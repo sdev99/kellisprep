@@ -1,0 +1,120 @@
+<button mat-fab class="contact-us-btn" (click)="openDialog()">
+  <img src="./assets/images/chat-btn.png"/>
+</button>
+
+<div class="footer">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4 col-lg-6 col-sm-12">
+        <p
+          style="color:#fff;opacity: 0.8;letter-spacing: 0px;padding: 22px;line-height: 32px;font-size: 18p;font-family: Montserrat">
+          With Dummy text similar to ABC. But with the search bar on the first section, where users can search for
+          Categories, courses and exam.
+          <br/>
+          <br/>
+          This search will have a dropdown showing results on successful search.
+        </p>
+      </div>
+
+      <div class="col-md-8 col-lg-5 col-sm-12 list-view">
+        <div class="row" style="color:#fff;">
+          <div class="col-sm-12 col-md-4">
+            <mat-list role="list">
+              <mat-list-item role="listitem" class="heading">About</mat-list-item>
+              <mat-list-item *ngFor="let item of abouts" role="listitem">{{item.title}}</mat-list-item>
+            </mat-list>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <mat-list role="list">
+              <mat-list-item role="listitem" class="heading">Contact</mat-list-item>
+              <mat-list-item *ngFor="let item of contacts" role="listitem">{{item.title}}</mat-list-item>
+            </mat-list>
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <mat-list role="list">
+              <mat-list-item role="listitem" class="heading">Courses</mat-list-item>
+              <mat-list-item *ngFor="let item of courses" role="listitem">{{item.title}}</mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="row language">
+      <div class="col-auto no-padding">
+        <mat-label>Language</mat-label>
+
+        <mat-form-field appearance="outline">
+          <mat-select [(ngModel)]="langauge">
+            <mat-option *ngFor="let item of languages" [value]="item.code">
+              {{item.title}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-icon-button>Go</button>
+
+      </div>
+    </div>
+
+
+    <div class="row country">
+      <div class="col-xs-12 col-sm-auto no-padding title">
+        Country
+      </div>
+      <div class="col-xs-12 col-sm-auto no-padding">
+        <button mat-button class="country-btn">
+          <img src="./assets/images/flag-us.png"/>
+          US
+        </button>
+
+        <button mat-button class="country-btn">
+          <img src="./assets/images/flag-in.png"/>
+          India
+        </button>
+
+        <button mat-button class="country-btn">
+          <img src="./assets/images/flag-mx.png"/>
+          Mexico
+        </button>
+
+        <button mat-button class="country-btn">
+          <img src="./assets/images/flag-bz.png"/>
+          Brazil
+        </button>
+
+      </div>
+    </div>
+    <div class="row policy-copyright">
+      <div class="col-xs-12 col-sm-auto no-padding">
+        <p class="copyright-text">© 2020 Kallisprep Academy</p>
+      </div>
+      <div class="col-xs-12 col-sm-auto flex-fill">
+        <button mat-button class="term-ploicy-btn" routerLink="/login">Terms of use</button>
+        <button mat-button class="term-ploicy-btn" routerLink="/login">Privacy policy</button>
+      </div>
+
+      <div class="col-xs-12 col-sm-auto social-btns">
+        <button mat-icon-button>
+          <img src="./assets/images/instagram.png"/>
+        </button>
+
+        <button mat-icon-button>
+          <img src="./assets/images/facebook.png"/>
+        </button>
+
+        <button mat-icon-button>
+          <img src="./assets/images/twitter.png"/>
+        </button>
+
+        <button mat-icon-button>
+          <img src="./assets/images/youtube.png"/>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+</div>

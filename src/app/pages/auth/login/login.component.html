@@ -1,0 +1,70 @@
+<app-header></app-header>
+<div class="container-fluid auth-content-container">
+  <img class="d-none d-md-block left-img" src="./../assets/images/login-left-img.png"/>
+  <div style="flex:1">
+
+    <app-alert></app-alert>
+
+    <div class="main-content">
+      <h1 class="text-center page-title">Login</h1>
+      <mat-card>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <div class="input-group">
+              <input formControlName="email" type="email" id="email" class="form-control" placeholder="Email address"
+                     [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+
+              <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.required">Email is required</div>
+              </div>
+            </div>
+
+          </div>
+          <div class="form-group" style="margin-bottom: 0">
+            <label for="password">Password</label>
+            <div class="input-group">
+              <input formControlName="password" id="password" type="password" class="form-control"
+                     placeholder="Password"
+                     [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+
+              <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                <div *ngIf="f.password.errors.required">Password is required</div>
+              </div>
+            </div>
+
+          </div>
+
+          <button type="button" mat-button color="primary" (click)="openDialog()" class="forgot-pass-btn">Forgot
+            Password?
+          </button>
+          <br/>
+          <br/>
+
+          <button [disabled]="loading" type="submit" mat-raised-button style="width: 100%" color="primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Login
+          </button>
+
+          <br/>
+          <br/>
+          <br/>
+          <button type="button" mat-raised-button style="width: 100%" class="social-btn">
+            <img src="./assets/images/google-icon.png" style="width: 22px;height: 22px"/>
+            Continue with Google
+          </button>
+          <br/>
+          <br/>
+          <button type="button" mat-raised-button style="width: 100%" class="social-btn">
+            <mat-icon>facebook</mat-icon>
+            Continue with Facebok
+          </button>
+        </form>
+      </mat-card>
+    </div>
+
+
+  </div>
+  <img class="d-none d-md-block right-img" src="./../assets/images/login-right-img.png"/>
+</div>
+<app-footer></app-footer>

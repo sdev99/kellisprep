@@ -1,0 +1,54 @@
+.main-content {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .page-title {
+    margin-top: 24px;
+    font-size: 32px;
+    color: #140020;
+  }
+
+  mat-card {
+    margin: 16px;
+    padding: 30px 16px;
+    width: 30vw;
+    max-width: 474px;
+    min-width: 300px;
+    box-shadow: 0px 3px 6px #0000001A;
+    border: 1px solid #D9E2E9;
+    border-radius: 10px;
+
+    input {
+      font-family: Montserrat;
+      font-size: 12px;
+      color: #C5C7CB;
+      height: 42px;
+      border: 1px solid #E2DDE6;
+      border-radius: 3px;
+    }
+
+    .forgot-pass-btn {
+      padding: 0;
+      font-size: 14px;
+      box-shadow: none;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .social-btn {
+      background: #EBE9EC 0% 0% no-repeat padding-box;
+      border-radius: 3px;
+      color: #58068C;
+
+      img, mat-icon {
+        position: absolute;
+        left: 12px;
+        top: 7px;
+      }
+    }
+  }
+}

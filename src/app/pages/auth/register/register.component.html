@@ -1,0 +1,105 @@
+<app-header></app-header>
+<div class="container-fluid auth-content-container">
+  <img class="d-none d-md-block left-img" src="./../assets/images/login-left-img.png"/>
+  <div style="flex:1">
+
+    <app-alert></app-alert>
+
+    <div class="main-content">
+      <h1 class="text-center page-title">Sign Up</h1>
+      <mat-card>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="firstname">First Name</label>
+                <div class="input-group">
+                  <input type="text" id="firstname" class="form-control" placeholder="First Name"
+                         formControlName="firstname" [ngClass]="{ 'is-invalid': submitted && f.firstname.errors }">
+                  <div *ngIf="submitted && f.firstname.errors" class="invalid-feedback">
+                    <div *ngIf="f.firstname.errors.required">Firstname is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="lastname">
+                <label for="email">Last Name</label>
+                <div class="input-group">
+                  <input type="text" id="lastname" class="form-control" placeholder="Last name"
+                         formControlName="lastname" [ngClass]="{ 'is-invalid': submitted && f.lastname.errors }">
+                  <div *ngIf="submitted && f.lastname.errors" class="invalid-feedback">
+                    <div *ngIf="f.lastname.errors.required">Lastname is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <div class="input-group">
+              <input type="email" id="email" class="form-control" placeholder="Email address" formControlName="email"
+                     [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+              <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.required">Email is required</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="username">User name</label>
+            <div class="input-group">
+              <input id="username" class="form-control" placeholder="User name" formControlName="username"
+                     [ngClass]="{ 'is-invalid': submitted && f.username.errors }">
+              <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                <div *ngIf="f.username.errors.required">Username is required</div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-group">
+              <input id="password" type="password" class="form-control" placeholder="Password"
+                     formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+              <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                <div *ngIf="f.password.errors.required">Password is required</div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="userRole">Role</label>
+            <div class="input-group">
+              <div ngbDropdown class="d-inline-block">
+                <button type="button" class="btn btn-outline-dark" style="border-color: #ced4da" id="userRole"
+                        ngbDropdownToggle>
+                  Student
+                </button>
+                <div ngbDropdownMenu aria-labelledby="userRole">
+                  <button type="button" *ngFor="let item of roles|keyvalue" ngbDropdownItem>{{item.key}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <button [disabled]="loading" type="submit" mat-raised-button style="width: 100%" color="primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Sign up
+          </button>
+
+        </form>
+      </mat-card>
+    </div>
+
+
+  </div>
+  <img class="d-none d-md-block right-img" src="./../assets/images/login-right-img.png"/>
+</div>
+<app-footer></app-footer>

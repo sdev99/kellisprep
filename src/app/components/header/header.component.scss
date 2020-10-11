@@ -1,0 +1,118 @@
+::ng-deep ngb-accordion {
+  position: fixed;
+  width: 100vw;
+  z-index: 998;
+  overflow-y: auto;
+
+  .card-header {
+    display: none;
+  }
+
+  .card.ng-star-inserted {
+    border: none;
+
+    .collapse {
+      padding-bottom: 16px;
+      border-bottom: 1px solid #E8E8E8;
+    }
+
+    .card-body {
+      margin-top: 64px;
+    }
+  }
+}
+
+
+mat-toolbar {
+  position: fixed;
+  z-index: 999;
+
+  .logo-view {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      position: absolute;
+    }
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .app-logo {
+    width: 200px;
+    height: 60px;
+  }
+
+  .button-row-left {
+    display: table-cell;
+  }
+
+  .button-row-right {
+    display: table-cell;
+  }
+
+  .user-profile-btn {
+    width: 50px;
+    height: 50px;
+    margin-right: 40px;
+    @media only screen and (max-width: 991.98px) {
+      margin-right: 0px;
+      width: 40px;
+      height: 40px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    &:after {
+      display: none !important;
+    }
+  }
+
+}
+
+
+::ng-deep mat-tab-group {
+  .list-box {
+    margin: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .mat-tab-label .mat-tab-label-content {
+    font: normal normal 600 18px/22px Montserrat;
+    letter-spacing: 0px;
+    color: #101010;
+    opacity: 1;
+  }
+
+  .mat-tab-label-active .mat-tab-label-content {
+    color: #58068C;
+  }
+
+  .mat-subheader {
+    font: normal normal normal 18px/22px Montserrat;
+    letter-spacing: 0.9px;
+    color: #140020;
+    text-transform: uppercase;
+    opacity: 1;
+  }
+
+  .mat-list-item .mat-line {
+    font: normal normal 600 16px/19px Montserrat;
+    letter-spacing: 0px;
+    color: #140020;
+    opacity: 1;
+  }
+}
+
+

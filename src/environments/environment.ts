@@ -1,9 +1,11 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+const proxyurl = 'https://cors-anywhere.herokuapp.com/';
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: proxyurl + 'http://52.179.100.163/api'
 };
 
 /*

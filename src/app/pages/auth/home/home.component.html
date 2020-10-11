@@ -1,0 +1,34 @@
+<app-header></app-header>
+<div class="container-fluid auth-content-container">
+  <img class="d-none d-md-block left-img" src="./../assets/images/login-left-img.png"/>
+  <div style="flex:1">
+
+    <app-alert></app-alert>
+
+    <div class="main-content text-center">
+      <p class="heading-1">
+        For every student,every classroom.
+        <br/>
+        Real results.
+      </p>
+
+
+      <p class="description">
+        We’re a nonprofit with the mission to provide a free, world-class education for anyone, anywhere.
+      </p>
+
+      <form class="form-inline md-form form-sm search-input" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-icon>search</mat-icon>
+        <input class="form-control form-control-sm ml-3 w-75" type="text"
+               formControlName="search"
+               placeholder="Search for categories, courses and exams" aria-label="Search"
+               mdbInput>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </form>
+    </div>
+
+
+  </div>
+  <img class="d-none d-md-block right-img" src="./../assets/images/login-right-img.png"/>
+</div>
+<app-footer></app-footer>

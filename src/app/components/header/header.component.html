@@ -1,0 +1,104 @@
+<mat-toolbar>
+  <div class="button-row-left d-block d-lg-none">
+    <button mat-icon-button style="box-shadow: none;outline:none;" (click)="drawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+
+  <div class="button-row-left d-none d-lg-block">
+
+    <button color="primary" mat-button (click)="acc.toggle('exam-dropview')">
+      Exams
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+
+    <button color="primary" mat-button class="margin" (click)="acc.toggle('courses-dropview')">
+      Courses
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+
+  </div>
+
+  <div class="spacer"></div>
+
+
+  <div class="logo-view">
+    <img routerLink="/home" class="app-logo" src="./assets/images/kp-logo.png">
+  </div>
+
+
+  <div *ngIf="!isLoggedIn" class="button-row-right d-none d-lg-block">
+    <button mat-button color="primary" routerLink="/login">Login</button>
+    <button mat-button color="primary" routerLink="/register">Sign Up</button>
+  </div>
+
+  <div *ngIf="isLoggedIn" ngbDropdown #myDrop="ngbDropdown">
+    <button class="user-profile-btn" mat-icon-button ngbDropdownToggle id="userProfileBtn">
+      <img src="./assets/images/demo-user.png"/>
+    </button>
+
+    <div ngbDropdownMenu aria-labelledby="userProfileBtn">
+      <button type="button" ngbDropdownItem routerLink="/dashboard">Dashboard</button>
+      <div class="dropdown-divider"></div>
+      <button type="button" ngbDropdownItem>Settings</button>
+      <button type="button" ngbDropdownItem>Help</button>
+      <button type="button" style="color: #FF0000" (click)="logout()" ngbDropdownItem>Logout</button>
+    </div>
+  </div>
+
+</mat-toolbar>
+
+
+<mat-drawer #drawer mode="over" style="background-color: #FAFAFA;width: 200px;z-index: 9999"
+            class="d-block d-lg-none">
+  <div class="button-row-right" style="display: flex;justify-content: flex-end;">
+    <button style="box-shadow: none;outline:none;" mat-icon-button (click)="drawer.close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <mat-list>
+    <mat-list-item>
+      <button color="primary" mat-button (click)="acc.toggle('exam-dropview');drawer.close();">
+        Exams
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+    </mat-list-item>
+
+    <mat-list-item>
+      <button color="primary" mat-button class="margin" (click)="acc.toggle('courses-dropview');drawer.close();">
+        Courses
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+    </mat-list-item>
+
+    <ng-container *ngIf="!isLoggedIn">
+      <mat-list-item>
+        <button mat-button color="primary" routerLink="/login">Login</button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-button color="primary" routerLink="/register">Sign Up</button>
+      </mat-list-item>
+    </ng-container>
+  </mat-list>
+</mat-drawer>
+
+
+<ngb-accordion [closeOthers]="true" #acc="ngbAccordion">
+  <ngb-panel id="exam-dropview">
+    <ng-template ngbPanelHeader>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <app-exams-dropview></app-exams-dropview>
+    </ng-template>
+  </ngb-panel>
+
+
+  <ngb-panel id="courses-dropview">
+    <ng-template ngbPanelHeader>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <app-courses-dropview></app-courses-dropview>
+    </ng-template>
+  </ngb-panel>
+
+</ngb-accordion>
