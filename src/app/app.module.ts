@@ -23,13 +23,16 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {DashboardComponent} from './pages/dashboard/dashboard.component';
-import { AlertComponent } from './components/alert/alert.component';
+import {AlertComponent} from './components/alert/alert.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSelectModule} from '@angular/material/select';
-import { ExamsDropviewComponent } from './modals/exams-dropview/exams-dropview.component';
+import {ExamsDropviewComponent} from './modals/exams-dropview/exams-dropview.component';
 import {MatTabsModule} from '@angular/material/tabs';
-import { CoursesDropviewComponent } from './modals/courses-dropview/courses-dropview.component';
-import { ContactUsComponent } from './modals/contact-us/contact-us.component';
+import {CoursesDropviewComponent} from './modals/courses-dropview/courses-dropview.component';
+import {ContactUsComponent} from './modals/contact-us/contact-us.component';
+import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
+import {PipesModule} from './pipes/pipes.module';
+import {MatPaginatorIntlCro} from './classes/mat-paginator-intl-cro';
 
 @NgModule({
   declarations: [
@@ -46,28 +49,30 @@ import { ContactUsComponent } from './modals/contact-us/contact-us.component';
     CoursesDropviewComponent,
     ContactUsComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatButtonModule,
-        MatGridListModule,
-        MatListModule,
-        NgbModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatDialogModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        CommonModule,
-        MatSidenavModule,
-        MatSelectModule,
-        FormsModule,
-        MatTabsModule,
-    ],
-  providers: [],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatGridListModule,
+    MatListModule,
+    NgbModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    CommonModule,
+    MatSidenavModule,
+    MatSelectModule,
+    FormsModule,
+    MatTabsModule,
+    MatPaginatorModule,
+    PipesModule
+  ],
+  providers: [{provide: MatPaginatorIntl, useClass: MatPaginatorIntlCro}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

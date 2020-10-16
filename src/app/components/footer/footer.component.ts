@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ForgotpasswordComponent} from '../../modals/forgotpassword/forgotpassword.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ContactUsComponent} from '../../modals/contact-us/contact-us.component';
+import {MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-footer',
@@ -50,7 +52,21 @@ export class FooterComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer
   ) {
+    iconRegistry.addSvgIcon(
+      'flag-us',
+      sanitizer.bypassSecurityTrustResourceUrl('./assets/images/flag-us.svg'));
+    iconRegistry.addSvgIcon(
+      'flag-in',
+      sanitizer.bypassSecurityTrustResourceUrl('./assets/images/flag-in.svg'));
+    iconRegistry.addSvgIcon(
+      'flag-mx',
+      sanitizer.bypassSecurityTrustResourceUrl('./assets/images/flag-mx.svg'));
+    iconRegistry.addSvgIcon(
+      'flag-bz',
+      sanitizer.bypassSecurityTrustResourceUrl('./assets/images/flag-bz.svg'));
   }
 
   ngOnInit(): void {

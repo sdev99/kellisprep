@@ -7,6 +7,16 @@ import {map} from 'rxjs/operators';
 import {EnumService} from './enum.service';
 import {environment} from '../../environments/environment';
 
+declare global {
+  interface Array<T> {
+    clone(): Array<T>;
+  }
+}
+
+Array.prototype.clone = function() {
+  return JSON.parse(JSON.stringify(this));
+};
+
 @Injectable({
   providedIn: 'root'
 })

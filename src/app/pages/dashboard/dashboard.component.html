@@ -6,11 +6,11 @@
       <div class="list-group" *ngFor="let section of menuItems">
         <h3 matSubheader style="margin-bottom: 0;padding-bottom: 0;">{{section.title}}</h3>
         <button style="border: none;padding-left: 16px;" type="button" class="list-group-item list-group-item-action"
-                *ngFor="let item of section.list">
+                [ngClass]="{'selected':selectedMenu.title==item.title}"
+                *ngFor="let item of section.submenus" (click)="onItemSelect(item)">
           {{item.title}}
         </button>
       </div>
-
 
       <div style="flex:1"></div>
 
@@ -26,98 +26,154 @@
           Logout
         </button>
       </div>
-
     </div>
 
     <div class="right-content">
-      <h1 class="menu-title">Purchased Courses</h1>
-      <div class="row">
-        <div class="col-xs-12 col-sm-6">
-          <mat-card class="course-card">
-            <mat-card-content>
-              <mat-list>
-                <mat-list-item>
-                  <div mat-line>US history</div>
-                  <div mat-line> Price: $36.99</div>
-                  <button mat-button color="primary">
-                    See all
-                  </button>
-                </mat-list-item>
-                <mat-divider></mat-divider>
+      <h1 class="menu-title">{{selectedMenu.title}}</h1>
 
-                <mat-list-item>
-                  <div mat-line>Worlds collide (1491-1607)</div>
-                  <button mat-raised-button color="primary">
-                    Resume
-                  </button>
-                </mat-list-item>
+      <ng-container *ngIf="selectedMenu.type === 'exam_history'; else myExamCourses">
 
-                <mat-list-item>
-                  <div mat-line>Colonial America (1607-1754)</div>
-                </mat-list-item>
+        <!--        filter tool bar-->
+        <div class="row filter-tool-bar">
+          <div class="col-xs-12 col-sm-auto field-container">
+            <input type="search" class="search-field" placeholder="Search exams" [(ngModel)]="examSearchTerm">
+          </div>
+          <div class="col-xs-12 col-sm-auto field-container">
+            <div class="row">
+              <div class="col-auto">
+                <div class="input-group">
+                  <div ngbDropdown class="d-inline-block">
+                    <button type="button" class="btn btn-outline-dark" style="border-color: #ced4da" id="filterByDate"
+                            ngbDropdownToggle>
+                      {{selectedTime.title}}
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="filterByDate">
+                      <button type="button" *ngFor="let item of filterTimesList" ngbDropdownItem>{{item.title}}</button>
+                      <div class="dropdown-divider"></div>
+                      <button type="button" ngbDropdownItem
+                              style="display: flex;flex-direction: row;align-items: center;">
+                        Jump to specific date
+                        <mat-icon>chevron_right</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-                <mat-list-item>
-                  <div mat-line>The road to revolution (1754-1800)</div>
-                </mat-list-item>
-
-                <mat-list-item>
-                  <div mat-line>The early republic (1800-1848)</div>
-                </mat-list-item>
-              </mat-list>
-            </mat-card-content>
-          </mat-card>
+              <div class="col-auto">
+                <div class="input-group">
+                  <div ngbDropdown class="d-inline-block">
+                    <button type="button" class="btn btn-outline-dark" style="border-color: #ced4da" id="filterByExam"
+                            ngbDropdownToggle>
+                      {{selectedExam.title}}
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="filterByExam">
+                      <button type="button" *ngFor="let item of filterExamList" ngbDropdownItem>{{item.title}}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-xs-12 col-sm-6">
-          <mat-card class="course-card">
-            <mat-card-content>
-              <mat-list>
-                <mat-list-item>
-                  <div mat-line>US history</div>
-                  <div mat-line> Price: $36.99</div>
-                  <button mat-button color="primary">
-                    See all
-                  </button>
-                </mat-list-item>
-                <mat-divider></mat-divider>
+        <!--        filter-toolbar-end  -->
+        <table class="table exam-history-table">
+          <thead>
+          <tr>
+            <th scope="col" sortable="name">Exams</th>
+            <th scope="col" sortable="area">Date</th>
+            <th scope="col" sortable="population">Score</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let exam of getExamHistoryListByPagination() | listFilter:examSearchTerm:'title'">
+            <td>
+              <div class="exam-name">
+                <ngb-highlight [result]="exam.title" [term]="examSearchTerm"></ngb-highlight>
+              </div>
+              <div class="exam-type">
+                <ngb-highlight [result]="exam.type" [term]="examSearchTerm"></ngb-highlight>
+              </div>
+            </td>
+            <td>
+              <ngb-highlight [result]="exam.date | date:'MMM dd,yyyy \'at\' hh:mm a'"
+                             [term]="examSearchTerm"></ngb-highlight>
+            </td>
+            <td>
+              <ngb-highlight [result]="exam.score | number" [term]="examSearchTerm"></ngb-highlight>
+              %
+            </td>
+          </tr>
+          </tbody>
+        </table>
 
-                <mat-list-item>
-                  <div mat-line>Worlds collide (1491-1607)</div>
-                  <button mat-raised-button color="primary">
-                    Resume
-                  </button>
-                </mat-list-item>
 
-                <mat-list-item>
-                  <div mat-line>Colonial America (1607-1754)</div>
-                </mat-list-item>
 
-                <mat-list-item>
-                  <div mat-line>The road to revolution (1754-1800)</div>
-                </mat-list-item>
+        <mat-paginator [length]="examsHistories.length"
+                       [pageSize]="examHistoryPagination.pageSize"
+                       (page)="pageChange($event)"
+                       [pageSizeOptions]="itemsPerPage">
+        </mat-paginator>
 
-                <mat-list-item>
-                  <div mat-line>The early republic (1800-1848)</div>
-                </mat-list-item>
-              </mat-list>
-            </mat-card-content>
-          </mat-card>
+      </ng-container>
+
+      <ng-template #myExamCourses>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6" *ngFor="let item of selectedMenu.list">
+            <mat-card class="course-card">
+              <mat-card-content>
+                <mat-list>
+                  <mat-list-item>
+                    <div mat-line>{{item.title}}</div>
+                    <div mat-line class="price" *ngIf="item.price"> Price: {{item.price}}</div>
+                    <button mat-button color="primary">
+                      See all
+                    </button>
+                  </mat-list-item>
+                  <mat-divider></mat-divider>
+
+                  <mat-list-item class="chapter-item" *ngFor="let chapter of item.topics">
+                    <div mat-line>{{chapter.title}}</div>
+                    <button mat-raised-button color="primary" *ngIf="chapter.status === 'resume'">
+                      Resume
+                    </button>
+
+                    <button mat-raised-button color="primary" *ngIf="chapter.status === 'start'">
+                      Start
+                    </button>
+
+                    <div class="completed" *ngIf="chapter.status === 'completed'">
+                      <mat-icon>check_circle</mat-icon>
+                      Completed
+                    </div>
+
+                  </mat-list-item>
+                </mat-list>
+              </mat-card-content>
+            </mat-card>
+          </div>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col-12 text-center">
-          <mat-card class="add-course-card">
-            <mat-card-content>
-              <button class="add-new-btn" mat-button color="primary">
-                <mat-icon>add_circle</mat-icon>
-              </button>
-              <button mat-button>
-                Add new course
-              </button>
-            </mat-card-content>
-          </mat-card>
+        <div class="row">
+          <div class="col-12 text-center">
+            <mat-card class="add-course-card">
+              <mat-card-content>
+                <button class="add-new-btn" mat-button color="primary">
+                  <mat-icon>add_circle</mat-icon>
+                </button>
+                <button mat-button *ngIf="selectedMenu.type==='course'">
+                  Add new course
+                </button>
+                <button mat-button *ngIf="selectedMenu.type==='exam'">
+                  Add new exam
+                </button>
+              </mat-card-content>
+            </mat-card>
+          </div>
         </div>
-      </div>
+      </ng-template>
+
+
     </div>
   </div>
 
