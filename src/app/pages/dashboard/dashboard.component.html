@@ -77,6 +77,8 @@
           </div>
         </div>
         <!--        filter-toolbar-end  -->
+
+
         <table class="table exam-history-table">
           <thead>
           <tr>
@@ -108,7 +110,6 @@
         </table>
 
 
-
         <mat-paginator [length]="examsHistories.length"
                        [pageSize]="examHistoryPagination.pageSize"
                        (page)="pageChange($event)"
@@ -126,7 +127,7 @@
                   <mat-list-item>
                     <div mat-line>{{item.title}}</div>
                     <div mat-line class="price" *ngIf="item.price"> Price: {{item.price}}</div>
-                    <button mat-button color="primary">
+                    <button mat-button color="primary" (click)="seeAll(item)">
                       See all
                     </button>
                   </mat-list-item>
@@ -134,11 +135,12 @@
 
                   <mat-list-item class="chapter-item" *ngFor="let chapter of item.topics">
                     <div mat-line>{{chapter.title}}</div>
-                    <button mat-raised-button color="primary" *ngIf="chapter.status === 'resume'">
+                    <button mat-raised-button color="primary" *ngIf="chapter.status === 'resume'"
+                            (click)="openTopicDetail(item,chapter)">
                       Resume
                     </button>
 
-                    <button mat-raised-button color="primary" *ngIf="chapter.status === 'start'">
+                    <button mat-raised-button color="primary" *ngIf="chapter.status === 'start'" (click)="openTopicDetail(item,chapter)">
                       Start
                     </button>
 
@@ -158,7 +160,7 @@
           <div class="col-12 text-center">
             <mat-card class="add-course-card">
               <mat-card-content>
-                <button class="add-new-btn" mat-button color="primary">
+                <button class="add-new-btn" mat-button color="primary" (click)="openAddExamCourseDialog()">
                   <mat-icon>add_circle</mat-icon>
                 </button>
                 <button mat-button *ngIf="selectedMenu.type==='course'">
@@ -172,7 +174,6 @@
           </div>
         </div>
       </ng-template>
-
 
     </div>
   </div>

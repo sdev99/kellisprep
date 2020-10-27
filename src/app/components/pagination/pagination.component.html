@@ -1,0 +1,8 @@
+<div class="pagination-view">
+  <div class="pagination-count">
+    {{(currentIndex + 1) + " of " + totalPages}}
+  </div>
+  <div class="pagination-dots">
+    <div *ngFor="let page of pages" class="dot" [ngClass]="{active:page==currentIndex}"></div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<app-header *ngIf="categoryDetail" [pathsTree]="['Math','Math '+categoryDetail.title]"
+            [subHeaderText3]="categoryDetail.price?'Price: '+categoryDetail.price:''"></app-header>
+
+<div class="container-fluid dashboard-content-container has-subheader">
+  <div class="content">
+    <mat-card class="course-card" *ngFor="let item of courses" (click)="onTopicSelect(item)">
+      <mat-card-content>
+        <div class="left">
+          <img src="./assets/images/{{item.icon}}"/>
+        </div>
+        <div class="right">
+          <div class="heading">{{item.title}}</div>
+
+          <div class="row" *ngFor="let subItem of item.list">
+            <div class="col-xs-6 col-sm-3">{{subItem.title}}</div>
+            <div class="col-xs-6 col-auto">{{subItem.value}}</div>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<app-footer></app-footer>

@@ -1,4 +1,8 @@
 import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.component';
+import {MatDialog} from '@angular/material/dialog';
+import {PersonalizeExamcourseComponent} from '../../modals/personalize-examcourse/personalize-examcourse.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +17,7 @@ export class DashboardComponent implements OnInit {
         {
           title: 'Purchased Courses',
           type: 'course',
+          planType: 'purchased',
           list: [
             {
               title: 'US history',
@@ -39,6 +44,7 @@ export class DashboardComponent implements OnInit {
         {
           title: 'Free Courses',
           type: 'course',
+          planType: 'free',
           list: [
             {
               title: 'US history',
@@ -68,6 +74,7 @@ export class DashboardComponent implements OnInit {
         {
           title: 'Purchased Exams',
           type: 'exam',
+          planType: 'purchased',
           list: [
             {
               title: 'SAT',
@@ -94,6 +101,7 @@ export class DashboardComponent implements OnInit {
         {
           title: 'Free Exams',
           type: 'exam',
+          planType: 'free',
           list: [
             {
               title: 'SAT',
@@ -225,8 +233,11 @@ export class DashboardComponent implements OnInit {
     previousPageIndex: number
   };
 
-  constructor() {
-    this.selectedMenu = this.menuItems[2].submenus[0];
+  constructor(
+    private router: Router,
+    public dialog: MatDialog,
+  ) {
+    this.selectedMenu = this.menuItems[0].submenus[0];
     this.selectedExam = this.filterExamList[0];
     this.selectedTime = this.filterTimesList[0];
 
@@ -249,8 +260,53 @@ export class DashboardComponent implements OnInit {
     this.examHistoryPagination = event;
   }
 
+  openTopicDetail(category, item): void {
+    if (this.selectedMenu.type === 'exam') {
+      this.router.navigate(['practice-tests'], {
+        queryParams: {
+          topic: JSON.stringify(item),
+          category: JSON.stringify(category),
+        }
+      });
+    } else if (this.selectedMenu.type === 'course') {
+      this.router.navigate(['topic-detail'], {
+        queryParams: {
+          topic: JSON.stringify(item),
+          category: JSON.stringify(category),
+        }
+      });
+    }
+  }
+
+  seeAll(item): void {
+    if (this.selectedMenu.type === 'course') {
+      this.router.navigate(['category-topics'], {
+        queryParams: {
+          category: JSON.stringify(item)
+        }
+      });
+    }
+  }
+
   getExamHistoryListByPagination(): any {
     const list = this.examsHistories.clone().splice(this.examHistoryPagination.pageIndex * this.examHistoryPagination.pageSize, this.examHistoryPagination.pageSize);
     return list;
+  }
+
+  openAddExamCourseDialog(): void {
+
+    const dialogRef = this.dialog.open(PersonalizeExamcourseComponent, {
+      id: 'personalizedExamCourseDialog',
+      disableClose: false,
+      role: 'dialog',
+      data: {
+        type: this.selectedMenu.type,
+        planType: this.selectedMenu.planType
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 }

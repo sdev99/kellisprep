@@ -1,0 +1,74 @@
+<div>
+  <h2 mat-dialog-title>
+    {{title}}
+  </h2>
+  <div class="devider"></div>
+
+
+  <!--        filter tool bar-->
+  <div class="row filter-tool-bar">
+    <div class="col-xs-12 col-sm-auto field-container">
+      <input type="search" class="search-field" placeholder="Search Exams" [(ngModel)]="examSearchTerm">
+    </div>
+    <div class="col-xs-12 col-sm-auto field-container">
+      <div class="row">
+        <div class="col-auto">
+          <div class="input-group">
+            <div ngbDropdown class="d-inline-block">
+              <button type="button" class="btn btn-outline-dark" style="border-color: #ced4da" id="filterByExam"
+                      ngbDropdownToggle>
+                {{(selectedCatagory && selectedCatagory.value) ? selectedCatagory.value : 'Select Category'}}
+              </button>
+              <div ngbDropdownMenu aria-labelledby="filterByExam">
+                <button type="button" *ngFor="let item of examCategories" ngbDropdownItem
+                        (click)="onCategorySelect(item)">{{item.title}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--        filter-toolbar-end  -->
+  <div class="devider"></div>
+
+</div>
+
+<mat-dialog-content class="mat-typography" id="personalizeContent">
+
+  <table class="table personalized-table">
+    <thead>
+    <tr>
+      <th scope="col" sortable="name" *ngIf="tableColFirst">{{tableColFirst}}</th>
+      <th scope="col" sortable="area" *ngIf="tableColSecond">{{tableColSecond}}</th>
+      <th scope="col" sortable="population" *ngIf="tableColThird">{{tableColThird}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of list | listFilter:examSearchTerm:'title' | listFilter:selectedCatagory.value:'category'">
+      <td *ngIf="tableColFirst" class="name-col">
+        <ion-checkbox [(ngModel)]="item.selected"></ion-checkbox>
+        <ngb-highlight [result]="item.title" [term]="examSearchTerm"></ngb-highlight>
+      </td>
+      <td *ngIf="tableColSecond">
+        <ngb-highlight [result]="item.category"
+                       [term]="examSearchTerm"></ngb-highlight>
+      </td>
+      <td *ngIf="tableColThird">
+        <ngb-highlight [result]="item.price" [term]="examSearchTerm"></ngb-highlight>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button type="cancel" mat-button mat-dialog-close color="primary"
+          (click)="btnAction(false)">Cancel
+  </button>
+  <button mat-raised-button color="primary" cdkFocusInitial
+          (click)="btnAction(true)">Continue with {{selectedItemCount()}} Courses
+  </button>
+</mat-dialog-actions>
+

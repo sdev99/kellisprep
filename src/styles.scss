@@ -17,6 +17,7 @@ $kellisprep-accent: mat-palette($mat-pink, A200, A100, A400);
 // The warn palette is optional (defaults to red).
 $kellisprep-warn: mat-palette($mat-red);
 
+
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
 $kellisprep-theme: mat-light-theme((
@@ -49,6 +50,15 @@ body {
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 
+:root {
+  --primary: #58068c; // or any global you wish to share with components
+}
+
+
+.mat-drawer-content {
+  overflow-y: auto !important;
+  max-height: 100vh;
+}
 
 .auth-content-container {
   width: 100%;
@@ -78,7 +88,11 @@ body {
   overflow: auto;
   padding: 0;
   background-color: #FAFAFA;
-  padding-top: 80px;
+  padding-top: 64px;
+
+  &.has-subheader {
+    padding-top: 128px;
+  }
 }
 
 * {

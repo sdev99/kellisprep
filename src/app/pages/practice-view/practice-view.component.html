@@ -1,0 +1,99 @@
+<app-header></app-header>
+
+<div class="container-fluid dashboard-content-container">
+  <app-back-subheader title="Quiz: Welcome to the Big History" (back)="onBack()"></app-back-subheader>
+
+  <div class="content">
+
+    <div class="row practice-content">
+
+      <ng-container *ngIf="questions[currentIndex].questionType === 'multilinetext'">
+        <div class="col-12 left-content">
+          <h1 class="question">{{questions[currentIndex].title}}</h1>
+
+
+          <div class="form-group textarea-input">
+            <label>Answer</label>
+            <div class="input-group">
+                <textarea id="message" class="form-control"
+                          placeholder="Write your answer here..."
+                          [(ngModel)]="questions[currentIndex].answer"
+                          [maxlength]="maxMessageLength"
+                          [ngClass]="{ 'is-invalid': submitted  }"></textarea>
+
+              <div class="message-length">
+                {{(maxMessageLength - questions[currentIndex].answer.length)}}/{{maxMessageLength}} characters remaining
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="questions[currentIndex].questionType === 'audio'">
+        <div class="col-12 left-content">
+          <h1 class="question">{{questions[currentIndex].title}}</h1>
+
+
+          <div class="voice-input">
+            <label>Answer</label>
+            <div tappable mat-ripple fill="clear" class="voice-record-btn">
+              <label>Tap to record your voice</label>
+              <ion-icon name="mic" slot="end"></ion-icon>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container
+        *ngIf="questions[currentIndex].questionType === 'singlechoice' || questions[currentIndex].questionType === 'multichoice'">
+        <div class="col-md-6 left-content">
+
+          <ng-container *ngIf="questions[currentIndex].descriptionType === 'text'">
+            <h1>Agriculture iron and Bantu people</h1>
+            <p [innerHTML]="questions[currentIndex].description"></p>
+          </ng-container>
+
+          <ng-container *ngIf="questions[currentIndex].descriptionType === 'video'">
+            <iframe class="video-view" [src]="questions[currentIndex].description | safe:'resourceUrl'" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+          </ng-container>
+
+        </div>
+
+        <div class="col-md-6 right-content">
+          <h2 class="question">{{questions[currentIndex].title}}</h2>
+          <div class="answer-type">Choose {{questions[currentIndex].questionType != 'singlechoice' ? 'multiple' : '1'}}
+            answer
+          </div>
+
+
+          <app-answer-choice-item
+            *ngFor="let item of questions[currentIndex].answers"
+            [selected]="item.selected"
+            [index]="item.index"
+            [title]="item.title"
+            (click)="item.selected=!item.selected"
+          ></app-answer-choice-item>
+        </div>
+
+
+      </ng-container>
+
+    </div>
+
+
+    <div class="row practice-footer">
+      <button mat-button color="primary" (click)="onBack()">
+        Go to lesson page
+      </button>
+      <div style="display: flex;flex:1;"></div>
+      <app-pagination [currentIndex]="currentIndex" [totalPages]="questions.length"></app-pagination>
+      <button mat-raised-button color="primary" (click)="onNext()">
+        Next Question
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

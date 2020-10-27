@@ -1,0 +1,111 @@
+<app-header></app-header>
+
+
+<div class="container-fluid dashboard-content-container">
+  <app-page-path-tree></app-page-path-tree>
+
+  <div class="content">
+    <div class="left-menu">
+      <h1 class="title">SAT EXAM</h1>
+      <div class="price">$99.00</div>
+      <div class="offer-price">
+        <span class="original-price">$36.99</span>
+        &nbsp;
+        <span class="off-percent">71% off</span>
+      </div>
+      <div *ngIf="selectionType === 'course'" class="enrolled-student">6,412 students Enrolled</div>
+
+      <br/>
+
+      <div class="icon-item">
+        <mat-icon>new_releases</mat-icon>
+        <div class="text">Last date to apply 08/24/2020</div>
+      </div>
+
+      <div class="icon-item">
+        <ion-icon src="./assets/images/global.svg"></ion-icon>
+        <div class="text">English</div>
+      </div>
+
+      <div class="icon-item">
+        <ion-icon name="volume-high"></ion-icon>
+        <div class="text">English Auto</div>
+      </div>
+
+      <br/>
+      <br/>
+      <button mat-raised-button color="primary" (click)="openConfirmPay()">
+        Buy Now
+      </button>
+
+      <div *ngIf="selectionType === 'course'" class="guarntee-text">30 day money-back guarantee</div>
+
+      <div style="flex:1"></div>
+      <button mat-raised-button class="leave-page-btn" (click)="onLeavePage()">
+        Leave this Page
+      </button>
+    </div>
+
+    <div class="right-content">
+
+      <div class="video-play-view">
+        <img class="video-thumbnail" src="./assets/images/demo-sat.png"/>
+      </div>
+
+      <mat-card class="exam-card">
+        <mat-card-content>
+          <h1>This exam includes</h1>
+          <div class="devider-line"></div>
+          <div class="row">
+
+            <div class="col-xs-12 col-sm-6" *ngFor="let item of list">
+              <ion-item lines="none">
+                <ion-img [src]="item.icon" slot="start"></ion-img>
+                <ion-label>{{item.title}}</ion-label>
+              </ion-item>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="card-learn">
+        <mat-card-content>
+          <h1>What you'll learn</h1>
+          <div class="devider-line"></div>
+          <div class="row">
+
+            <div class="col-xs-12">
+              <ion-item lines="none">
+                <ion-icon name="checkmark-circle" slot="start" color="medium"></ion-icon>
+                <ion-label>Develop a clear, solid strategy for UX that applies to any kind of product or project
+                </ion-label>
+              </ion-item>
+            </div>
+
+            <div class="col-xs-12">
+              <ion-item lines="none">
+                <ion-icon name="checkmark-circle" slot="start" color="medium"></ion-icon>
+                <ion-label>Understand who your stakeholders really are and what you need to know from each of them.
+                  Develop a clear, solid strategy for UX that applies to any kind of product or project
+                </ion-label>
+              </ion-item>
+            </div>
+
+            <div class="col-xs-12">
+              <ion-item lines="none">
+                <ion-icon name="checkmark-circle" slot="start" color="medium"></ion-icon>
+                <ion-label>Develop a clear, solid strategy for UX that applies to any kind of product or project
+                </ion-label>
+              </ion-item>
+            </div>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+
+  </div>
+
+</div>
+<app-footer></app-footer>

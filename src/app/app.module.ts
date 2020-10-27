@@ -33,6 +33,30 @@ import {ContactUsComponent} from './modals/contact-us/contact-us.component';
 import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
 import {PipesModule} from './pipes/pipes.module';
 import {MatPaginatorIntlCro} from './classes/mat-paginator-intl-cro';
+import { CategoryTopicsComponent } from './pages/category-topics/category-topics.component';
+import { TopicDetailComponent } from './pages/topic-detail/topic-detail.component';
+import { VideoDurationIndicatorComponent } from './components/video-duration-indicator/video-duration-indicator.component';
+import { SelectExamCourseComponent } from './pages/select-exam-course/select-exam-course.component';
+import { PagePathTreeComponent } from './components/page-path-tree/page-path-tree.component';
+import { IonicModule } from '@ionic/angular';
+import { ConfirmPayComponent } from './pages/confirm-pay/confirm-pay.component';
+import { LearnViewComponent } from './pages/learn-view/learn-view.component';
+import { BackSubheaderComponent } from './components/back-subheader/back-subheader.component';
+import { PracticeViewComponent } from './pages/practice-view/practice-view.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
+import {MatRippleModule} from '@angular/material/core';
+import { PracticeTestsComponent } from './pages/practice-tests/practice-tests.component';
+import { TestDirectionComponent } from './pages/test-direction/test-direction.component';
+import { SectionDirectionComponent } from './pages/section-direction/section-direction.component';
+import { WritingSectionComponent } from './pages/writing-section/writing-section.component';
+import { AnswerChoiceItemComponent } from './components/answer-choice-item/answer-choice-item.component';
+import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.component';
+import { TermsofserviceComponent } from './pages/termsofservice/termsofservice.component';
+import { PrivacypolicyComponent } from './pages/privacypolicy/privacypolicy.component';
+import { PersonalizeExamcourseComponent } from './modals/personalize-examcourse/personalize-examcourse.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTableModule} from '@angular/material/table';
+import { AnswerMultipleChoiceItemComponent } from './components/answer-multiple-choice-item/answer-multiple-choice-item.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +72,26 @@ import {MatPaginatorIntlCro} from './classes/mat-paginator-intl-cro';
     ExamsDropviewComponent,
     CoursesDropviewComponent,
     ContactUsComponent,
+    CategoryTopicsComponent,
+    TopicDetailComponent,
+    VideoDurationIndicatorComponent,
+    SelectExamCourseComponent,
+    PagePathTreeComponent,
+    ConfirmPayComponent,
+    LearnViewComponent,
+    BackSubheaderComponent,
+    PracticeViewComponent,
+    PaginationComponent,
+    PracticeTestsComponent,
+    TestDirectionComponent,
+    SectionDirectionComponent,
+    WritingSectionComponent,
+    AnswerChoiceItemComponent,
+    ConfirmModalComponent,
+    TermsofserviceComponent,
+    PrivacypolicyComponent,
+    PersonalizeExamcourseComponent,
+    AnswerMultipleChoiceItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,7 +114,11 @@ import {MatPaginatorIntlCro} from './classes/mat-paginator-intl-cro';
     FormsModule,
     MatTabsModule,
     MatPaginatorModule,
-    PipesModule
+    PipesModule,
+    IonicModule.forRoot(),
+    MatRippleModule,
+    MatCheckboxModule,
+    MatTableModule
   ],
   providers: [{provide: MatPaginatorIntl, useClass: MatPaginatorIntlCro}],
   bootstrap: [AppComponent]

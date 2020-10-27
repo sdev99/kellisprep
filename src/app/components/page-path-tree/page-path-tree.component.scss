@@ -1,0 +1,18 @@
+.page-path-tree {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .text-1 {
+    font: normal normal normal 14px/18px Montserrat;
+    letter-spacing: -0.14px;
+    color: #140020;
+    opacity: 0.5;
+    padding-right: 8px;
+  }
+
+  mat-icon {
+    color: #140020;
+    opacity: 0.5;
+  }
+}

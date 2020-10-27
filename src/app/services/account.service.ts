@@ -97,5 +97,4 @@ export class AccountService {
     this.router.navigate(['/login']);
   }
 
-
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AccountService} from '../../services/account.service';
 import {User} from '../../_models';
 
@@ -8,6 +8,13 @@ import {User} from '../../_models';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  @Input() subHeaderText1: string;
+  @Input() subHeaderText2: string;
+  @Input() subHeaderText3: string;
+  @Input() rightBtnTitle: string;
+  @Input() pathsTree = [];
+  @Output() rightBtnClick = new EventEmitter<void>();
+
   user: User;
   isLoggedIn = false;
 
@@ -25,7 +32,7 @@ export class HeaderComponent implements OnInit {
   }
 
 
-  logout() {
+  logout(): void {
     this.accountService.logout();
   }
 }

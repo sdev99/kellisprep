@@ -1,0 +1,132 @@
+<app-header></app-header>
+
+
+<div class="container-fluid dashboard-content-container">
+  <app-page-path-tree></app-page-path-tree>
+
+  <div class="content">
+    <div class="left-menu">
+      <h1 class="title">SAT EXAM</h1>
+      <div class="price">$99.00</div>
+      <div class="offer-price">
+        <span class="original-price">$36.99</span>
+        &nbsp;
+        <span class="off-percent">71% off</span>
+      </div>
+
+      <br/>
+      <br/>
+
+      <div class="price-row">
+        <div class="left">SAT Exam</div>
+        <div class="right">$99.99 USD</div>
+      </div>
+
+      <div class="price-row">
+        <div class="left">Discount</div>
+        <div class="right">$10.00 USD</div>
+      </div>
+
+      <div class="price-row total">
+        <div class="left">Total</div>
+        <div class="right">$89.99 USD</div>
+      </div>
+    </div>
+
+    <div class="right-content">
+      <h1 class="select-payment-title">Select your payment</h1>
+
+      <ion-radio-group [(ngModel)]="paymentMethod">
+        <div class="payment-methods">
+          <ion-item lines="none">
+            <ion-label>Credit / Debit Card</ion-label>
+            <ion-radio slot="start" value="card"></ion-radio>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-label>Paypal</ion-label>
+            <ion-radio slot="start" value="paypal"></ion-radio>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-label>Cash on Delivery</ion-label>
+            <ion-radio slot="start" value="cod"></ion-radio>
+          </ion-item>
+        </div>
+      </ion-radio-group>
+
+      <br/>
+
+      <h1>For card payment</h1>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="card-payment-form">
+        <div class="form-group">
+          <label for="cardNumber">Card Number</label>
+          <div class="input-group">
+            <input formControlName="cardNumber" type="email" id="cardNumber" class="form-control"
+                   placeholder="0000 0000 0000 0000"
+                   [ngClass]="{ 'is-invalid': submitted && f.cardNumber.errors }">
+
+            <div *ngIf="submitted && f.cardNumber.errors" class="invalid-feedback">
+              <div *ngIf="f.cardNumber.errors.required">Card number is required</div>
+            </div>
+          </div>
+
+        </div>
+        <div class="form-group">
+          <label for="nameOnCard">Name on Card</label>
+          <div class="input-group">
+            <input formControlName="nameOnCard" id="nameOnCard" type="text" class="form-control"
+                   placeholder="Name on Card"
+                   [ngClass]="{ 'is-invalid': submitted && f.nameOnCard.errors }">
+
+            <div *ngIf="submitted && f.nameOnCard.errors" class="invalid-feedback">
+              <div *ngIf="f.nameOnCard.errors.required">Cardholder name is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="expiryDate">Expiry Date</label>
+              <div class="input-group">
+                <input type="text" id="expiryDate" class="form-control" placeholder="MM/YY"
+                       formControlName="expiryDate" [ngClass]="{ 'is-invalid': submitted && f.expiryDate.errors }">
+                <div *ngIf="submitted && f.expiryDate.errors" class="invalid-feedback">
+                  <div *ngIf="f.expiryDate.errors.required">Expiry date is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="cvvCode">
+              <label for="cvvCode">CVV Code</label>
+              <div class="input-group">
+                <input type="number" id="cvvCode" class="form-control" placeholder="CVV Code"
+                       maxlength="4"
+                       formControlName="cvvCode" [ngClass]="{ 'is-invalid': submitted && f.cvvCode.errors }">
+                <div *ngIf="submitted && f.cvvCode.errors" class="invalid-feedback">
+                  <div *ngIf="f.cvvCode.errors.required">CVV code is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <button type="submit" mat-raised-button color="primary">
+          Proceed
+        </button>
+
+        <br/>
+        <br/>
+
+      </form>
+
+    </div>
+
+
+  </div>
+
+</div>
+<app-footer></app-footer>

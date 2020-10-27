@@ -1,0 +1,39 @@
+<app-header [pathsTree]="['SAT', 'Practice Test1', 'Reading Section']" subHeaderText3="60 minutes left"
+            rightBtnTitle="Finish this Section" (rightBtnClick)="onFinishSectionClick()"></app-header>
+
+<div class="container-fluid dashboard-content-container has-subheader">
+
+  <div class="content">
+
+    <div class=" direction-content">
+      <h1>
+        WELCOME TO {{data ? data.title : ''}}
+      </h1>
+
+      <p>
+        This test is divided up into 4 sections. Once you have finished all of the sections, you will get your math and
+        reading scores. You must complete (or skip) each section to unlock the next. You cannot "save" a section for
+        later, and once a section's timer has run out, you cannot go back to work on that section again. You can take
+        breaks between the sections, and you do not have to complete the whole practice test in one sitting. The first
+        part is Reading. It is 65 minutes and has 52 questions.
+      </p>
+
+      <p style="font-weight: 600">
+        Once you start the timer, you cannot pause this section.
+      </p>
+    </div>
+
+
+    <div class="direction-footer">
+      <!--      <button mat-button color="primary" (click)="onBack()">-->
+      <!--        Go to lesson page-->
+      <!--      </button>-->
+      <div style="display: flex;flex:1;"></div>
+      <button mat-raised-button color="primary" (click)="onNext()">
+        Let's go, start the timer
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

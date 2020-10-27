@@ -1,10 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-courses-dropview',
-  templateUrl: './courses-dropview.component.html'
+  templateUrl: './courses-dropview.component.html',
+  styleUrls: ['./courses-dropview.component.scss']
 })
 export class CoursesDropviewComponent implements OnInit {
+  @Output() dismiss = new EventEmitter<void>();
+
   coursePlans = ['Free Courses', 'Paid Courses'];
 
   courseTypes = [
@@ -55,10 +59,21 @@ export class CoursesDropviewComponent implements OnInit {
     }
   ];
 
-  constructor() {
+  constructor(
+    private router: Router,
+  ) {
   }
 
   ngOnInit(): void {
+  }
+
+  onCourseSelect(course): void {
+    this.dismiss.emit();
+    this.router.navigate(['select-exam-course'], {
+      queryParams: {
+        selectionType: 'course'
+      }
+    });
   }
 
 }

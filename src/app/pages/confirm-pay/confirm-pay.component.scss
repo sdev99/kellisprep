@@ -1,0 +1,169 @@
+::ng-deep app-page-path-tree {
+  .page-path-tree {
+    margin: 20px 80px 0;
+  }
+}
+
+.content {
+  margin: 20px 80px;
+  background-color: #FFFFFF;
+  border: 1px solid #D4D3D4;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .menu-title {
+    margin: 16px 5px 10px;
+    font: normal normal 600 38px/47px Montserrat;
+    letter-spacing: 0px;
+    color: #140020;
+    opacity: 1;
+  }
+
+  .left-menu {
+    border-right: 1px solid #D4D3D4;
+    display: flex;
+    padding-right: 0;
+    flex-direction: column;
+    min-width: 300px;
+    padding: 20px;
+
+    .title {
+      font: normal normal 600 34px/42px Montserrat;
+      letter-spacing: 0px;
+      color: #140020;
+      opacity: 1;
+    }
+
+    .price {
+      color: var(--unnamed-color-58068c);
+      text-align: left;
+      font: normal normal 600 29px/35px Montserrat;
+      letter-spacing: 0px;
+      color: #58068C;
+      opacity: 1;
+    }
+
+    .offer-price {
+      .original-price {
+        text-align: left;
+        text-decoration: line-through;
+        font: normal normal normal 14px/18px Montserrat;
+        letter-spacing: 0.42px;
+        color: #8E8C8F;
+        opacity: 1;
+      }
+
+      .off-percent {
+        text-align: left;
+        font: normal normal normal 14px/18px Montserrat;
+        letter-spacing: 0.42px;
+        color: #8E8C8F;
+        opacity: 1;
+      }
+    }
+
+    .price-row {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      margin-top: 20px;
+
+      .left {
+        flex: 1;
+        font: normal normal normal 14px/18px Montserrat;
+        letter-spacing: -0.14px;
+        color: #140020;
+        opacity: 1;
+      }
+
+      .right {
+        flex: 1;
+        text-align: right;
+        font: normal normal medium 14px/18px Montserrat;
+        letter-spacing: -0.14px;
+        color: #140020;
+        opacity: 1;
+      }
+
+      &.total * {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .right-content {
+    flex: 1;
+    padding: 30px;
+
+    h1 {
+      font: normal normal 600 17px/20px Montserrat;
+      letter-spacing: 0.51px;
+      color: #140020;
+      opacity: 1;
+
+      &.select-payment-title {
+        margin: 0;
+      }
+    }
+
+
+    .payment-methods {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      ion-item {
+        --padding-start: 0;
+        min-height: 20px;
+
+        ion-label {
+          margin: 0;
+        }
+
+        ion-radio {
+          margin: 0;
+          margin-right: 12px;
+          --color-checked: #58068c;
+          --inner-border-radius: 50%;
+          --border-radius: 50%;
+        }
+      }
+    }
+
+    .card-payment-form {
+      max-width: 496px;
+
+      label {
+        font: normal normal 500 14px/18px Montserrat;
+        letter-spacing: 0px;
+        color: #140020;
+        opacity: 1;
+      }
+
+      input {
+        border: 1px solid #E2DDE6;
+        font-weight: normal normal 500 12px/15px Montserrat;
+        letter-spacing: 0px;
+        color: #C5C7CB;
+        opacity: 1;
+      }
+
+      button {
+        width: 220px;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    margin: 20px 16px;
+
+    .left-menu {
+      width: 100%;
+    }
+    .right-content {
+      width: 100%;
+    }
+  }
+}

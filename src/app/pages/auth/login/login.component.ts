@@ -35,17 +35,19 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      email: ['sukhdev.patidar99@gmail.com', Validators.required],
-      password: ['12345678', Validators.required]
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+      // email: ['sukhdev.patidar99@gmail.com', Validators.required],
+      // password: ['12345678', Validators.required]
     });
   }
 
   // convenience getter for easy access to form fields
-  get f() {
+  get f(): any {
     return this.form.controls;
   }
 
-  openDialog() {
+  openDialog(): void {
 
     const dialogRef = this.dialog.open(ForgotpasswordComponent, {
       id: 'forgotpassword',
@@ -59,7 +61,7 @@ export class LoginComponent implements OnInit {
   }
 
 
-  onSubmit() {
+  onSubmit(): void {
     this.submitted = true;
 
     // reset alerts on submit

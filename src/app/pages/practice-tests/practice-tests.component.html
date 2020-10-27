@@ -1,0 +1,27 @@
+<app-header [pathsTree]="['SAT','Practice Test1']"></app-header>
+
+<div class="container-fluid dashboard-content-container has-subheader">
+  <div class="content">
+
+
+    <div class="row">
+      <div class="col-12">
+        <h2>Sections</h2>
+        <div class="list-heading">Practice</div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6" *ngFor="let item of practiceList">
+        <div class="practice-item">
+          <h3>{{item.title}}</h3>
+          <p>{{item.decription}}</p>
+
+          <button mat-raised-button color="primary" (click)="startPractice(item)">
+            Start
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

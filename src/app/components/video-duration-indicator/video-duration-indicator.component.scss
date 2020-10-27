@@ -1,0 +1,45 @@
+$pi: 3.14159265358979;
+$Twopi: $pi * 2;
+
+$circumference: calc(#{$Twopi} * 139);
+$arc-length-percent: 0.4;
+
+img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 25px;
+  stroke: #58068C;
+  //0.5 - 50%
+  stroke-dasharray: calc(#{$arc-length-percent} * #{$circumference}) $circumference;
+}
+
+.circle-bg {
+  fill: none;
+  stroke-width: 25px;
+  stroke: #DECDE8;
+}
+
+//layout stuff
+.container {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}

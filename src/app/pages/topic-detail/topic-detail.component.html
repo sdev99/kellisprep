@@ -1,0 +1,50 @@
+<app-header *ngIf="categoryDetail" [pathsTree]="['Math','Math '+categoryDetail.title]"
+            [subHeaderText3]="categoryDetail.price?'Price: '+categoryDetail.price:''"></app-header>
+
+<div class="container-fluid dashboard-content-container has-subheader">
+  <div class="content">
+    <mat-card class="course-card" *ngFor="let item of topics" (click)="onTopicItem(item)">
+      <mat-card-content>
+        <h2>{{item.title}}</h2>
+
+
+        <div class="row">
+
+          <div class="col-sm-12 col-md-6">
+            <mat-list>
+              <div class="list-heading">Learn</div>
+              <mat-list-item tappable *ngFor="let subItem of item.learnList" (click)="openLearnDetail(subItem)">
+                <!--                <mat-icon mat-list-icon>folder</mat-icon>-->
+
+                <app-video-duration-indicator mat-list-icon
+                                              [percent]="calculatePercent(subItem)"></app-video-duration-indicator>
+
+                <div mat-line>{{subItem.title}}</div>
+              </mat-list-item>
+            </mat-list>
+          </div>
+
+          <div class="col-sm-12 col-md-6" *ngIf="item.practiceList && item.practiceList.length>0">
+            <div class="list-heading">Practice</div>
+            <div class="practice-item" *ngFor="let subItem of item.practiceList">
+              <h3>{{subItem.title}}</h3>
+              <p>{{subItem.decription}}</p>
+
+              <button mat-raised-button color="primary" *ngIf="!subItem.practice" (click)="startPractice(subItem)">
+                Start
+              </button>
+
+              <button class="practice-btn" color="primary" *ngIf="subItem.practice">
+                Practice
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<app-footer></app-footer>

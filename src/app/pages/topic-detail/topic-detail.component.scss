@@ -1,0 +1,87 @@
+.content {
+  margin: 20px 80px;
+  padding-bottom: 20px;
+
+  .course-card {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #D4D3D4;
+
+    mat-card-content {
+      display: flex;
+      margin: auto;
+      flex-direction: column;
+      background-color: #FFFFFF;
+
+      h2 {
+        font: normal normal bold 24px/29px Montserrat;
+        letter-spacing: 0.72px;
+        color: #140020;
+      }
+
+      .list-heading {
+        font: normal normal 600 18px/22px Montserrat;
+        letter-spacing: 0px;
+        color: #656565;
+      }
+
+      mat-list {
+        .mat-list-icon {
+          width: auto;
+          height: auto;
+        }
+
+        .mat-line {
+          font: normal normal normal 16px/19px Montserrat;
+          letter-spacing: -0.16px;
+          color: #140020;
+          opacity: 1;
+        }
+      }
+
+      .practice-item {
+        display: flex;
+        flex-direction: column;
+        background: #FAFAFA 0% 0% no-repeat padding-box;
+        border: 1px solid #D4D3D4;
+        border-radius: 6px;
+        padding: 16px;
+        margin-top: 16px;
+
+        h3 {
+          font: normal normal 600 20px/24px Montserrat;
+          letter-spacing: -0.2px;
+          color: #140020;
+        }
+
+        p {
+          font: normal normal normal 16px/19px Montserrat;
+          letter-spacing: -0.16px;
+          color: #656565;
+        }
+
+        button {
+          width: 100px;
+          height: 43px;
+          background: var(--unnamed-color-58068c) 0% 0% no-repeat padding-box;
+          background: #58068C 0% 0% no-repeat padding-box;
+          border-radius: 3px;
+
+          &.practice-btn {
+            background: #D4C6DC 0% 0% no-repeat padding-box;
+            border-radius: 3px;
+            opacity: 1;
+            font: normal normal 600 14px/18px Montserrat;
+            letter-spacing: 0px;
+            color: #58068C;
+          }
+        }
+
+      }
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    margin: 20px 16px;
+  }
+}

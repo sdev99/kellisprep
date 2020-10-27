@@ -45,8 +45,40 @@
       <button type="button" style="color: #FF0000" (click)="logout()" ngbDropdownItem>Logout</button>
     </div>
   </div>
-
 </mat-toolbar>
+
+
+<!--Subheader-->
+<div class="subheader" *ngIf="subHeaderText1">
+  <div style="flex:1">
+    <span class="text1">{{subHeaderText1}}</span> <span class="text2" *ngIf="subHeaderText2">/ {{subHeaderText2}}</span>
+  </div>
+
+  <div>
+    <span class="text3" *ngIf="subHeaderText3">{{subHeaderText3}}</span>
+  </div>
+</div>
+
+<div class="subheader" *ngIf="pathsTree && pathsTree.length>0">
+  <div style="flex:1">
+    <ng-container *ngFor="let item of pathsTree; let idx=index">
+      <span class="text1" *ngIf="idx==0;else subPath">{{item}}</span>
+      <ng-template #subPath>
+        <span class="text2" *ngIf="idx==(pathsTree.length-1); else middlePath">/ {{item}}</span>
+        <ng-template #middlePath>
+          <span class="text-m">/ {{item}}</span>
+        </ng-template>
+      </ng-template>
+    </ng-container>
+  </div>
+
+  <div style="display: flex;flex-direction: row;align-items: center;">
+    <span class="text3" *ngIf="subHeaderText3">{{subHeaderText3}}</span>
+    <button mat-ripple class="subheader-right-btn" *ngIf="rightBtnTitle"
+                (click)="rightBtnClick.emit()">{{rightBtnTitle}}</button>
+  </div>
+</div>
+<!--Subheader End-->
 
 
 <mat-drawer #drawer mode="over" style="background-color: #FAFAFA;width: 200px;z-index: 9999"
@@ -88,7 +120,7 @@
     <ng-template ngbPanelHeader>
     </ng-template>
     <ng-template ngbPanelContent>
-      <app-exams-dropview></app-exams-dropview>
+      <app-exams-dropview (dismiss)="acc.toggle('exam-dropview')"></app-exams-dropview>
     </ng-template>
   </ngb-panel>
 
@@ -97,7 +129,7 @@
     <ng-template ngbPanelHeader>
     </ng-template>
     <ng-template ngbPanelContent>
-      <app-courses-dropview></app-courses-dropview>
+      <app-courses-dropview (dismiss)="acc.toggle('courses-dropview')"></app-courses-dropview>
     </ng-template>
   </ngb-panel>
 

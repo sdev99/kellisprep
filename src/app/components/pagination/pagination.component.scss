@@ -1,0 +1,36 @@
+.pagination-view {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .pagination-count {
+    font: normal normal medium 14px/18px Montserrat;
+    letter-spacing: 0px;
+    color: #140020;
+  }
+
+  .pagination-dots {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0 8px;
+
+    .dot {
+      border-radius: 50%;
+      background: #58068C 0% 0% no-repeat padding-box;
+      opacity: 0.2;
+      width: 6px;
+      height: 6px;
+      margin: 0 2.5px;
+
+      &.active {
+        background: #58068C 0% 0% no-repeat padding-box;
+        width: 10px;
+        height: 10px;
+        opacity: 1;
+      }
+    }
+  }
+}

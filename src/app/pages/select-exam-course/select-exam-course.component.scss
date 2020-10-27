@@ -1,0 +1,227 @@
+::ng-deep app-page-path-tree {
+  .page-path-tree {
+    margin: 20px 80px 0;
+  }
+}
+
+.content {
+  margin: 20px 80px;
+  background-color: #FFFFFF;
+  border: 1px solid #D4D3D4;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .menu-title {
+    margin: 16px 5px 10px;
+    font: normal normal 600 38px/47px Montserrat;
+    letter-spacing: 0px;
+    color: #140020;
+    opacity: 1;
+  }
+
+  .left-menu {
+    border-right: 1px solid #D4D3D4;
+    display: flex;
+    padding-right: 0;
+    flex-direction: column;
+    min-width: 200px;
+    padding: 20px;
+
+    .title {
+      font: normal normal 600 34px/42px Montserrat;
+      letter-spacing: 0px;
+      color: #140020;
+      opacity: 1;
+    }
+
+    .price {
+      color: var(--unnamed-color-58068c);
+      text-align: left;
+      font: normal normal 600 29px/35px Montserrat;
+      letter-spacing: 0px;
+      color: #58068C;
+      opacity: 1;
+    }
+
+    .offer-price {
+      margin-top: 8px;
+
+      .original-price {
+        text-align: left;
+        text-decoration: line-through;
+        font: normal normal normal 14px/18px Montserrat;
+        letter-spacing: 0.42px;
+        color: #8E8C8F;
+        opacity: 1;
+      }
+
+      .off-percent {
+        text-align: left;
+        font: normal normal normal 14px/18px Montserrat;
+        letter-spacing: 0.42px;
+        color: #8E8C8F;
+        opacity: 1;
+      }
+    }
+
+    .enrolled-student {
+      font: normal normal normal 16px/19px Montserrat;
+      letter-spacing: -0.16px;
+      color: #140020;
+      opacity: 1;
+      margin-top: 12px;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-top: 16px;
+
+      mat-icon, ion-icon {
+        margin-right: 8px;
+        color: #9D9A9F;
+        opacity: 1;
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
+      }
+
+      .text {
+        font: normal normal 600 14px/18px Montserrat;
+        letter-spacing: -0.14px;
+        color: #140020;
+        opacity: 1;
+      }
+    }
+
+    .guarntee-text {
+      font: normal normal normal 11px/14px Montserrat;
+      letter-spacing: -0.11px;
+      color: #737274;
+      opacity: 1;
+      width: 100%;
+      padding: 16px;
+    }
+
+    .leave-page-btn {
+      background-color: #EBE9EC;
+      text-align: center;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 600;
+      font-family: Montserrat;
+      letter-spacing: 0px;
+      color: #58068C;
+      opacity: 1;
+    }
+  }
+
+  .right-content {
+    flex: 1;
+    padding: 16px;
+
+    .video-play-view {
+      margin: auto;
+
+      .video-thumbnail {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+
+    .exam-card {
+      margin: 16px 5px;
+      border: 1px solid #D4D3D4;
+      border-radius: 6px;
+      display: flex;
+
+      mat-card-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .devider-line {
+          border: 1px solid #E2DDE6;
+          opacity: 1;
+          width: 100%;
+        }
+
+
+        ion-item {
+          ion-img {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          ion-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+    }
+
+    .card-learn {
+      margin: 16px 5px;
+      border: 1px solid #D4D3D4;
+      border-radius: 6px;
+      display: flex;
+
+      mat-card-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .devider-line {
+          border: 1px solid #E2DDE6;
+          opacity: 1;
+          width: 100%;
+        }
+
+
+        ion-item {
+          ion-icon {
+            margin-right: 16px;
+            width: 20px;
+            height: 20px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          ion-label {
+            font: normal normal normal 16px/19px Montserrat;
+            letter-spacing: -0.16px;
+            color: #140020;
+            opacity: 1;
+            white-space: normal;
+          }
+        }
+
+
+      }
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    margin: 20px 16px;
+
+    .left-menu {
+      width: 100%;
+    }
+    .right-content {
+      width: 100%;
+    }
+  }
+}

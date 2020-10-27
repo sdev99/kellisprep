@@ -38,7 +38,7 @@ export class ForgotpasswordComponent implements OnInit {
     return this.form.controls;
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.submitted = true;
 
     // reset alerts on submit

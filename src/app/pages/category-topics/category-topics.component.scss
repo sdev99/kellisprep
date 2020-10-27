@@ -1,0 +1,52 @@
+.content {
+  margin: 20px 80px;
+  padding-bottom: 20px;
+
+  .course-card {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #D4D3D4;
+
+    mat-card-content {
+      display: flex;
+      margin: auto;
+      flex-direction: row;
+      background-color: #FFFFFF;
+
+      .left {
+        padding: 0 10px;
+
+        img {
+          width: 46px;
+          height: 46px;
+        }
+      }
+
+      .right {
+        flex: 1;
+        padding: 0 16px;
+
+        .heading {
+          font: normal normal bold 18px/22px Montserrat;
+          letter-spacing: 0.54px;
+          color: #140020;
+          margin-top: 10px;
+        }
+
+        .row {
+          div {
+            font: normal normal normal 16px/19px Montserrat;
+            letter-spacing: -0.16px;
+            color: #140020;
+            padding-right: 16px;
+            padding-top: 16px;
+          }
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    margin: 20px 16px;
+  }
+}
