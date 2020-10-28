@@ -1,4 +1,8 @@
 {
-    "appService.defaultWebAppToDeploy": "/subscriptions/5f5ec1a7-6034-495a-8546-e05f79cdccbe/resourceGroups/KallisPrepRG/providers/Microsoft.Web/sites/KellisPrep",
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/5f5ec1a7-6034-495a-8546-e05f79cdccbe/resourceGroups/KallisPrepRG/providers/Microsoft.Web/sites/KellisprepWeb",
     "appService.deploySubpath": "."
 }
