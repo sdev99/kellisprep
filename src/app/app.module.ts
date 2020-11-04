@@ -58,6 +58,11 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
 import {AnswerMultipleChoiceItemComponent} from './components/answer-multiple-choice-item/answer-multiple-choice-item.component';
 import {ErrorInterceptor} from './helpers/error.interceptor';
+import {SocialLoginModule, SocialAuthServiceConfig} from 'angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider,
+} from 'angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -119,11 +124,30 @@ import {ErrorInterceptor} from './helpers/error.interceptor';
     IonicModule.forRoot(),
     MatRippleModule,
     MatCheckboxModule,
-    MatTableModule
+    MatTableModule,
+    SocialLoginModule
   ],
   providers: [
     {provide: MatPaginatorIntl, useClass: MatPaginatorIntlCro},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '282079938719-blhojiu1g4sjj3u2rcpl3bt6mvo467m4.apps.googleusercontent.com'
+            ),
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('813116739489112'),
+          },
+        ],
+      } as SocialAuthServiceConfig,
+    }
   ],
   bootstrap: [AppComponent]
 })

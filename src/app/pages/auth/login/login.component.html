@@ -41,22 +41,24 @@
           <br/>
           <br/>
 
-          <button [disabled]="loading" type="submit" mat-raised-button style="width: 100%" color="primary">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          <button [disabled]="loginLoading" type="submit" mat-raised-button style="width: 100%" color="primary">
+            <span *ngIf="loginLoading" class="spinner-border spinner-border-sm mr-1"></span>
             Login
           </button>
 
           <br/>
           <br/>
           <br/>
-          <button type="button" mat-raised-button style="width: 100%" class="social-btn">
+          <button [disabled]="googleLoading" type="button" mat-raised-button style="width: 100%" class="social-btn" (click)="signInWithGoogle()">
             <img src="./assets/images/google-icon.png" style="width: 22px;height: 22px"/>
+            <span *ngIf="googleLoading" class="spinner-border spinner-border-sm mr-1"></span>
             Continue with Google
           </button>
           <br/>
           <br/>
-          <button type="button" mat-raised-button style="width: 100%" class="social-btn">
+          <button [disabled]="facebookLoading" type="button" mat-raised-button style="width: 100%" class="social-btn" (click)="signInWithFB()">
             <mat-icon>facebook</mat-icon>
+            <span *ngIf="facebookLoading" class="spinner-border spinner-border-sm mr-1"></span>
             Continue with Facebok
           </button>
         </form>
