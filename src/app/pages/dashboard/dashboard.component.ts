@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.component';
 import {MatDialog} from '@angular/material/dialog';
 import {PersonalizeExamcourseComponent} from '../../modals/personalize-examcourse/personalize-examcourse.component';
+import {ApiService} from '../../services/api.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -236,6 +237,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private router: Router,
     public dialog: MatDialog,
+    public apiService: ApiService,
   ) {
     this.selectedMenu = this.menuItems[0].submenus[0];
     this.selectedExam = this.filterExamList[0];
@@ -250,6 +252,31 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.examSearch();
+    }, 2000);
+  }
+
+  examSearch(): void {
+    const proxyurl = 'https://cors-anywhere.herokuapp.com/';
+
+    // this.apiService.examSearch({languageId: 1, searchStyle: 0, includeCourses: false}).subscribe((data) => {
+    //   debugger;
+    // }, (error) => {
+    // });
+
+    fetch('http://52.179.100.163/api/exam/search', {
+      headers: {
+        Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbXIiOiJbbnVsbCxudWxsLFwic3VraGRldi5wYXRpZGFyOTlAZ21haWwuY29tXCIsXCI0XCJdIiwianRpIjoiNDhjNTIzNDMtMDExNS00MzJhLThmMmQtN2M2MDZjNTM2YTE3IiwiaWF0IjoiMTEvMi8yMDIwIDQ6MDA6MjYgQU0iLCJuYmYiOjE2MDQyODk2MjYsImV4cCI6MTYwNDI5MzIyNiwiaXNzIjoiaHR0cHM6Ly93d3cua2FsbGlzcHJlcC5jb20iLCJhdWQiOiJTaXRlVXNlcnMifQ.2jolz8uWg3DbY457E4RarpFFnte-zWHr6xxOA_DVpKE',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({}),
+      mode: 'cors',
+    }).then((res) => {
+      debugger;
+    }).catch(error => {
+      debugger;
+    });
   }
 
   onItemSelect(item): void {

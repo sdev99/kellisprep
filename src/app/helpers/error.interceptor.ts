@@ -16,14 +16,29 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+
+    const token = this.accountService.userValue?.token;
+    // Authentication by setting header with token value
+    if (token && !request.headers.has('Authorization')) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: 'Bearer ' + token
+        }
+      });
+    }
+
+    request = request.clone({
+      headers: request.headers.set('Accept', 'application/json')
+    });
+
     return next.handle(request).pipe(catchError(err => {
+
       if ([401, 403].includes(err.status) && this.accountService.userValue) {
         // auto logout if 401 or 403 response returned from api
         this.accountService.logout();
       }
 
-      const error = err.error?.message || err.statusText;
-      console.error(err);
+      const error = err.error;
       return throwError(error);
     }));
   }

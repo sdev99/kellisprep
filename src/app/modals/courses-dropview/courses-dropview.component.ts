@@ -43,7 +43,7 @@ export class CoursesDropviewComponent implements OnInit {
       ]
     },
     {
-      type: 'Tofefl',
+      type: 'TOEFL',
       list: [
         {title: 'Couse name 1'},
         {title: 'Couse name 2'},

@@ -36,7 +36,7 @@ export class AccountService {
     return this.userSubject.value;
   }
 
-  login(eMail = '', password = '', googleId = '', facebookId = '') {
+  login(eMail = '', password = '', googleId = '', facebookId = ''): Observable<any> {
     return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.LOGIN}`, {
       googleId,
       facebookId,
@@ -70,27 +70,27 @@ export class AccountService {
     }));
   }
 
-  googleLogin(googleId = '') {
+  googleLogin(googleId = ''): Observable<any> {
     return this.login('', '', googleId);
   }
 
-  facebookLogin(facebookId = '') {
+  facebookLogin(facebookId = ''): Observable<any> {
     return this.login('', '', '', facebookId);
   }
 
-  resgiter(data) {
+  resgiter(data): Observable<any> {
     return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.REGISTER}`, data);
   }
 
-  forgotpassword(languageId, email) {
+  forgotpassword(languageId, email): Observable<any> {
     return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.FORGOTPWD}`, {languageId, email});
   }
 
-  contactusSubmit(data) {
+  contactusSubmit(data): Observable<any> {
     return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.CONTACTUS}`, data);
   }
 
-  logout() {
+  logout(): void {
     // remove user from local storage and set current user to null
     localStorage.removeItem(EnumService.localStorageKeys.USER_DATA);
     this.userSubject.next(null);

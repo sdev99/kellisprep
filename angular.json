@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "kellisprep": {
+    "kallisprep": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/kellisprep",
+            "outputPath": "dist/kallisprep",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -101,18 +101,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "kellisprep:build"
+            "browserTarget": "kallisprep:build",
+            "proxyConfig": "src/proxy.conf.json"
           },
           "configurations": {
             "production": {
-              "browserTarget": "kellisprep:build:production"
+              "browserTarget": "kallisprep:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "kellisprep:build"
+            "browserTarget": "kallisprep:build"
           }
         },
         "test": {
@@ -149,40 +150,40 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "kellisprep:serve"
+            "devServerTarget": "kallisprep:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "kellisprep:serve:production"
+              "devServerTarget": "kallisprep:serve:production"
             }
           }
         },
         "ionic-cordova-serve": {
           "builder": "@ionic/angular-toolkit:cordova-serve",
           "options": {
-            "cordovaBuildTarget": "kellisprep:ionic-cordova-build",
-            "devServerTarget": "kellisprep:serve"
+            "cordovaBuildTarget": "kallisprep:ionic-cordova-build",
+            "devServerTarget": "kallisprep:serve"
           },
           "configurations": {
             "production": {
-              "cordovaBuildTarget": "kellisprep:ionic-cordova-build:production",
-              "devServerTarget": "kellisprep:serve:production"
+              "cordovaBuildTarget": "kallisprep:ionic-cordova-build:production",
+              "devServerTarget": "kallisprep:serve:production"
             }
           }
         },
         "ionic-cordova-build": {
           "builder": "@ionic/angular-toolkit:cordova-build",
           "options": {
-            "browserTarget": "kellisprep:build"
+            "browserTarget": "kallisprep:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "kellisprep:build:production"
+              "browserTarget": "kallisprep:build:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "kellisprep"
+  "defaultProject": "kallisprep"
 }

@@ -27,6 +27,15 @@ export class EnumService {
     UPDATESETTINGS: 'user/updatesettings',
     GETSETTINGS: 'user/getsettings',
 
+    CATEGORY_SEARCH: 'category/search',
+
+    EXAM_HISTORY: 'user/history',
+    EXAM_SEARCH: 'exam/search',
+    EXAM_PURCHASE: 'exam/purchase',
+    EXAM_SESSION_INIT: 'examsession/init',
+    EXAM_SESSION_RESUME: 'examsession/resume',
+    EXAM_SESSION_END: 'examsession/end',
+
     CONTACTUS: 'communication/contact',
   };
 }
