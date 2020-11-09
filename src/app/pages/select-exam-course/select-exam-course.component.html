@@ -4,15 +4,25 @@
 <div class="container-fluid dashboard-content-container">
   <app-page-path-tree></app-page-path-tree>
 
-  <div class="content">
+  <app-alert></app-alert>
+
+
+  <div class="content" *ngIf="examDetail">
     <div class="left-menu">
-      <h1 class="title">SAT EXAM</h1>
-      <div class="price">$99.00</div>
-      <div class="offer-price">
-        <span class="original-price">$36.99</span>
-        &nbsp;
-        <span class="off-percent">71% off</span>
-      </div>
+      <h1 class="title">{{examDetail.title}}</h1>
+
+      <ng-container *ngIf="examDetail.price">
+        <div class="price">{{examDetail.price + ' ' + examDetail.currencyText}}</div>
+
+        <div class="offer-price">
+          <span class="original-price">$36.99</span>
+          &nbsp;
+          <span class="off-percent">71% off</span>
+        </div>
+      </ng-container>
+      <div class="price" *ngIf="!examDetail.price">Free</div>
+
+
       <div *ngIf="selectionType === 'course'" class="enrolled-student">6,412 students Enrolled</div>
 
       <br/>
@@ -98,14 +108,12 @@
                 </ion-label>
               </ion-item>
             </div>
-
           </div>
         </mat-card-content>
       </mat-card>
-
     </div>
-
   </div>
-
 </div>
+
 <app-footer></app-footer>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop:true }"></ngx-loading>

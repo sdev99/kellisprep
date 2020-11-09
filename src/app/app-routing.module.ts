@@ -17,6 +17,10 @@ import {SectionDirectionComponent} from './pages/section-direction/section-direc
 import {WritingSectionComponent} from './pages/writing-section/writing-section.component';
 import {PrivacypolicyComponent} from './pages/privacypolicy/privacypolicy.component';
 import {TermsofserviceComponent} from './pages/termsofservice/termsofservice.component';
+import {ReadingSectionComponent} from './pages/reading-section/reading-section.component';
+import {MathSectionComponent} from './pages/math-section/math-section.component';
+import {ListeningSectionComponent} from './pages/listening-section/listening-section.component';
+import {SpeakingSectionComponent} from './pages/speaking-section/speaking-section.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'}, // redirect to `first-component`
@@ -35,7 +39,11 @@ const routes: Routes = [
   {path: 'practice-tests', component: PracticeTestsComponent, canActivate: [AuthGuard]},
   {path: 'test-direction', component: TestDirectionComponent, canActivate: [AuthGuard]},
   {path: 'section-direction', component: SectionDirectionComponent, canActivate: [AuthGuard]},
+  {path: 'reading-section', component: ReadingSectionComponent, canActivate: [AuthGuard]},
   {path: 'writing-section', component: WritingSectionComponent, canActivate: [AuthGuard]},
+  {path: 'math-section', component: MathSectionComponent, canActivate: [AuthGuard]},
+  {path: 'listening-section', component: ListeningSectionComponent, canActivate: [AuthGuard]},
+  {path: 'speaking-section', component: SpeakingSectionComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

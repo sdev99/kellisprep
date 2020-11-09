@@ -1,4 +1,6 @@
-<app-header [pathsTree]="['SAT','Practice Test1']"></app-header>
+<app-header [pathsTree]="pathsTree"></app-header>
+
+<app-alert></app-alert>
 
 <div class="container-fluid dashboard-content-container has-subheader">
   <div class="content">
@@ -15,7 +17,9 @@
           <h3>{{item.title}}</h3>
           <p>{{item.decription}}</p>
 
-          <button mat-raised-button color="primary" (click)="startPractice(item)">
+          <button
+            *ngIf="examResumeSessionData && examResumeSessionData.sectionData && item.type === examResumeSessionData.sectionData.name"
+            mat-raised-button color="primary" (click)="startPractice(item)">
             Start
           </button>
         </div>

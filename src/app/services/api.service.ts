@@ -28,11 +28,26 @@ export class ApiService {
   }
 
   examSearch(data): Observable<any> {
-    const url = 'http://52.179.100.163/api';
-    return this.http.post(`${url}/${EnumService.apiEndPoints.EXAM_SEARCH}?${this.queryString(data)}`, {}, {
-      headers: {
-        'Content-Type': 'applciation/json'
-      },
-    });
+    return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.EXAM_SEARCH}?${this.queryString(data)}`, {});
+  }
+
+  userHistory(data): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.USER_HISTORY}`, data);
+  }
+
+  purchaseExam(data): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.EXAM_PURCHASE}`, data);
+  }
+
+  initExamSession(data): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.EXAM_SESSION_INIT}`, data);
+  }
+
+  resumeExamSession(data): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.EXAM_SESSION_RESUME}`, data);
+  }
+
+  endExamSession(data): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.EXAM_SESSION_END}`, data);
   }
 }

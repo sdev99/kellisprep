@@ -78,6 +78,14 @@ export class AccountService {
     return this.login('', '', '', facebookId);
   }
 
+  facebookRegister(data): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.REGISTER}`, data);
+  }
+
+  googleRegister(data): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.REGISTER}`, data);
+  }
+
   resgiter(data): Observable<any> {
     return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.REGISTER}`, data);
   }

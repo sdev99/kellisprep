@@ -4,6 +4,9 @@ import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.co
 import {MatDialog} from '@angular/material/dialog';
 import {PersonalizeExamcourseComponent} from '../../modals/personalize-examcourse/personalize-examcourse.component';
 import {ApiService} from '../../services/api.service';
+import {AccountService} from '../../services/account.service';
+import {CookieService} from 'ngx-cookie-service';
+import {EnumService} from '../../services/enum.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +14,8 @@ import {ApiService} from '../../services/api.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  loading = false;
+
   menuItems = [
     {
       title: 'My Courses',
@@ -19,6 +24,7 @@ export class DashboardComponent implements OnInit {
           title: 'Purchased Courses',
           type: 'course',
           planType: 'purchased',
+          apiDataKey: 'paidCourses',
           list: [
             {
               title: 'US history',
@@ -46,6 +52,7 @@ export class DashboardComponent implements OnInit {
           title: 'Free Courses',
           type: 'course',
           planType: 'free',
+          apiDataKey: 'freeCourses',
           list: [
             {
               title: 'US history',
@@ -74,6 +81,7 @@ export class DashboardComponent implements OnInit {
       submenus: [
         {
           title: 'Purchased Exams',
+          apiDataKey: 'paidExams',
           type: 'exam',
           planType: 'purchased',
           list: [
@@ -103,6 +111,7 @@ export class DashboardComponent implements OnInit {
           title: 'Free Exams',
           type: 'exam',
           planType: 'free',
+          apiDataKey: 'freeExams',
           list: [
             {
               title: 'SAT',
@@ -132,7 +141,8 @@ export class DashboardComponent implements OnInit {
       submenus: [
         {
           title: 'Exam History',
-          type: 'exam_history'
+          type: 'exam_history',
+          apiDataKey: 'examHistory',
         },
       ]
     }
@@ -234,10 +244,14 @@ export class DashboardComponent implements OnInit {
     previousPageIndex: number
   };
 
+  myHistories;
+
   constructor(
     private router: Router,
     public dialog: MatDialog,
     public apiService: ApiService,
+    public cookieService: CookieService,
+    public accountService: AccountService,
   ) {
     this.selectedMenu = this.menuItems[0].submenus[0];
     this.selectedExam = this.filterExamList[0];
@@ -252,32 +266,45 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.examSearch();
-    }, 2000);
+    this.getUserHistory();
   }
 
-  examSearch(): void {
-    const proxyurl = 'https://cors-anywhere.herokuapp.com/';
+  getUserHistory(): void {
+    this.apiService.userHistory({courseLanguageId: 1, userId: this.accountService.userValue.id}).subscribe((data) => {
 
-    // this.apiService.examSearch({languageId: 1, searchStyle: 0, includeCourses: false}).subscribe((data) => {
-    //   debugger;
-    // }, (error) => {
-    // });
+      const myHistories = {};
+      Object.keys(data).map((historyType) => {
+        const list = data[historyType];
+        if (historyType !== 'examHistory') {
+          const examsByTypes = {};
+          list.map((item) => {
+            if (!examsByTypes[item.type]) {
+              examsByTypes[item.type] = [];
+            }
+            examsByTypes[item.type].push(item);
+          });
+          myHistories[historyType] = examsByTypes;
+        } else {
+          myHistories[historyType] = list;
+        }
+      });
 
-    fetch('http://52.179.100.163/api/exam/search', {
-      headers: {
-        Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbXIiOiJbbnVsbCxudWxsLFwic3VraGRldi5wYXRpZGFyOTlAZ21haWwuY29tXCIsXCI0XCJdIiwianRpIjoiNDhjNTIzNDMtMDExNS00MzJhLThmMmQtN2M2MDZjNTM2YTE3IiwiaWF0IjoiMTEvMi8yMDIwIDQ6MDA6MjYgQU0iLCJuYmYiOjE2MDQyODk2MjYsImV4cCI6MTYwNDI5MzIyNiwiaXNzIjoiaHR0cHM6Ly93d3cua2FsbGlzcHJlcC5jb20iLCJhdWQiOiJTaXRlVXNlcnMifQ.2jolz8uWg3DbY457E4RarpFFnte-zWHr6xxOA_DVpKE',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({}),
-      mode: 'cors',
-    }).then((res) => {
-      debugger;
-    }).catch(error => {
-      debugger;
+      this.myHistories = myHistories;
+
+      // currencyId: 1
+      // currencyText: "USD"
+      // id: 8
+      // isStarted: false
+      // name: "TOEFL #1"
+      // price: 100
+      // sectionId: null
+      // type: "TOEFL"
+
+    }, (error) => {
+
     });
   }
+
 
   onItemSelect(item): void {
     this.selectedMenu = item;
@@ -287,7 +314,46 @@ export class DashboardComponent implements OnInit {
     this.examHistoryPagination = event;
   }
 
-  openTopicDetail(category, item): void {
+  startExam(item): void {
+    if (this.selectedMenu.type === 'exam') {
+      this.loading = true;
+      this.apiService.initExamSession({
+        userId: this.accountService.userValue.id,
+        examId: item.id
+      }).subscribe((data) => {
+        this.loading = false;
+        this.cookieService.set(EnumService.cookieNames.CURRENT_EXAM_SESSION, JSON.stringify(item));
+        if (data.isSuccess) {
+          this.router.navigate(['practice-tests']);
+        } else {
+          this.router.navigate(['practice-tests']);
+        }
+      }, (error) => {
+        this.loading = false;
+      });
+      // {
+      //   "examId": 2,
+      //   "userId": 14,
+      //   "sessionId": "b34ab0e5-ec3e-4c13-9ae5-556a9f07439c",
+      //   "examTypeId": 1,
+      //   "examTypeText": "SAT",
+      //   "title": "SAT-EXAM-01",
+      //   "description": "<p>SAT-EXAM-01</p>",
+      //   "isSuccess": true,
+      //   "exception": null,
+      //   "messages": null
+      // }
+
+    } else if (this.selectedMenu.type === 'course') {
+      this.router.navigate(['topic-detail'], {
+        queryParams: {
+          topic: JSON.stringify(item),
+        }
+      });
+    }
+  }
+
+  openTopicDetail(category, item = {}): void {
     if (this.selectedMenu.type === 'exam') {
       this.router.navigate(['practice-tests'], {
         queryParams: {
@@ -305,11 +371,11 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  seeAll(item): void {
+  seeAll(type): void {
     if (this.selectedMenu.type === 'course') {
       this.router.navigate(['category-topics'], {
         queryParams: {
-          category: JSON.stringify(item)
+          category: type
         }
       });
     }

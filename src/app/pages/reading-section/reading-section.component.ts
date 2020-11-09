@@ -6,17 +6,16 @@ import {MatDialog} from '@angular/material/dialog';
 import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.component';
 import {EnumService} from '../../services/enum.service';
 import {CookieService} from 'ngx-cookie-service';
-import {AccountService} from '../../services/account.service';
 import {ApiService} from '../../services/api.service';
+import {AccountService} from '../../services/account.service';
 import {AlertService} from '../../services/alert.service';
 
 @Component({
-  selector: 'app-writing-section',
-  templateUrl: './writing-section.component.html',
-  styleUrls: ['./writing-section.component.scss']
+  selector: 'app-reading-section',
+  templateUrl: './reading-section.component.html',
+  styleUrls: ['./reading-section.component.scss']
 })
-export class WritingSectionComponent implements OnInit {
-
+export class ReadingSectionComponent implements OnInit {
   EnumService = EnumService;
 
   loading = false;
@@ -86,7 +85,7 @@ export class WritingSectionComponent implements OnInit {
 
     if (item) {
       this.itemDetail = JSON.parse(item);
-      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Writing Section'];
+      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Reading Section'];
     }
 
     if (examData) {
@@ -146,7 +145,7 @@ export class WritingSectionComponent implements OnInit {
     }).subscribe((res) => {
       this.loading = false;
       if (res.isSuccess) {
-        this.openMathSectionDialog();
+        this.openWritingSectionDialog();
 
       } else {
         this.alertService.error(res.messages.join('\n'));
@@ -155,7 +154,6 @@ export class WritingSectionComponent implements OnInit {
       this.loading = false;
     });
   };
-
 
   singleChoiceItemSelect(item, subItem): void {
     item.choices.map((choice) => {
@@ -186,17 +184,17 @@ export class WritingSectionComponent implements OnInit {
     });
   }
 
-  openMathSectionDialog(): void {
+  openWritingSectionDialog(): void {
 
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       id: 'confirmdialog',
       disableClose: true,
       role: 'dialog',
       data: {
-        title: 'You finished Writing, nice work!',
-        message: 'When you take the real SAT, there\'s a 10-minute break before the next section. Take a quick breather, and when you\'re ready, start the next section: Math section.',
+        title: 'You finished Reading, nice work!',
+        message: 'When you take the real SAT, there\'s a 10-minute break before the next section. Take a quick breather, and when you\'re ready, start the next section: Writing section.',
         leftBtnTitle: 'Start Later',
-        rightBtnTitle: 'Start the Math Section'
+        rightBtnTitle: 'Start the Writing Section'
       }
     });
 
@@ -219,7 +217,7 @@ export class WritingSectionComponent implements OnInit {
         this.cookieService.set(EnumService.cookieNames.CURRENT_EXAM_SESSION_DATA, JSON.stringify(data));
         this.router.navigate(['test-direction'], {
           queryParams: {
-            practiceType: EnumService.examSectionTypes.MATH
+            practiceType: EnumService.examSectionTypes.WRITING
           }
         });
       } else {
@@ -227,7 +225,6 @@ export class WritingSectionComponent implements OnInit {
       }
     });
   };
-
 
   onBack(): void {
     this.location.back();

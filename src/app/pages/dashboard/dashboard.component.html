@@ -1,6 +1,8 @@
 <app-header></app-header>
 <div class="container-fluid dashboard-content-container">
 
+  <app-alert></app-alert>
+
   <div class="content">
     <div class="left-menu">
       <div class="list-group" *ngFor="let section of menuItems">
@@ -78,76 +80,82 @@
         </div>
         <!--        filter-toolbar-end  -->
 
+        <ng-container *ngIf="myHistories[selectedMenu.apiDataKey] && myHistories[selectedMenu.apiDataKey].length>0">
+          <table class="table exam-history-table">
+            <thead>
+            <tr>
+              <th scope="col" sortable="name">Exams</th>
+              <th scope="col" sortable="area">Date</th>
+              <th scope="col" sortable="population">Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let exam of myHistories[selectedMenu.apiDataKey] | listFilter:examSearchTerm:'examTitle'">
+              <td>
+                <div class="exam-name">
+                  <ngb-highlight [result]="exam.examTitle" [term]="examSearchTerm"></ngb-highlight>
+                </div>
+                <div class="exam-type">
+                  <ngb-highlight [result]="exam.examType" [term]="examSearchTerm"></ngb-highlight>
+                </div>
+              </td>
+              <td>
+                <ngb-highlight [result]="exam.completedOn | date:'MMM dd,yyyy \'at\' hh:mm a'"
+                               [term]="examSearchTerm"></ngb-highlight>
+              </td>
+              <td>
+                <ngb-highlight [result]="exam.score | number" [term]="examSearchTerm"></ngb-highlight>
+                %
+              </td>
+            </tr>
+            </tbody>
+          </table>
 
-        <table class="table exam-history-table">
-          <thead>
-          <tr>
-            <th scope="col" sortable="name">Exams</th>
-            <th scope="col" sortable="area">Date</th>
-            <th scope="col" sortable="population">Score</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let exam of getExamHistoryListByPagination() | listFilter:examSearchTerm:'title'">
-            <td>
-              <div class="exam-name">
-                <ngb-highlight [result]="exam.title" [term]="examSearchTerm"></ngb-highlight>
-              </div>
-              <div class="exam-type">
-                <ngb-highlight [result]="exam.type" [term]="examSearchTerm"></ngb-highlight>
-              </div>
-            </td>
-            <td>
-              <ngb-highlight [result]="exam.date | date:'MMM dd,yyyy \'at\' hh:mm a'"
-                             [term]="examSearchTerm"></ngb-highlight>
-            </td>
-            <td>
-              <ngb-highlight [result]="exam.score | number" [term]="examSearchTerm"></ngb-highlight>
-              %
-            </td>
-          </tr>
-          </tbody>
-        </table>
 
-
-        <mat-paginator [length]="examsHistories.length"
-                       [pageSize]="examHistoryPagination.pageSize"
-                       (page)="pageChange($event)"
-                       [pageSizeOptions]="itemsPerPage">
-        </mat-paginator>
+          <mat-paginator [length]="myHistories[selectedMenu.apiDataKey].length"
+                         [pageSize]="examHistoryPagination.pageSize"
+                         (page)="pageChange($event)"
+                         [pageSizeOptions]="itemsPerPage">
+          </mat-paginator>
+        </ng-container>
 
       </ng-container>
 
       <ng-template #myExamCourses>
-        <div class="row">
-          <div class="col-xs-12 col-sm-6" *ngFor="let item of selectedMenu.list">
+        <div class="row" *ngIf="myHistories && myHistories[selectedMenu.apiDataKey]">
+          <div class="col-xs-12 col-sm-6" *ngFor="let keyvalue of myHistories[selectedMenu.apiDataKey] | keyvalue">
             <mat-card class="course-card">
               <mat-card-content>
                 <mat-list>
+
                   <mat-list-item>
-                    <div mat-line>{{item.title}}</div>
-                    <div mat-line class="price" *ngIf="item.price"> Price: {{item.price}}</div>
-                    <button mat-button color="primary" (click)="seeAll(item)">
+                    <div mat-line>{{keyvalue.key}}</div>
+                    <!--                    <div mat-line class="price" *ngIf="item.price">-->
+                    <!--                      Price: {{item.price + ' ' + item.currencyText}}-->
+                    <!--                    </div>-->
+                    <button mat-button color="primary" (click)="seeAll(keyvalue.key)">
                       See all
                     </button>
                   </mat-list-item>
+
                   <mat-divider></mat-divider>
 
-                  <mat-list-item class="chapter-item" *ngFor="let chapter of item.topics">
-                    <div mat-line>{{chapter.title}}</div>
-                    <button mat-raised-button color="primary" *ngIf="chapter.status === 'resume'"
-                            (click)="openTopicDetail(item,chapter)">
+                  <mat-list-item class="chapter-item" *ngFor="let item of keyvalue.value">
+                    <div mat-line>{{item.name}}</div>
+                    <button mat-raised-button color="primary" *ngIf="item.isStarted"
+                            (click)="startExam(item)">
                       Resume
                     </button>
 
-                    <button mat-raised-button color="primary" *ngIf="chapter.status === 'start'" (click)="openTopicDetail(item,chapter)">
+                    <button mat-raised-button color="primary" *ngIf="!item.isStarted"
+                            (click)="startExam(item)">
                       Start
                     </button>
 
-                    <div class="completed" *ngIf="chapter.status === 'completed'">
-                      <mat-icon>check_circle</mat-icon>
-                      Completed
-                    </div>
+                    <!--                    <div class="completed" *ngIf="chapter.status === 'completed'">-->
+                    <!--                      <mat-icon>check_circle</mat-icon>-->
+                    <!--                      Completed-->
+                    <!--                    </div>-->
 
                   </mat-list-item>
                 </mat-list>
@@ -179,4 +187,6 @@
   </div>
 
 </div>
+
 <app-footer></app-footer>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop:true }"></ngx-loading>

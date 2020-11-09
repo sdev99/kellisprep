@@ -94,12 +94,12 @@ export class LoginComponent implements OnInit {
                 this.router.navigate([returnUrl]);
               }, 1000);
             } else {
-              this.alertService.error(data.message);
+              this.signUpWithGoogle(res);
             }
           },
           error: error => {
             this.googleLoading = false;
-            this.alertService.error(error.statusText);
+            this.signUpWithGoogle(res);
           }
         });
 
@@ -113,6 +113,7 @@ export class LoginComponent implements OnInit {
     this.facebookLoading = true;
 
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID).then((res) => {
+      debugger;
       // authToken: "EAALjhn5rDVgBAMRRW5qPbWfAKR3QgG5zB65TDgXNreLwkcEZAZCw3sIiOZAZBIqeeVZBPZAMMzbLlIAzUDCk8ZBnpUSeR8aQ7ZAcDmTOKZAwDuDzQOSDAAZCZAdTxecwWj8vq39iCpRWBP0j0eRtPml5xD1ERDtJJvWiFlBoNsapAaOo8oOXbwLgQgIVvWZBrUwXZCk6yFZCDKHWegBAZDZD"
       // email: "sukhdev.patidar99@gmail.com"
       // firstName: "Sukhdev"
@@ -136,18 +137,88 @@ export class LoginComponent implements OnInit {
                 this.router.navigate([returnUrl]);
               }, 1000);
             } else {
-              this.alertService.error(data.message);
+              this.signUpWithFB(res);
             }
           },
           error: error => {
             this.facebookLoading = false;
-            this.alertService.error(error.statusText);
+            this.signUpWithFB(res);
           }
         });
 
     }).catch((error) => {
       this.facebookLoading = false;
     });
+  }
+
+
+  signUpWithFB(socialUser): void {
+    this.alertService.clear();
+    this.facebookLoading = true;
+
+    this.accountService.facebookRegister({
+      facebookId: socialUser.id,
+      firstname: socialUser.firstName,
+      lastname: socialUser.lastName,
+      eMail: socialUser.email,
+      username: socialUser.name,
+      roleId: EnumService.userRoles.Student,
+    })
+      // .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.facebookLoading = false;
+
+          if (data.isSuccess) {
+            this.alertService.success('Login success');
+            const returnUrl = this.route.snapshot.queryParams.returnUrl || '/dashboard';
+
+            setTimeout(() => {
+              this.router.navigate([returnUrl]);
+            }, 1000);
+          } else {
+            this.alertService.error(data.message);
+          }
+        },
+        error: error => {
+          this.facebookLoading = false;
+          this.alertService.error(error.statusText);
+        }
+      });
+  }
+
+  signUpWithGoogle(socialUser): void {
+    this.alertService.clear();
+    this.googleLoading = true;
+
+    this.accountService.googleRegister({
+      googleId: socialUser.id,
+      firstname: socialUser.firstName,
+      lastname: socialUser.lastName,
+      username: socialUser.name,
+      roleId: EnumService.userRoles.Student,
+    })
+      // .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          this.googleLoading = false;
+
+          if (data.isSuccess) {
+            this.alertService.success('Login success');
+            const returnUrl = this.route.snapshot.queryParams.returnUrl || '/dashboard';
+
+            setTimeout(() => {
+              this.router.navigate([returnUrl]);
+            }, 1000);
+          } else {
+            this.alertService.error(data.message);
+          }
+        },
+        error: error => {
+          this.googleLoading = false;
+          this.alertService.error(error.statusText);
+        }
+      });
   }
 
   onSubmit(): void {

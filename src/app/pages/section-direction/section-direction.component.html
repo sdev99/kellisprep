@@ -1,4 +1,4 @@
-<app-header [pathsTree]="['SAT', 'Practice Test1', 'Reading Section']" subHeaderText3="60 minutes left"
+<app-header [pathsTree]="pathsTree" subHeaderText3="60 minutes left"
             rightBtnTitle="Finish this Section" (rightBtnClick)="onFinishSectionClick()"></app-header>
 
 <div class="container-fluid dashboard-content-container has-subheader">
@@ -7,7 +7,7 @@
 
     <div class=" direction-content">
       <h1>
-        WELCOME TO Reading Section
+        WELCOME TO {{practiceType}} Section
       </h1>
 
       <p>

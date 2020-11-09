@@ -1,0 +1,133 @@
+::ng-deep app-page-path-tree {
+  .page-path-tree {
+    margin: 20px 80px 0;
+  }
+}
+
+.content {
+  margin: 20px 80px;
+  background-color: #FFFFFF;
+  border: 1px solid #D4D3D4;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: hidden;
+
+
+  .practice-content {
+    margin: 0;
+    width: 100%;
+
+    .question {
+      font: normal normal 600 14px/18px Montserrat;
+      letter-spacing: 0.42px;
+      color: #140020;
+      opacity: 1;
+    }
+
+
+    .left-content {
+      overflow-y: auto;
+      max-height: 50vh;
+      border-right: 1px solid #D4D3D4;
+      display: flex;
+      flex-direction: column;
+
+      h1 {
+        margin: 30px;
+        font: normal normal 600 20px/24px Montserrat;
+        letter-spacing: 0px;
+        color: #140020;
+        opacity: 1;
+      }
+
+      p {
+        margin: 0 30px 30px;
+        font: normal normal normal 12px/17px Montserrat;
+        letter-spacing: -0.12px;
+        color: #140020;
+        opacity: 1;
+      }
+    }
+
+    .right-content {
+      padding: 30px;
+      overflow-y: auto;
+      max-height: 50vh;
+
+      .question-count {
+        font: normal normal 600 12px/15px Montserrat;
+        letter-spacing: 0px;
+        color: #656565;
+        opacity: 1;
+        padding: 20px 0;
+      }
+
+      .answer-type {
+        font: normal normal 600 14px/18px Montserrat;
+        letter-spacing: 0.42px;
+        color: #140020;
+        opacity: 1;
+        padding: 20px 0;
+      }
+
+      .video-view {
+        width: 80%;
+        min-width: 280px;
+        margin: 30px auto;
+        height: 40vh;
+      }
+
+
+      .textarea-input {
+
+        label {
+          font: normal normal 600 14px/18px Montserrat;
+          letter-spacing: 0.42px;
+          color: #140020;
+          opacity: 1;
+        }
+
+        textarea {
+          margin-top: 10px;
+          border: 1px solid #D4D3D4;
+          border-radius: 6px;
+          opacity: 1;
+          padding: 12px;
+          height: 290px;
+          width: 100%;
+          resize: none;
+          font-family: Montserrat;
+          font-size: 12px;
+          color: #444444;
+        }
+
+        .message-length {
+          width: 100%;
+          text-align: right;
+          font: normal normal normal 12px/15px Montserrat;
+          letter-spacing: 0.6px;
+          color: #656565;
+          opacity: 0.8;
+          padding: 6px 0;
+        }
+      }
+    }
+  }
+
+  .practice-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #E2DDE6;
+    padding: 20px;
+  }
+
+
+  @media only screen and (max-width: 600px) {
+    margin: 20px 16px;
+  }
+}

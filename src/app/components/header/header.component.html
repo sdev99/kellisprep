@@ -64,9 +64,9 @@
     <ng-container *ngFor="let item of pathsTree; let idx=index">
       <span class="text1" *ngIf="idx==0;else subPath">{{item}}</span>
       <ng-template #subPath>
-        <span class="text2" *ngIf="idx==(pathsTree.length-1); else middlePath">/ {{item}}</span>
+        <span class="text2" *ngIf="idx==(pathsTree.length-1); else middlePath"> /{{item}}</span>
         <ng-template #middlePath>
-          <span class="text-m">/ {{item}}</span>
+          <span class="text-m"> /{{item}}</span>
         </ng-template>
       </ng-template>
     </ng-container>

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WritingSectionComponent } from './writing-section.component';
+import { SpeakingSectionComponent } from './speaking-section.component';
 
-describe('WritingSectionComponent', () => {
-  let component: WritingSectionComponent;
-  let fixture: ComponentFixture<WritingSectionComponent>;
+describe('SpeakingSectionComponent', () => {
+  let component: SpeakingSectionComponent;
+  let fixture: ComponentFixture<SpeakingSectionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WritingSectionComponent ]
+      declarations: [ SpeakingSectionComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WritingSectionComponent);
+    fixture = TestBed.createComponent(SpeakingSectionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

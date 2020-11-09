@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
+import {EnumService} from '../../services/enum.service';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-section-direction',
@@ -8,16 +10,25 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./section-direction.component.scss']
 })
 export class SectionDirectionComponent implements OnInit {
-  data;
+  practiceType;
+  itemDetail;
+  pathsTree;
 
   constructor(
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
+    private cookieService: CookieService,
   ) {
     this.route.queryParams.subscribe((params) => {
-      if (params && params.data) {
-        this.data = JSON.parse(params.data);
+      if (params && params.practiceType) {
+        this.practiceType = params.practiceType;
+      }
+
+      const item = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION);
+      if (item) {
+        this.itemDetail = JSON.parse(item);
+        this.pathsTree = [this.itemDetail.type, this.itemDetail.name, this.practiceType + ' Section'];
       }
     });
   }
@@ -30,11 +41,25 @@ export class SectionDirectionComponent implements OnInit {
   }
 
   onNext(): void {
-    this.router.navigate(['writing-section'], {
-      queryParams: {
-        data: JSON.stringify(this.data)
-      }
-    });
+    let navigateTo = 'reading-section';
+    switch (this.practiceType) {
+      case EnumService.examSectionTypes.READING:
+        navigateTo = 'reading-section';
+        break;
+      case EnumService.examSectionTypes.WRITING:
+        navigateTo = 'writing-section';
+        break;
+      case EnumService.examSectionTypes.MATH:
+        navigateTo = 'math-section';
+        break;
+      case EnumService.examSectionTypes.LISTENING:
+        navigateTo = 'listening-section';
+        break;
+      case EnumService.examSectionTypes.SPEAKING:
+        navigateTo = 'speaking-section';
+        break;
+    }
+    this.router.navigate([navigateTo]);
   }
 
   onFinishSectionClick(): void {

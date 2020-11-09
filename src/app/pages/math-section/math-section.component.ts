@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ForgotpasswordComponent} from '../../modals/forgotpassword/forgotpassword.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.component';
 import {EnumService} from '../../services/enum.service';
@@ -11,11 +10,11 @@ import {ApiService} from '../../services/api.service';
 import {AlertService} from '../../services/alert.service';
 
 @Component({
-  selector: 'app-writing-section',
-  templateUrl: './writing-section.component.html',
-  styleUrls: ['./writing-section.component.scss']
+  selector: 'app-math-section',
+  templateUrl: './math-section.component.html',
+  styleUrls: ['./math-section.component.scss']
 })
-export class WritingSectionComponent implements OnInit {
+export class MathSectionComponent implements OnInit {
 
   EnumService = EnumService;
 
@@ -86,7 +85,7 @@ export class WritingSectionComponent implements OnInit {
 
     if (item) {
       this.itemDetail = JSON.parse(item);
-      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Writing Section'];
+      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Math Section'];
     }
 
     if (examData) {
@@ -115,7 +114,7 @@ export class WritingSectionComponent implements OnInit {
           questionId: question.id,
         };
 
-        let isAsnwered = false;
+        let isAnswered = false;
 
         if (question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_OBJECT || question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) {
           const choices = question.choices;
@@ -123,17 +122,17 @@ export class WritingSectionComponent implements OnInit {
           choices.map((choice) => {
             if (choice.selected) {
               selectedChoices.push(choice.id);
-              isAsnwered = true;
+              isAnswered = true;
             }
           });
 
           answerObject.selectedChoices = selectedChoices;
         } else if (question.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE || question.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE) {
           answerObject.answerInput = question.answerInput;
-          isAsnwered = true;
+          isAnswered = true;
         }
 
-        if (isAsnwered) {
+        if (isAnswered) {
           asnwers.push(answerObject);
         }
       });
@@ -147,7 +146,6 @@ export class WritingSectionComponent implements OnInit {
       this.loading = false;
       if (res.isSuccess) {
         this.openMathSectionDialog();
-
       } else {
         this.alertService.error(res.messages.join('\n'));
       }
@@ -217,11 +215,7 @@ export class WritingSectionComponent implements OnInit {
     }).subscribe((data) => {
       if (data.isSuccess) {
         this.cookieService.set(EnumService.cookieNames.CURRENT_EXAM_SESSION_DATA, JSON.stringify(data));
-        this.router.navigate(['test-direction'], {
-          queryParams: {
-            practiceType: EnumService.examSectionTypes.MATH
-          }
-        });
+        this.router.navigate(['math-section']);
       } else {
         this.alertService.error(data.message.join('\n'));
       }

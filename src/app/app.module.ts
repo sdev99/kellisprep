@@ -59,10 +59,17 @@ import {MatTableModule} from '@angular/material/table';
 import {AnswerMultipleChoiceItemComponent} from './components/answer-multiple-choice-item/answer-multiple-choice-item.component';
 import {ErrorInterceptor} from './helpers/error.interceptor';
 import {SocialLoginModule, SocialAuthServiceConfig} from 'angularx-social-login';
+import {NgxLoadingModule} from 'ngx-loading';
+import {CookieService} from 'ngx-cookie-service';
+
 import {
   GoogleLoginProvider,
   FacebookLoginProvider,
 } from 'angularx-social-login';
+import { ReadingSectionComponent } from './pages/reading-section/reading-section.component';
+import { MathSectionComponent } from './pages/math-section/math-section.component';
+import { ListeningSectionComponent } from './pages/listening-section/listening-section.component';
+import { SpeakingSectionComponent } from './pages/speaking-section/speaking-section.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +105,10 @@ import {
     PrivacypolicyComponent,
     PersonalizeExamcourseComponent,
     AnswerMultipleChoiceItemComponent,
+    ReadingSectionComponent,
+    MathSectionComponent,
+    ListeningSectionComponent,
+    SpeakingSectionComponent,
   ],
   imports: [
     BrowserModule,
@@ -125,7 +136,8 @@ import {
     MatRippleModule,
     MatCheckboxModule,
     MatTableModule,
-    SocialLoginModule
+    SocialLoginModule,
+    NgxLoadingModule.forRoot({})
   ],
   providers: [
     {provide: MatPaginatorIntl, useClass: MatPaginatorIntlCro},
@@ -147,7 +159,8 @@ import {
           },
         ],
       } as SocialAuthServiceConfig,
-    }
+    },
+    CookieService
   ],
   bootstrap: [AppComponent]
 })
