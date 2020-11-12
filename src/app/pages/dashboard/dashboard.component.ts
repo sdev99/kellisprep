@@ -253,7 +253,10 @@ export class DashboardComponent implements OnInit {
     public cookieService: CookieService,
     public accountService: AccountService,
   ) {
-    this.selectedMenu = this.menuItems[0].submenus[0];
+    const selectedMenuIndex = this.cookieService.get(EnumService.cookieNames.DASHBOARD_SELECTED_MENU_INDEX) || 0;
+    const selectedSubMenuIndex = this.cookieService.get(EnumService.cookieNames.DASHBOARD_SELECTED_SUBMENU_INDEX) || 0;
+
+    this.selectedMenu = this.menuItems[selectedMenuIndex].submenus[selectedSubMenuIndex];
     this.selectedExam = this.filterExamList[0];
     this.selectedTime = this.filterTimesList[0];
 
@@ -266,15 +269,29 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setupUserHistory();
     this.getUserHistory();
+    this.getExams();
   }
 
-  getUserHistory(): void {
-    this.apiService.userHistory({courseLanguageId: 1, userId: this.accountService.userValue.id}).subscribe((data) => {
+  getExams(): void {
+    this.apiService.examSearch({}).subscribe((res) => {
+      this.loading = false;
+      const exams = res.exams;
+      if (exams) {
+        localStorage.setItem(EnumService.localStorageKeys.ALL_EXAMS, JSON.stringify(exams));
+      }
+    }, (error) => {
+    });
+  }
 
+  setupUserHistory = () => {
+    const storedUserHistory = localStorage.getItem(EnumService.localStorageKeys.USER_HISTORY);
+    if (storedUserHistory) {
+      const userHistory = JSON.parse(storedUserHistory);
       const myHistories = {};
-      Object.keys(data).map((historyType) => {
-        const list = data[historyType];
+      Object.keys(userHistory).map((historyType) => {
+        const list = userHistory[historyType];
         if (historyType !== 'examHistory') {
           const examsByTypes = {};
           list.map((item) => {
@@ -290,6 +307,13 @@ export class DashboardComponent implements OnInit {
       });
 
       this.myHistories = myHistories;
+    }
+  };
+
+  getUserHistory(): void {
+    this.apiService.userHistory({courseLanguageId: 1, userId: this.accountService.userValue.id}).subscribe((data) => {
+      localStorage.setItem(EnumService.localStorageKeys.USER_HISTORY, JSON.stringify(data));
+      this.setupUserHistory();
 
       // currencyId: 1
       // currencyText: "USD"
@@ -306,8 +330,10 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  onItemSelect(item): void {
+  onItemSelect(item, menuIndex, submenuIndex): void {
     this.selectedMenu = item;
+    this.cookieService.set(EnumService.cookieNames.DASHBOARD_SELECTED_MENU_INDEX, menuIndex);
+    this.cookieService.set(EnumService.cookieNames.DASHBOARD_SELECTED_SUBMENU_INDEX, submenuIndex);
   }
 
   pageChange(event): void {

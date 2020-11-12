@@ -116,7 +116,7 @@ export class MathSectionComponent implements OnInit {
 
         let isAnswered = false;
 
-        if (question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_OBJECT || question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) {
+        if (question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT || question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) {
           const choices = question.choices;
           const selectedChoices = [];
           choices.map((choice) => {
@@ -145,7 +145,7 @@ export class MathSectionComponent implements OnInit {
     }).subscribe((res) => {
       this.loading = false;
       if (res.isSuccess) {
-        this.openMathSectionDialog();
+        this.router.navigate(['dashboard']);
       } else {
         this.alertService.error(res.messages.join('\n'));
       }
@@ -182,31 +182,9 @@ export class MathSectionComponent implements OnInit {
         this.endExamSession();
       }
     });
+
   }
 
-  openMathSectionDialog(): void {
-
-    const dialogRef = this.dialog.open(ConfirmModalComponent, {
-      id: 'confirmdialog',
-      disableClose: true,
-      role: 'dialog',
-      data: {
-        title: 'You finished Writing, nice work!',
-        message: 'When you take the real SAT, there\'s a 10-minute break before the next section. Take a quick breather, and when you\'re ready, start the next section: Math section.',
-        leftBtnTitle: 'Start Later',
-        rightBtnTitle: 'Start the Math Section'
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.resumeExam();
-      } else {
-        this.router.navigate(['practice-tests']);
-      }
-      console.log(`Dialog result: ${result}`);
-    });
-  }
 
   resumeExam = () => {
     this.apiService.resumeExamSession({

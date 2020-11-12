@@ -18,7 +18,7 @@
           <p>{{item.decription}}</p>
 
           <button
-            *ngIf="examResumeSessionData && examResumeSessionData.sectionData && item.type === examResumeSessionData.sectionData.name"
+            [disabled]="!(examResumeSessionData && examResumeSessionData.sectionData && item.type === examResumeSessionData.sectionData.name)"
             mat-raised-button color="primary" (click)="startPractice(item)">
             Start
           </button>
@@ -29,3 +29,4 @@
 </div>
 
 <app-footer></app-footer>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop:true }"></ngx-loading>

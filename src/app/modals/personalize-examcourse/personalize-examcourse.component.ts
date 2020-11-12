@@ -1,5 +1,10 @@
 import {AfterViewInit, Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {ApiService} from '../../services/api.service';
+import {ShareddataService} from '../../services/shareddata.service';
+import {EnumService} from '../../services/enum.service';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-personalize-examcourse',
@@ -14,13 +19,7 @@ export class PersonalizeExamcourseComponent implements AfterViewInit, OnInit {
   tableColThird;
 
   examSearchTerm;
-  examCategories = [
-    {title: 'All', value: ''},
-    {title: 'Arts', value: 'Arts'},
-    {title: 'Biology', value: 'Biology'},
-    {title: 'Physics', value: 'Physics'},
-    {title: 'Math', value: 'Math'},
-  ];
+  examCategories = [{title: 'All', value: ''}];
 
   selectedCatagory: any = {};
 
@@ -44,31 +43,19 @@ export class PersonalizeExamcourseComponent implements AfterViewInit, OnInit {
     {title: 'Geometry', category: 'Math'},
     {title: 'genetics, marine biology', category: 'Biology'},
   ];
-  purchasedExams = [
-    {title: 'SAT', category: 'Arts', price: '$99.99'},
-    {title: 'TOEFL', category: 'Biology', price: '$90.00'},
-    {title: 'TOEIC', category: 'Physics', price: '$60.09'},
-    {title: 'PPSC', category: 'Math', price: '$90.00'},
-    {title: 'NTS', category: 'Biology', price: '$60.09'},
-    {title: 'FPSC', category: 'Physics', price: '$50.00'},
-    {title: 'NAT', category: 'Arts', price: '$90.00'},
-    {title: 'PAT', category: 'Biology', price: '$60.09'},
-  ];
-  freeExams = [
-    {title: 'SAT', category: 'Arts'},
-    {title: 'TOEFL', category: 'Biology'},
-    {title: 'TOEIC', category: 'Physics'},
-    {title: 'PPSC', category: 'Math'},
-    {title: 'NTS', category: 'Biology'},
-    {title: 'FPSC', category: 'Physics'},
-    {title: 'NAT', category: 'Arts'},
-    {title: 'PAT', category: 'Biology'},
-  ];
 
-  list = [];
+
+  list;
+
+  loading = false;
+  selectedExam;
 
   constructor(
     public dialog: MatDialog,
+    private router: Router,
+    private apiService: ApiService,
+    private shareddataService: ShareddataService,
+    private cookieService: CookieService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
   }
@@ -77,16 +64,16 @@ export class PersonalizeExamcourseComponent implements AfterViewInit, OnInit {
     if (this.data.type === 'exam') {
       if (this.data.planType === 'free') {
         this.title = 'Personalize Free Exams';
-        this.list = this.freeExams;
         this.tableColFirst = 'Exams';
         this.tableColSecond = 'Category';
       } else if (this.data.planType === 'purchased') {
         this.title = 'Personalize Purchased Exams';
-        this.list = this.purchasedExams;
         this.tableColFirst = 'Exams';
         this.tableColSecond = 'Category';
         this.tableColThird = 'Price';
       }
+      this.list = this.shareddataService.allExamsList;
+      this.getExams();
     } else if (this.data.type === 'course') {
       if (this.data.planType === 'free') {
         this.title = 'Personalize Free Courses';
@@ -102,7 +89,6 @@ export class PersonalizeExamcourseComponent implements AfterViewInit, OnInit {
       }
     }
 
-
   }
 
   ngAfterViewInit(): void {
@@ -115,9 +101,50 @@ export class PersonalizeExamcourseComponent implements AfterViewInit, OnInit {
     }, 500);
   }
 
+  getExams(): void {
+    this.loading = true;
+    this.apiService.examSearch({}).subscribe((res) => {
+      this.loading = false;
+      const exams = res.exams;
+      if (exams) {
+        this.list = exams;
+        this.shareddataService.allExamsList = exams;
+        exams.map((item) => {
+          const examType = item.examTypeText;
+          let found = false;
+          this.examCategories.map((cat) => {
+            if (cat.title === examType) {
+              found = true;
+              return;
+            }
+          });
+          if (!found) {
+            this.examCategories.push({
+              title: item.examTypeText,
+              value: item.examTypeText,
+            });
+          }
+        });
+      }
+    }, (error) => {
+      this.loading = false;
+    });
+  }
+
   btnAction(res): void {
     const dialog = this.dialog.getDialogById('personalizedExamCourseDialog');
     dialog.close(res);
+
+    setTimeout(() => {
+      if (this.data.type === 'exam') {
+        this.cookieService.set(EnumService.cookieNames.SELECTED_EXAM_DETAILS, JSON.stringify(this.selectedExam));
+        this.router.navigate(['select-exam-course'], {
+          queryParams: {
+            selectionType: 'exam',
+          }
+        });
+      }
+    }, 400);
   }
 
   onCategorySelect(item): void {
@@ -125,12 +152,16 @@ export class PersonalizeExamcourseComponent implements AfterViewInit, OnInit {
   }
 
   selectedItemCount(): number {
-    let count = 0;
-    this.list.map((item) => {
-      if (item.selected) {
-        count++;
-      }
-    });
-    return count;
+    // let count = 0;
+    // this.list.map((item) => {
+    //   if (item.selected) {
+    //     count++;
+    //   }
+    // });
+    // return count;
+    if (this.selectedExam) {
+      return 1;
+    }
+    return 0;
   }
 }

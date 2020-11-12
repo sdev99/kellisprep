@@ -117,7 +117,7 @@ export class WritingSectionComponent implements OnInit {
 
         let isAsnwered = false;
 
-        if (question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_OBJECT || question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) {
+        if (question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT || question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) {
           const choices = question.choices;
           const selectedChoices = [];
           choices.map((choice) => {

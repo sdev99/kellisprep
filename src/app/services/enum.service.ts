@@ -13,8 +13,11 @@ export class EnumService {
   };
 
   static cookieNames = {
+    DASHBOARD_SELECTED_MENU_INDEX: 'dashboard_selected_menu_index',
+    DASHBOARD_SELECTED_SUBMENU_INDEX: 'dashboard_selected_submenu_index',
     CURRENT_EXAM_SESSION: 'current_exam_session',
     CURRENT_EXAM_SESSION_DATA: 'current_exam_session_data',
+    SELECTED_EXAM_DETAILS: 'selected_exam_details',
   };
 
   static examSectionTypes = {
@@ -26,7 +29,7 @@ export class EnumService {
   };
 
   static examQuestionTypes = {
-    MULTIPLE_CHOICE_SINGLE_OBJECT: 1,
+    MULTIPLE_CHOICE_SINGLE_SELECT: 1,
     VERIFIABLE_TEXT_SINGLE_LINE: 2,
     UNVERIFIABLE_TEXT_SINGLE_LINE: 3,
     AUDIO_RESPONSE: 4,
@@ -39,6 +42,8 @@ export class EnumService {
   static localStorageKeys = {
     AUTH_TOKEN: 'auth_token',
     USER_DATA: 'user_data',
+    ALL_EXAMS: 'all_exams',
+    USER_HISTORY: 'user_history',
   };
 
   static apiEndPoints = {

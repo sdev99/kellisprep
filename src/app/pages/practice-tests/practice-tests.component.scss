@@ -5,6 +5,12 @@
   border: 1px solid #D4D3D4;
   border-radius: 6px;
 
+
+  .mat-button-disabled {
+    opacity: 0.4;
+    color: #ffffff;
+  }
+
   h2 {
     font: normal normal bold 24px/29px Montserrat;
     letter-spacing: 0.72px;

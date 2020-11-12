@@ -36,30 +36,42 @@
 
 <mat-dialog-content class="mat-typography" id="personalizeContent">
 
-  <table class="table personalized-table">
-    <thead>
-    <tr>
-      <th scope="col" sortable="name" *ngIf="tableColFirst">{{tableColFirst}}</th>
-      <th scope="col" sortable="area" *ngIf="tableColSecond">{{tableColSecond}}</th>
-      <th scope="col" sortable="population" *ngIf="tableColThird">{{tableColThird}}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let item of list | listFilter:examSearchTerm:'title' | listFilter:selectedCatagory.value:'category'">
-      <td *ngIf="tableColFirst" class="name-col">
-        <ion-checkbox [(ngModel)]="item.selected"></ion-checkbox>
-        <ngb-highlight [result]="item.title" [term]="examSearchTerm"></ngb-highlight>
-      </td>
-      <td *ngIf="tableColSecond">
-        <ngb-highlight [result]="item.category"
-                       [term]="examSearchTerm"></ngb-highlight>
-      </td>
-      <td *ngIf="tableColThird">
-        <ngb-highlight [result]="item.price" [term]="examSearchTerm"></ngb-highlight>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <div *ngIf="loading && !list; else showExamList"
+       style="width: 100%;display: flex;align-items: center;justify-content: center; min-height:100px;height: 100%">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ng-template #showExamList>
+    <ion-radio-group [(ngModel)]="selectedExam">
+
+      <table class="table personalized-table">
+        <thead>
+        <tr>
+          <th scope="col" sortable="name" *ngIf="tableColFirst">{{tableColFirst}}</th>
+          <th scope="col" sortable="area" *ngIf="tableColSecond">{{tableColSecond}}</th>
+          <th scope="col" sortable="population" *ngIf="tableColThird">{{tableColThird}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          *ngFor="let item of list | listFilter:examSearchTerm:'title' | listFilter:selectedCatagory.value:'examTypeText'">
+          <td *ngIf="tableColFirst" class="name-col">
+            <!--          <ion-checkbox [(ngModel)]="item.selected"></ion-checkbox>-->
+            <ion-radio [value]="item"></ion-radio>
+            <ngb-highlight [result]="item.title" [term]="examSearchTerm"></ngb-highlight>
+          </td>
+          <td *ngIf="tableColSecond">
+            <ngb-highlight [result]="item.examTypeText"
+                           [term]="examSearchTerm"></ngb-highlight>
+          </td>
+          <td *ngIf="tableColThird">
+            <ngb-highlight [result]="item.price" [term]="examSearchTerm"></ngb-highlight>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </ion-radio-group>
+  </ng-template>
 
 
 </mat-dialog-content>
@@ -68,7 +80,7 @@
           (click)="btnAction(false)">Cancel
   </button>
   <button mat-raised-button color="primary" cdkFocusInitial
-          (click)="btnAction(true)">Continue with {{selectedItemCount()}} Courses
+          (click)="btnAction(true)">Continue with {{selectedItemCount()}}&nbsp;{{tableColFirst}}
   </button>
 </mat-dialog-actions>
 

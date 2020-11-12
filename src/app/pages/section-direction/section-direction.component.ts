@@ -13,6 +13,8 @@ export class SectionDirectionComponent implements OnInit {
   practiceType;
   itemDetail;
   pathsTree;
+  examSessionData;
+  sectionDescription;
 
   constructor(
     private location: Location,
@@ -26,9 +28,17 @@ export class SectionDirectionComponent implements OnInit {
       }
 
       const item = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION);
+      const examSessionData = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION_DATA);
       if (item) {
         this.itemDetail = JSON.parse(item);
         this.pathsTree = [this.itemDetail.type, this.itemDetail.name, this.practiceType + ' Section'];
+      }
+      if (examSessionData) {
+        this.examSessionData = JSON.parse(examSessionData);
+      }
+
+      if (this.examSessionData && this.examSessionData.sectionData && this.examSessionData.sectionData.guideline) {
+        this.sectionDescription = this.examSessionData.sectionData.guideline;
       }
     });
   }

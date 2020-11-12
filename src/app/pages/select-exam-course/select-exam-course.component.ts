@@ -4,6 +4,8 @@ import {Location} from '@angular/common';
 import {ApiService} from '../../services/api.service';
 import {AccountService} from '../../services/account.service';
 import {AlertService} from '../../services/alert.service';
+import {CookieService} from 'ngx-cookie-service';
+import {EnumService} from '../../services/enum.service';
 
 @Component({
   selector: 'app-select-exam-course',
@@ -22,12 +24,7 @@ export class SelectExamCourseComponent implements OnInit {
     {title: 'Certificate of completion', icon: './assets/images/certificate.png'},
   ];
 
-  examIncludes = [
-    {title: '3 Sections', icon: './assets/images/play.png'},
-    {title: '1 downloadable resource', icon: './assets/images/cloud-download.png'},
-    {title: 'Full lifetime access', icon: './assets/images/unlock-icon.png'},
-    {title: 'Access on mobile and TV', icon: './assets/images/mobile-icon.png'}
-  ];
+  examIncludes = [];
 
 
   list = [];
@@ -39,16 +36,25 @@ export class SelectExamCourseComponent implements OnInit {
     private alertService: AlertService,
     private apiService: ApiService,
     private accountService: AccountService,
+    private cookieService: CookieService,
     private router: Router,
   ) {
     this.route.queryParams.subscribe((params) => {
       if (params && params.selectionType) {
         this.selectionType = params.selectionType;
       }
-      if (params && params.examDetail) {
-        this.examDetail = JSON.parse(params.examDetail);
-      }
     });
+
+    const examDetail = cookieService.get(EnumService.cookieNames.SELECTED_EXAM_DETAILS);
+    if (examDetail) {
+      this.examDetail = JSON.parse(examDetail);
+      this.examIncludes.push({
+        title: this.examDetail.numberOfSections + ' Sections',
+        icon: './assets/images/play.png'
+      });
+      this.examIncludes.push({title: 'Full lifetime access', icon: './assets/images/unlock-icon.png'});
+      this.examIncludes.push({title: 'Access on Mobile', icon: './assets/images/mobile-icon.png'});
+    }
 
   }
 

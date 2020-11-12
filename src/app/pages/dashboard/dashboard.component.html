@@ -5,11 +5,12 @@
 
   <div class="content">
     <div class="left-menu">
-      <div class="list-group" *ngFor="let section of menuItems">
+      <div class="list-group" *ngFor="let section of menuItems; let menuIndex=index;">
         <h3 matSubheader style="margin-bottom: 0;padding-bottom: 0;">{{section.title}}</h3>
         <button style="border: none;padding-left: 16px;" type="button" class="list-group-item list-group-item-action"
                 [ngClass]="{'selected':selectedMenu.title==item.title}"
-                *ngFor="let item of section.submenus" (click)="onItemSelect(item)">
+                *ngFor="let item of section.submenus; let submenuIndex=index"
+                (click)="onItemSelect(item,menuIndex,submenuIndex)">
           {{item.title}}
         </button>
       </div>
@@ -49,32 +50,32 @@
                             ngbDropdownToggle>
                       {{selectedTime.title}}
                     </button>
-                    <div ngbDropdownMenu aria-labelledby="filterByDate">
-                      <button type="button" *ngFor="let item of filterTimesList" ngbDropdownItem>{{item.title}}</button>
-                      <div class="dropdown-divider"></div>
-                      <button type="button" ngbDropdownItem
-                              style="display: flex;flex-direction: row;align-items: center;">
-                        Jump to specific date
-                        <mat-icon>chevron_right</mat-icon>
-                      </button>
-                    </div>
+<!--                    <div ngbDropdownMenu aria-labelledby="filterByDate">-->
+<!--                      <button type="button" *ngFor="let item of filterTimesList" ngbDropdownItem>{{item.title}}</button>-->
+<!--                      <div class="dropdown-divider"></div>-->
+<!--                      <button type="button" ngbDropdownItem-->
+<!--                              style="display: flex;flex-direction: row;align-items: center;">-->
+<!--                        Jump to specific date-->
+<!--                        <mat-icon>chevron_right</mat-icon>-->
+<!--                      </button>-->
+<!--                    </div>-->
                   </div>
                 </div>
               </div>
 
-              <div class="col-auto">
-                <div class="input-group">
-                  <div ngbDropdown class="d-inline-block">
-                    <button type="button" class="btn btn-outline-dark" style="border-color: #ced4da" id="filterByExam"
-                            ngbDropdownToggle>
-                      {{selectedExam.title}}
-                    </button>
-                    <div ngbDropdownMenu aria-labelledby="filterByExam">
-                      <button type="button" *ngFor="let item of filterExamList" ngbDropdownItem>{{item.title}}</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+<!--              <div class="col-auto">-->
+<!--                <div class="input-group">-->
+<!--                  <div ngbDropdown class="d-inline-block">-->
+<!--                    <button type="button" class="btn btn-outline-dark" style="border-color: #ced4da" id="filterByExam"-->
+<!--                            ngbDropdownToggle>-->
+<!--                      {{selectedExam.title}}-->
+<!--                    </button>-->
+<!--                    <div ngbDropdownMenu aria-labelledby="filterByExam">-->
+<!--                      <button type="button" *ngFor="let item of filterExamList" ngbDropdownItem>{{item.title}}</button>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
             </div>
           </div>
         </div>
@@ -185,7 +186,6 @@
 
     </div>
   </div>
-
 </div>
 
 <app-footer></app-footer>

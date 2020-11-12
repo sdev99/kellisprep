@@ -12,6 +12,7 @@ import {AlertService} from '../../services/alert.service';
   styleUrls: ['./practice-tests.component.scss']
 })
 export class PracticeTestsComponent implements OnInit {
+  loading = false;
 
 
   practiceList = [
@@ -63,10 +64,12 @@ export class PracticeTestsComponent implements OnInit {
   }
 
   resumeExam = () => {
+    this.loading = true;
     this.apiService.resumeExamSession({
       userId: this.accountService.userValue.id,
       examId: this.itemDetail.id
     }).subscribe((data) => {
+      this.loading = false;
       if (data.isSuccess) {
         this.examResumeSessionData = data;
         this.cookieService.set(EnumService.cookieNames.CURRENT_EXAM_SESSION_DATA, JSON.stringify(data));
@@ -74,6 +77,8 @@ export class PracticeTestsComponent implements OnInit {
       } else {
         this.alertService.error(data.message.join('\n'));
       }
+    }, (error) => {
+      this.loading = false;
     });
   };
 

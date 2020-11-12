@@ -1,4 +1,5 @@
-<app-header [pathsTree]="pathsTree" subHeaderText3="60 minutes left"
+<app-header [pathsTree]="pathsTree"
+            [subHeaderText3]="(examSessionData&&examSessionData.duration?examSessionData.duration:0)+' minutes left'"
             rightBtnTitle="Finish this Section" (rightBtnClick)="onFinishSectionClick()"></app-header>
 
 <div class="container-fluid dashboard-content-container has-subheader">
@@ -8,7 +9,7 @@
     <div class=" direction-content">
       <h1>{{sectionTitle}}</h1>
 
-      <p>{{sectionDescription}}</p>
+      <p [innerHTML]="sectionDescription"></p>
 
       <p style="font-weight: 600">
         Once you start the timer, you cannot pause this section.

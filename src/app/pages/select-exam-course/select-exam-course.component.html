@@ -58,8 +58,11 @@
 
     <div class="right-content">
 
-      <div class="video-play-view">
-        <img class="video-thumbnail" src="./assets/images/demo-sat.png"/>
+      <div class="video-play-view" *ngIf="examDetail && examDetail.videoUri">
+        <!--        <img class="video-thumbnail" src="./assets/images/demo-sat.png"/>-->
+        <iframe class="video-thumbnail" [src]="examDetail.videoUri | safe:'resourceUrl'" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
       </div>
 
       <mat-card class="exam-card">
@@ -84,30 +87,32 @@
           <div class="devider-line"></div>
           <div class="row">
 
-            <div class="col-xs-12">
-              <ion-item lines="none">
-                <ion-icon name="checkmark-circle" slot="start" color="medium"></ion-icon>
-                <ion-label>Develop a clear, solid strategy for UX that applies to any kind of product or project
-                </ion-label>
-              </ion-item>
+            <div class="col-xs-12" *ngIf="examDetail && examDetail.whatYouLearn" [innerHTML]="examDetail.whatYouLearn">
             </div>
+            <!--            <div class="col-xs-12">-->
+            <!--              <ion-item lines="none">-->
+            <!--                <ion-icon name="checkmark-circle" slot="start" color="medium"></ion-icon>-->
+            <!--                <ion-label>Develop a clear, solid strategy for UX that applies to any kind of product or project-->
+            <!--                </ion-label>-->
+            <!--              </ion-item>-->
+            <!--            </div>-->
 
-            <div class="col-xs-12">
-              <ion-item lines="none">
-                <ion-icon name="checkmark-circle" slot="start" color="medium"></ion-icon>
-                <ion-label>Understand who your stakeholders really are and what you need to know from each of them.
-                  Develop a clear, solid strategy for UX that applies to any kind of product or project
-                </ion-label>
-              </ion-item>
-            </div>
+            <!--            <div class="col-xs-12">-->
+            <!--              <ion-item lines="none">-->
+            <!--                <ion-icon name="checkmark-circle" slot="start" color="medium"></ion-icon>-->
+            <!--                <ion-label>Understand who your stakeholders really are and what you need to know from each of them.-->
+            <!--                  Develop a clear, solid strategy for UX that applies to any kind of product or project-->
+            <!--                </ion-label>-->
+            <!--              </ion-item>-->
+            <!--            </div>-->
 
-            <div class="col-xs-12">
-              <ion-item lines="none">
-                <ion-icon name="checkmark-circle" slot="start" color="medium"></ion-icon>
-                <ion-label>Develop a clear, solid strategy for UX that applies to any kind of product or project
-                </ion-label>
-              </ion-item>
-            </div>
+            <!--            <div class="col-xs-12">-->
+            <!--              <ion-item lines="none">-->
+            <!--                <ion-icon name="checkmark-circle" slot="start" color="medium"></ion-icon>-->
+            <!--                <ion-label>Develop a clear, solid strategy for UX that applies to any kind of product or project-->
+            <!--                </ion-label>-->
+            <!--              </ion-item>-->
+            <!--            </div>-->
           </div>
         </mat-card-content>
       </mat-card>

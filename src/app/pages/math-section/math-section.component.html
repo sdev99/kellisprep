@@ -1,5 +1,6 @@
-<app-header [pathsTree]="pathsTree" subHeaderText3="60 minutes left"
-            rightBtnTitle="Finish this Section" (rightBtnClick)="onFinishSectionClick()"></app-header>
+<app-header [pathsTree]="pathsTree"
+            [subHeaderText3]="(examSessionData&&examSessionData.duration?examSessionData.duration:0)+' minutes left'"
+            rightBtnTitle="Finish this Section" (rightBtnClick)="openDialog()"></app-header>
 
 <div class="container-fluid dashboard-content-container has-subheader">
   <app-alert></app-alert>
@@ -9,8 +10,14 @@
     <div class="row practice-content">
 
       <div class="col-md-6 left-content">
-        <h1>Agriculture iron and Bantu people</h1>
-        <p [innerHTML]="descriptionText"></p>
+        <ng-container
+          *ngIf="examSectionSets && examSectionSets.length>=currentIndex&&examSectionSets[currentIndex].passage&&examSectionSets[currentIndex].passage.length>1; else demoPassage">
+          <div class="passage" [innerHTML]="examSectionSets[currentIndex].passage"></div>
+        </ng-container>
+        <ng-template #demoPassage>
+          <h1>Agriculture iron and Bantu people</h1>
+          <p [innerHTML]="descriptionText"></p>
+        </ng-template>
       </div>
 
       <div class="col-md-6 right-content">
@@ -47,7 +54,7 @@
 
             <!-- For Single/Multiple choice answer-->
             <ng-container
-              *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_OBJECT || item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT">
+              *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT || item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT">
 
               <h2 class="question" [innerHTML]="item.text"></h2>
 
@@ -56,21 +63,21 @@
                 answer
               </div>
 
-              <ng-container *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_OBJECT">
+              <ng-container *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT">
                 <app-answer-choice-item
-                  *ngFor="let subItem of item.choices"
+                  *ngFor="let subItem of item.choices; let index=index"
                   [selected]="subItem.selected"
-                  [index]="subItem.id"
+                  [index]="index"
                   [title]="subItem.text"
                   (click)="singleChoiceItemSelect(item, subItem)"
                 ></app-answer-choice-item>
               </ng-container>
 
-              <ng-container *ngIf="item.questionType === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT">
+              <ng-container *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT">
                 <app-answer-multiple-choice-item
-                  *ngFor="let subItem of item.answers"
+                  *ngFor="let subItem of item.choices; index as id"
                   [selected]="subItem.selected"
-                  [title]="subItem.title"
+                  [title]="subItem.text"
                   (click)="subItem.selected=!subItem.selected"
                 ></app-answer-multiple-choice-item>
               </ng-container>
