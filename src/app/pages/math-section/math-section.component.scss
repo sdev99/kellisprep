@@ -18,6 +18,9 @@
   .practice-content {
     margin: 0;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     .question {
       font: normal normal 600 14px/18px Montserrat;
@@ -26,39 +29,17 @@
       opacity: 1;
     }
 
-
-    .left-content {
-      overflow-y: auto;
-      max-height: 50vh;
-      border-right: 1px solid #D4D3D4;
-      display: flex;
-      flex-direction: column;
-
-      h1 {
-        margin: 30px;
-        font: normal normal 600 20px/24px Montserrat;
-        letter-spacing: 0px;
-        color: #140020;
-        opacity: 1;
-      }
-
-      p {
-        margin: 0 30px 30px;
-        font: normal normal normal 12px/17px Montserrat;
-        letter-spacing: -0.12px;
-        color: #140020;
-        opacity: 1;
-      }
-
-      .passage {
-        margin: 30px;
-      }
+    .question-img {
+      width: 300px;
+      height: auto;
+      object-fit: contain;
+      margin-right: 16px;
     }
 
-    .right-content {
+    .question-content {
       padding: 30px;
       overflow-y: auto;
-      max-height: 50vh;
+      max-height: 70vh;
 
       .question-count {
         font: normal normal 600 12px/15px Montserrat;

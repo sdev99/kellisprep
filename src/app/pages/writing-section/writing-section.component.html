@@ -30,10 +30,29 @@
             </div>
 
 
+            <h2 class="question" [innerHTML]="item.text"></h2>
+            <ion-img class="question-img" *ngIf="item && item.imageUri"
+                     [src]="item.mediaUrl+item.imageUri"></ion-img>
+
+            <!-- For Singleline text answer-->
+            <ng-container
+              *ngIf="item.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_SINGLE_LINE || item.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_SINGLE_LINE">
+
+              <div class="form-group text-input">
+                <label>Answer</label>
+                <div class="input-group">
+                  <ion-input class="form-control"
+                             placeholder="Write your answer here..."
+                             [(ngModel)]="item.answerInput"
+                             [ngClass]="{ 'is-invalid': submitted  }"></ion-input>
+
+                </div>
+              </div>
+            </ng-container>
+
             <!-- For multine text answer-->
             <ng-container
               *ngIf="item.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE || item.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE">
-              <h1 class="question">{{item.title}}</h1>
 
               <div class="form-group textarea-input">
                 <label>Answer</label>
@@ -56,7 +75,6 @@
             <ng-container
               *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT || item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT">
 
-              <h2 class="question" [innerHTML]="item.text"></h2>
 
               <div class="answer-type">
                 Choose {{(item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) ? 'multiple' : '1'}}
@@ -69,6 +87,7 @@
                   [selected]="subItem.selected"
                   [index]="index"
                   [title]="subItem.text"
+                  [imageUri]="subItem.imageUri"
                   (click)="singleChoiceItemSelect(item, subItem)"
                 ></app-answer-choice-item>
               </ng-container>
@@ -78,6 +97,7 @@
                   *ngFor="let subItem of item.choices; index as id"
                   [selected]="subItem.selected"
                   [title]="subItem.text"
+                  [imageUri]="subItem.imageUri"
                   (click)="subItem.selected=!subItem.selected"
                 ></app-answer-multiple-choice-item>
               </ng-container>

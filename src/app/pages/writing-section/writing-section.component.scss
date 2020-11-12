@@ -26,6 +26,12 @@
       opacity: 1;
     }
 
+    .question-img {
+      width: 200px;
+      height: auto;
+      object-fit: contain;
+      margin-right: 16px;
+    }
 
     .left-content {
       overflow-y: auto;

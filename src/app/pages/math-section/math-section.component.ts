@@ -8,6 +8,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {AccountService} from '../../services/account.service';
 import {ApiService} from '../../services/api.service';
 import {AlertService} from '../../services/alert.service';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-math-section',
@@ -15,51 +16,16 @@ import {AlertService} from '../../services/alert.service';
   styleUrls: ['./math-section.component.scss']
 })
 export class MathSectionComponent implements OnInit {
+  environment = environment;
 
   EnumService = EnumService;
 
   loading = false;
 
-  descriptionText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel tristique urna. Aliquam bibendum fringilla\n' +
-    '          nulla at ultrices. Etiam bibendum mi sed enim ultricies, et varius quam pellentesque. Proin lobortis dolor\n' +
-    '          mauris,\n' +
-    '          id posuere nunc semper pharetra. Phasellus et lobortis lorem. Phasellus sed pharetra odio. Interdum et\n' +
-    '          malesuada\n' +
-    '          fames ac ante ipsum primis in faucibus. Aenean fermentum, urna sit amet interdum pharetra, mi arcu hendrerit\n' +
-    '          risus, at rutrum tortor neque sit amet ipsum.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Duis commodo dolor dolor, vel ornare elit ornare sed. Ut non\n' +
-    '          pulvinar libero. Sed porta eu tortor interdum suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing\n' +
-    '          elit.\n' +
-    '          Nullam dui turpis, facilisis et quam eu, ultrices auctor neque. Donec pretium sapien non eleifend consectetur.\n' +
-    '          Nullam ligula ante, suscipit vel ex sit amet, semper feugiat arcu. Fusce vehicula leo placerat venenatis\n' +
-    '          fermentum.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Nullam eu eros tincidunt, aliquet felis ac, efficitur dolor. Sed malesuada nisi id neque fermentum, vel\n' +
-    '          consequat leo ornare. Duis a turpis pulvinar, auctor turpis vel, facilisis velit. Cras fermentum quis felis in\n' +
-    '          posuere. Proin in dictum nisi, vel luctus erat. Integer in libero est. Mauris aliquet libero in mauris\n' +
-    '          porttitor,\n' +
-    '          a tempor lacus lacinia.Duis commodo dolor dolor, vel ornare elit ornare sed. Ut non pulvinar libero. Sed\n' +
-    '          porta\n' +
-    '          eu tortor interdum suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Nullam dui turpis, facilisis\n' +
-    '          et quam eu, ultrices auctor neque. Donec pretium sapien non eleifend consectetur. Nullam ligula ante, suscipit\n' +
-    '          vel\n' +
-    '          ex sit amet, semper feugiat arcu. Fusce vehicula leo placerat venenatis fermentum. Nullam eu eros tincidunt,\n' +
-    '          aliquet felis ac, efficitur dolor. Sed malesuada nisi id neque fermentum, vel consequat leo ornare. Duis a\n' +
-    '          turpis\n' +
-    '          pulvinar, auctor turpis vel, facilisis velit. Cras fermentum quis felis in posuere.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Proin in dictum nisi, vel\n' +
-    '          luctus erat. Integer in libero est. Mauris aliquet libero in mauris porttitor, a tempor lacus lacinia.';
 
-
+  currentSetIndex = 0;
   currentIndex = 0;
+  currentQuestion;
 
   maxMessageLength = 250;
   submitted = false;
@@ -92,12 +58,8 @@ export class MathSectionComponent implements OnInit {
       // {"examSectionId":17,"sessionId":"b34ab0e5-ec3e-4c13-9ae5-556a9f07439c","examTypeId":1,"examTypeText":"SAT","title":"SAT-EXAM-01","description":"<p>SAT-EXAM-01</p>","duration":null,"sectionData":{"id":1,"name":"Reading","guideline":null,"sets":[{"id":2,"orderNo":1,"passage":" ","videoUri":null,"videoRepeatable":false,"questions":[{"id":1,"typeId":1,"text":"<p>q1x</p>","imageUri":"/medialibrary/image/worldmap.jpg","orderNo":0,"weight":1.00,"choices":[{"id":1,"text":"c1x","imageUri":null},{"id":2,"text":"c2x","imageUri":null},{"id":3,"text":"c3x","imageUri":null},{"id":4,"text":"c4x","imageUri":null}],"groups":[],"items":[]},{"id":10,"typeId":1,"text":" ","imageUri":null,"orderNo":1,"weight":1.00,"choices":[],"groups":[],"items":[]},{"id":12,"typeId":1,"text":" ","imageUri":null,"orderNo":2,"weight":1.00,"choices":[],"groups":[],"items":[]},{"id":17,"typeId":1,"text":"<p>aaaa</p>","imageUri":null,"orderNo":3,"weight":1.00,"choices":[{"id":20,"text":"cc1","imageUri":null},{"id":21,"text":"cc2","imageUri":null},{"id":22,"text":"cc3","imageUri":null},{"id":23,"text":"cc4","imageUri":null}],"groups":[],"items":[]},{"id":18,"typeId":1,"text":" ","imageUri":null,"orderNo":4,"weight":1.00,"choices":[],"groups":[],"items":[]},{"id":19,"typeId":1,"text":" ","imageUri":null,"orderNo":5,"weight":1.00,"choices":[],"groups":[],"items":[]},{"id":22,"typeId":1,"text":"<p>bbbb</p>","imageUri":null,"orderNo":6,"weight":1.00,"choices":[{"id":24,"text":"bc1","imageUri":null},{"id":25,"text":"bc2","imageUri":null},{"id":26,"text":"bc3","imageUri":null}],"groups":[],"items":[]},{"id":23,"typeId":1,"text":" ","imageUri":null,"orderNo":7,"weight":1.00,"choices":[],"groups":[],"items":[]}]}]},"isSuccess":true,"exception":null,"messages":["OK"]}
       this.examSessionData = JSON.parse(examData);
       this.examSectionSets = this.examSessionData.sectionData?.sets;
+      this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
     }
-
-    this.route.queryParams.subscribe((params) => {
-
-    });
-
   }
 
 
@@ -127,7 +89,7 @@ export class MathSectionComponent implements OnInit {
           });
 
           answerObject.selectedChoices = selectedChoices;
-        } else if (question.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE || question.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE) {
+        } else if (question.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_SINGLE_LINE || question.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_SINGLE_LINE || question.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE || question.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE) {
           answerObject.answerInput = question.answerInput;
           isAnswered = true;
         }
@@ -162,6 +124,17 @@ export class MathSectionComponent implements OnInit {
     subItem.selected = true;
   }
 
+
+  finishSection = () => {
+    if (this.currentSetIndex < this.examSectionSets.length - 1) {
+      this.currentSetIndex++;
+      this.currentIndex = 0;
+      this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
+    } else {
+      this.openDialog();
+    }
+  };
+
   openDialog(): void {
 
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
@@ -185,22 +158,6 @@ export class MathSectionComponent implements OnInit {
 
   }
 
-
-  resumeExam = () => {
-    this.apiService.resumeExamSession({
-      userId: this.accountService.userValue.id,
-      examId: this.itemDetail.id
-    }).subscribe((data) => {
-      if (data.isSuccess) {
-        this.cookieService.set(EnumService.cookieNames.CURRENT_EXAM_SESSION_DATA, JSON.stringify(data));
-        this.router.navigate(['math-section']);
-      } else {
-        this.alertService.error(data.message.join('\n'));
-      }
-    });
-  };
-
-
   onBack(): void {
     this.location.back();
   }
@@ -208,12 +165,14 @@ export class MathSectionComponent implements OnInit {
   onPrevious(): void {
     if (this.currentIndex > 0) {
       this.currentIndex--;
+      this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
     }
   }
 
   onNext(): void {
-    if (this.currentIndex < (this.examSectionSets.length - 1)) {
+    if (this.currentIndex < (this.examSectionSets[this.currentSetIndex].questions.length - 1)) {
       this.currentIndex++;
+      this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
     }
   }
 

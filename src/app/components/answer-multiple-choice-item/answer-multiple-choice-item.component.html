@@ -1,5 +1,8 @@
 <div tappable class="answer-row">
   <ion-checkbox [checked]="selected"></ion-checkbox>
-  <div class="answer-text">{{title}}</div>
+  <div class="answer-view">
+    <div class="answer-text" *ngIf="title">{{title}}</div>
+    <ion-img class="answer-img" *ngIf="imageUri" [src]="environment.mediaUrl+imageUri"></ion-img>
+  </div>
 </div>
 

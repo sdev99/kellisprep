@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-answer-multiple-choice-item',
@@ -6,9 +7,11 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./answer-multiple-choice-item.component.scss']
 })
 export class AnswerMultipleChoiceItemComponent implements OnInit {
+  environment = environment;
 
   @Input() selected: boolean;
   @Input() title: string;
+  @Input() imageUri: string;
 
   constructor() {
   }

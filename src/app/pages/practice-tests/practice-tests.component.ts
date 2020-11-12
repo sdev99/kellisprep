@@ -15,23 +15,7 @@ export class PracticeTestsComponent implements OnInit {
   loading = false;
 
 
-  practiceList = [
-    {
-      title: 'Reading Section',
-      type: 'Reading',
-      decription: 'Short detail about reading section in which you have to tell about what is reading section'
-    },
-    {
-      title: 'Writing Section',
-      type: 'Writing',
-      decription: 'Short detail about witting section in which you have to tell about what is witting section'
-    },
-    {
-      title: 'Math Section',
-      type: 'Math',
-      decription: 'Short detail about Math Section in which you have to tell about what is Math Section'
-    },
-  ];
+  practiceList;
   itemDetail;
   pathsTree = [];
 
@@ -50,6 +34,49 @@ export class PracticeTestsComponent implements OnInit {
     if (item) {
       this.itemDetail = JSON.parse(item);
       this.pathsTree = [this.itemDetail.type, this.itemDetail.name];
+      if (this.itemDetail.type === 'SAT') {
+        this.practiceList = [
+          {
+            title: 'Reading Section',
+            type: 'Reading',
+            decription: 'Short detail about reading section in which you have to tell about what is reading section'
+          },
+          {
+            title: 'Writing Section',
+            type: 'Writing',
+            decription: 'Short detail about witting section in which you have to tell about what is witting section'
+          },
+          {
+            title: 'Math Section',
+            type: 'Math',
+            decription: 'Short detail about Math Section in which you have to tell about what is Math Section'
+          },
+        ];
+      }
+      if (this.itemDetail.type === 'TOEFL') {
+        this.practiceList = [
+          {
+            title: 'Reading Section',
+            type: 'Reading',
+            decription: 'Short detail about reading section in which you have to tell about what is reading section'
+          },
+          {
+            title: 'Listening Section',
+            type: 'Listening',
+            decription: 'Short detail about Listening Section in which you have to tell about what is Listening Section'
+          },
+          {
+            title: 'Speaking Section',
+            type: 'Speaking',
+            decription: 'Short detail about speaking action which you have to tell about what is speaking action'
+          },
+          {
+            title: 'Writing Section',
+            type: 'Writing',
+            decription: 'Short detail about witting section in which you have to tell about what is witting section'
+          },
+        ];
+      }
     }
 
     this.route.queryParams.subscribe((params) => {

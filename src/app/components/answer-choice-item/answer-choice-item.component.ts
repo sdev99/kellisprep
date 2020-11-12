@@ -1,22 +1,26 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {environment} from '../../../environments/environment';
 
 @Component({
-    selector: 'app-answer-choice-item',
-    templateUrl: './answer-choice-item.component.html',
-    styleUrls: ['./answer-choice-item.component.scss']
+  selector: 'app-answer-choice-item',
+  templateUrl: './answer-choice-item.component.html',
+  styleUrls: ['./answer-choice-item.component.scss']
 })
 export class AnswerChoiceItemComponent implements OnInit {
-    @Input() selected: string;
-    @Input() index: number;
-    @Input() title: string;
-    questionIndex;
+  environment = environment;
 
-    constructor() {
+  @Input() selected: string;
+  @Input() index: number;
+  @Input() title: string;
+  @Input() imageUri: string;
+  questionIndex;
 
-    }
+  constructor() {
 
-    ngOnInit(): void {
-      this.questionIndex = String.fromCharCode(65 + this.index);
-    }
+  }
+
+  ngOnInit(): void {
+    this.questionIndex = String.fromCharCode(65 + this.index);
+  }
 
 }
