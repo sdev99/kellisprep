@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {map} from 'rxjs/operators';
 import {EnumService} from './enum.service';
 import {environment} from '../../environments/environment';
+import {CookieService} from 'ngx-cookie-service';
 
 declare global {
   interface Array<T> {
@@ -27,6 +28,7 @@ export class AccountService {
   constructor(
     private router: Router,
     private http: HttpClient,
+    private cookieService: CookieService,
   ) {
     this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem(EnumService.localStorageKeys.USER_DATA)));
     this.user = this.userSubject.asObservable();
@@ -100,7 +102,13 @@ export class AccountService {
 
   logout(): void {
     // remove user from local storage and set current user to null
-    localStorage.removeItem(EnumService.localStorageKeys.USER_DATA);
+    Object.values(EnumService.localStorageKeys).map((key) => {
+      localStorage.removeItem(key);
+    });
+    Object.values(EnumService.cookieNames).map((key) => {
+      this.cookieService.delete(key);
+    });
+
     this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
