@@ -9,6 +9,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {ApiService} from '../../services/api.service';
 import {AccountService} from '../../services/account.service';
 import {AlertService} from '../../services/alert.service';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-reading-section',

@@ -102,6 +102,15 @@
               </ng-container>
 
             </ng-container>
+
+
+            <!-- For drag and drop choice question-->
+            <ng-container
+              *ngIf="item.typeId === EnumService.examQuestionTypes.DRAG_DROP">
+              <label>Answer Choices</label>
+
+            </ng-container>
+
           </ng-container>
 
 
