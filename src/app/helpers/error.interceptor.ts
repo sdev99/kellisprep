@@ -39,7 +39,10 @@ export class ErrorInterceptor implements HttpInterceptor {
       }
 
       const error = err.error;
-      return throwError(error);
+      if (error) {
+        return throwError(error);
+      }
+      return throwError(err);
     }));
   }
 }

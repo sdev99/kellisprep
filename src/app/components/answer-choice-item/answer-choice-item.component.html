@@ -2,6 +2,6 @@
   <div class="answer-index" [ngClass]="{active:selected}">{{questionIndex}}</div>
   <div class="answer-view">
     <div class="answer-text" *ngIf="title">{{title}}</div>
-    <ion-img class="answer-img" *ngIf="imageUri" [src]="environment.mediaUrl+imageUri"></ion-img>
+    <img class="answer-img" *ngIf="imageUri" [src]="environment.mediaUrl+imageUri"/>
   </div>
 </div>

@@ -38,13 +38,19 @@ export class AccountService {
     return this.userSubject.value;
   }
 
-  login(eMail = '', password = '', googleId = '', facebookId = ''): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.LOGIN}`, {
-      googleId,
-      facebookId,
+  login(eMail = null, password = null, googleId = null, facebookId = null): Observable<any> {
+    const body: any = {
       eMail,
       password
-    }).pipe(map((data: any) => {
+    };
+    if (googleId) {
+      body.googleId = googleId;
+    }
+    if (facebookId) {
+      body.googleId = facebookId;
+    }
+
+    return this.http.post(`${environment.apiUrl}/${EnumService.apiEndPoints.LOGIN}`, body).pipe(map((data: any) => {
       if (data.isSuccess) {
         const userInfo = data.userInfo;
         const token = data.token;

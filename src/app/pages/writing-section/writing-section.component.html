@@ -31,8 +31,8 @@
 
 
             <h2 class="question" [innerHTML]="item.text"></h2>
-            <ion-img class="question-img" *ngIf="item && item.imageUri"
-                     [src]="item.mediaUrl+item.imageUri"></ion-img>
+            <img class="question-img" *ngIf="item && item.imageUri"
+                 [src]="item.mediaUrl+item.imageUri"/>
 
             <!-- For Singleline text answer-->
             <ng-container

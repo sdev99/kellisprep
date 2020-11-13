@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit {
     return this.form.controls;
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.submitted = true;
 
     // reset alerts on submit
@@ -64,9 +64,7 @@ export class RegisterComponent implements OnInit {
       username: this.f.username.value,
       eMail: this.f.email.value,
       password: this.f.password.value,
-      roleId: this.f.role.value,
-      googleId: '',
-      facebookId: '',
+      roleId: this.f.role.value
     })
       // .pipe(first())
       .subscribe({

@@ -113,7 +113,6 @@ export class LoginComponent implements OnInit {
     this.facebookLoading = true;
 
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID).then((res) => {
-      debugger;
       // authToken: "EAALjhn5rDVgBAMRRW5qPbWfAKR3QgG5zB65TDgXNreLwkcEZAZCw3sIiOZAZBIqeeVZBPZAMMzbLlIAzUDCk8ZBnpUSeR8aQ7ZAcDmTOKZAwDuDzQOSDAAZCZAdTxecwWj8vq39iCpRWBP0j0eRtPml5xD1ERDtJJvWiFlBoNsapAaOo8oOXbwLgQgIVvWZBrUwXZCk6yFZCDKHWegBAZDZD"
       // email: "sukhdev.patidar99@gmail.com"
       // firstName: "Sukhdev"
@@ -182,7 +181,11 @@ export class LoginComponent implements OnInit {
         },
         error: error => {
           this.facebookLoading = false;
-          this.alertService.error(error.statusText);
+          if (error) {
+            this.alertService.error(error.statusText);
+          } else {
+            this.alertService.error('Error in signing up');
+          }
         }
       });
   }
@@ -216,7 +219,11 @@ export class LoginComponent implements OnInit {
         },
         error: error => {
           this.googleLoading = false;
-          this.alertService.error(error.statusText);
+          if (error) {
+            this.alertService.error(error.statusText);
+          } else {
+            this.alertService.error('Error in signing up');
+          }
         }
       });
   }
@@ -252,7 +259,11 @@ export class LoginComponent implements OnInit {
         },
         error: error => {
           this.loginLoading = false;
-          this.alertService.error(error.statusText);
+          if (error) {
+            this.alertService.error(error.statusText);
+          } else {
+            this.alertService.error('Error in signing up');
+          }
         }
       });
   }
