@@ -70,6 +70,7 @@ import { ReadingSectionComponent } from './pages/reading-section/reading-section
 import { MathSectionComponent } from './pages/math-section/math-section.component';
 import { ListeningSectionComponent } from './pages/listening-section/listening-section.component';
 import { SpeakingSectionComponent } from './pages/speaking-section/speaking-section.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -110,35 +111,36 @@ import { SpeakingSectionComponent } from './pages/speaking-section/speaking-sect
     ListeningSectionComponent,
     SpeakingSectionComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatGridListModule,
-    MatListModule,
-    NgbModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    CommonModule,
-    MatSidenavModule,
-    MatSelectModule,
-    FormsModule,
-    MatTabsModule,
-    MatPaginatorModule,
-    PipesModule,
-    IonicModule.forRoot(),
-    MatRippleModule,
-    MatCheckboxModule,
-    MatTableModule,
-    SocialLoginModule,
-    NgxLoadingModule.forRoot({})
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        MatGridListModule,
+        MatListModule,
+        NgbModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatDialogModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        CommonModule,
+        MatSidenavModule,
+        MatSelectModule,
+        FormsModule,
+        MatTabsModule,
+        MatPaginatorModule,
+        PipesModule,
+        IonicModule.forRoot(),
+        MatRippleModule,
+        MatCheckboxModule,
+        MatTableModule,
+        SocialLoginModule,
+        NgxLoadingModule.forRoot({}),
+        DragDropModule
+    ],
   providers: [
     {provide: MatPaginatorIntl, useClass: MatPaginatorIntlCro},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
