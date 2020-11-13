@@ -2,8 +2,8 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-// const proxyurl = 'https://cors-anywhere.herokuapp.com/';
-const proxyurl = '';
+const proxyurl = 'https://cors-anywhere.herokuapp.com/';
+// const proxyurl = '';
 
 export const environment = {
   production: false,
