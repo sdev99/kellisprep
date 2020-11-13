@@ -15,6 +15,49 @@
   overflow: hidden;
 
 
+  .group-list {
+    background-color: #F9F9F9;
+    margin-top: 16px;
+
+    ion-list-header {
+      font: normal normal 600 14px/18px Montserrat;
+      letter-spacing: 0.42px;
+      color: #140020;
+      opacity: 1;
+    }
+
+    .placeholder {
+      font: normal normal normal 14px/18px Montserrat;
+      letter-spacing: 0.42px;
+      color: #B4B4B4;
+      opacity: 1;
+    }
+
+    .group-drop-list {
+      width: 100%;
+      padding: 20px 10px;
+    }
+
+    ion-list-header {
+      font-weight: 500;
+    }
+
+    ion-item {
+      --background: transparent;
+    }
+  }
+
+  .choice-item-list {
+    ion-item {
+      ion-label {
+        font: normal normal normal 14px/18px Montserrat;
+        letter-spacing: 0px;
+        color: #140020;
+        opacity: 1;
+      }
+    }
+  }
+
   .practice-content {
     margin: 0;
     width: 100%;

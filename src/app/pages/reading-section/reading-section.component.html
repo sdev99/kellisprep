@@ -48,6 +48,7 @@
                 </div>
               </div>
             </ng-container>
+            <!-- End --- For Singleline text answer-->
 
             <!-- For multine text answer-->
             <ng-container
@@ -69,6 +70,7 @@
                 </div>
               </div>
             </ng-container>
+            <!-- End --- For multine text answer-->
 
             <!-- For Single/Multiple choice answer-->
             <ng-container
@@ -102,65 +104,64 @@
               </ng-container>
 
             </ng-container>
+            <!-- End --- For Single/Multiple choice answer-->
 
 
             <!-- For drag and drop choice question-->
-            <ng-container
-              *ngIf="item.typeId === EnumService.examQuestionTypes.DRAG_DROP">
+            <ng-container *ngIf="item.typeId === EnumService.examQuestionTypes.DRAG_DROP">
+              <div cdkDropListGroup>
 
-              <ion-list class="group-list" *ngFor="let group of item.groups">
-                <ion-list-header>
-                  {{group.text}}
-                </ion-list-header>
-                <ion-item>
-                  <ion-label>Drop your choices here</ion-label>
-                </ion-item>
-              </ion-list>
+                <ion-list
+                  class="group-list"
+                  *ngFor="let group of item.groups; let idx=index"
+                >
+                  <ion-list-header>
+                    {{group.text}}
+                  </ion-list-header>
+                  <div
+                    cdkDropList
+                    [cdkDropListData]="group.answered"
+                    class="group-drop-list"
+                    (cdkDropListDropped)="drop($event)"
+                  >
+                    <ion-item *ngIf="!group.answered || group.answered.length===0" cdkDrag>
+                      <ion-label class="placeholder">Drop your choices here</ion-label>
+                    </ion-item>
+                    <ion-item *ngFor="let answer of group.answered" cdkDrag>
+                      <ion-label>{{answer.text}}</ion-label>
+                    </ion-item>
+                  </div>
 
+                </ion-list>
 
-              <label>Answer Choices</label>
-              <div class="answer-type" style="padding: 0">Drop your choices from here</div>
+                <br/>
 
+                <label>Answer Choices</label>
+                <div class="answer-type" style="padding: 0">Drop your choices from here</div>
+                <br/>
 
-              <div class="example-container">
-                <h2>To do</h2>
-
-                <div
+                <ion-list
+                  lines="full"
                   cdkDropList
-                  #todoList="cdkDropList"
-                  [cdkDropListData]="todo"
-                  [cdkDropListConnectedTo]="[doneList]"
-                  class="example-list"
+                  [cdkDropListData]="item.items"
+                  class="choice-item-list"
                   (cdkDropListDropped)="drop($event)">
-                  <div class="example-box" *ngFor="let item of todo" cdkDrag>{{item}}</div>
-                </div>
+                  <ion-item *ngFor="let choiceItem of item.items" cdkDrag>
+                    <ion-icon slot="start" src="./assets/images/Drag.svg"></ion-icon>
+                    <ion-label>{{choiceItem.text}}</ion-label>
+                  </ion-item>
+                </ion-list>
               </div>
-
-              <div class="example-container">
-                <h2>Done</h2>
-
-                <div
-                  cdkDropList
-                  #doneList="cdkDropList"
-                  [cdkDropListData]="done"
-                  [cdkDropListConnectedTo]="[todoList]"
-                  class="example-list"
-                  (cdkDropListDropped)="drop($event)">
-                  <div class="example-box" *ngFor="let item of done" cdkDrag>{{item}}</div>
-                </div>
-              </div>
-
             </ng-container>
+            <!-- End --- For drag and drop choice question-->
 
+
+            <!--          <ng-container *ngIf="item.questionType === 'video'">-->
+            <!--            <iframe class="video-view" [src]="item.link | safe:'resourceUrl'" frameborder="0"-->
+            <!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+            <!--                    allowfullscreen></iframe>-->
+            <!--          </ng-container>-->
           </ng-container>
-
-
-          <!--          <ng-container *ngIf="item.questionType === 'video'">-->
-          <!--            <iframe class="video-view" [src]="item.link | safe:'resourceUrl'" frameborder="0"-->
-          <!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
-          <!--                    allowfullscreen></iframe>-->
-          <!--          </ng-container>-->
-
         </ng-container>
 
       </div>

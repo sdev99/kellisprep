@@ -49,6 +49,7 @@
                 </div>
               </div>
             </ng-container>
+            <!-- For Singleline text answer-->
 
             <!-- For multine text answer-->
             <ng-container
@@ -70,6 +71,7 @@
                 </div>
               </div>
             </ng-container>
+            <!-- End --- For multine text answer-->
 
             <!-- For Single/Multiple choice answer-->
             <ng-container
@@ -103,8 +105,59 @@
               </ng-container>
 
             </ng-container>
-          </ng-container>
+            <!-- End --- For Single/Multiple choice answer-->
 
+
+            <!-- For drag and drop choice question-->
+            <ng-container *ngIf="item.typeId === EnumService.examQuestionTypes.DRAG_DROP">
+              <div cdkDropListGroup>
+
+                <ion-list
+                  class="group-list"
+                  *ngFor="let group of item.groups; let idx=index"
+                >
+                  <ion-list-header>
+                    {{group.text}}
+                  </ion-list-header>
+
+                  <div
+                    cdkDropList
+                    [cdkDropListData]="group.answered"
+                    class="group-drop-list"
+                    (cdkDropListDropped)="drop($event)"
+                  >
+                    <ion-item *ngIf="!group.answered || group.answered.length===0" cdkDrag>
+                      <ion-label class="placeholder">Drop your choices here</ion-label>
+                    </ion-item>
+                    <ion-item *ngFor="let answer of group.answered" cdkDrag>
+                      <ion-label>{{answer.text}}</ion-label>
+                    </ion-item>
+                  </div>
+
+                </ion-list>
+
+                <br/>
+
+                <label>Answer Choices</label>
+                <div class="answer-type" style="padding: 0">Drop your choices from here</div>
+                <br/>
+
+                <ion-list
+                  lines="full"
+                  cdkDropList
+                  [cdkDropListData]="item.items"
+                  class="choice-item-list"
+                  (cdkDropListDropped)="drop($event)">
+                  <ion-item *ngFor="let choiceItem of item.items" cdkDrag>
+                    <ion-icon slot="start" src="./assets/images/Drag.svg"></ion-icon>
+                    <ion-label>{{choiceItem.text}}</ion-label>
+                  </ion-item>
+                </ion-list>
+              </div>
+            </ng-container>
+            <!-- End --- For drag and drop choice question-->
+
+          </ng-container>
 
           <!--          <ng-container *ngIf="item.questionType === 'video'">-->
           <!--            <iframe class="video-view" [src]="item.link | safe:'resourceUrl'" frameborder="0"-->
