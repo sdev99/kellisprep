@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   apiUrl: 'http://52.179.100.163/api',
-  mediaUrl: 'http://52.179.100.163:81/'
+  mediaUrl: 'http://52.179.100.163:81'
 };
