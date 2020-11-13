@@ -107,12 +107,20 @@
             <!-- For drag and drop choice question-->
             <ng-container
               *ngIf="item.typeId === EnumService.examQuestionTypes.DRAG_DROP">
+
+              <ion-list class="group-list" *ngFor="let group of item.groups">
+                <ion-list-header>
+                  {{group.text}}
+                </ion-list-header>
+                <ion-item>
+                  <ion-label>Drop your choices here</ion-label>
+                </ion-item>
+              </ion-list>
+
+
               <label>Answer Choices</label>
               <div class="answer-type" style="padding: 0">Drop your choices from here</div>
 
-              <ion-item>
-
-              </ion-item>
 
               <div class="example-container">
                 <h2>To do</h2>
