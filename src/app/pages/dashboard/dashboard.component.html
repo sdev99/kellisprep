@@ -50,32 +50,32 @@
                             ngbDropdownToggle>
                       {{selectedTime.title}}
                     </button>
-<!--                    <div ngbDropdownMenu aria-labelledby="filterByDate">-->
-<!--                      <button type="button" *ngFor="let item of filterTimesList" ngbDropdownItem>{{item.title}}</button>-->
-<!--                      <div class="dropdown-divider"></div>-->
-<!--                      <button type="button" ngbDropdownItem-->
-<!--                              style="display: flex;flex-direction: row;align-items: center;">-->
-<!--                        Jump to specific date-->
-<!--                        <mat-icon>chevron_right</mat-icon>-->
-<!--                      </button>-->
-<!--                    </div>-->
+                    <!--                    <div ngbDropdownMenu aria-labelledby="filterByDate">-->
+                    <!--                      <button type="button" *ngFor="let item of filterTimesList" ngbDropdownItem>{{item.title}}</button>-->
+                    <!--                      <div class="dropdown-divider"></div>-->
+                    <!--                      <button type="button" ngbDropdownItem-->
+                    <!--                              style="display: flex;flex-direction: row;align-items: center;">-->
+                    <!--                        Jump to specific date-->
+                    <!--                        <mat-icon>chevron_right</mat-icon>-->
+                    <!--                      </button>-->
+                    <!--                    </div>-->
                   </div>
                 </div>
               </div>
 
-<!--              <div class="col-auto">-->
-<!--                <div class="input-group">-->
-<!--                  <div ngbDropdown class="d-inline-block">-->
-<!--                    <button type="button" class="btn btn-outline-dark" style="border-color: #ced4da" id="filterByExam"-->
-<!--                            ngbDropdownToggle>-->
-<!--                      {{selectedExam.title}}-->
-<!--                    </button>-->
-<!--                    <div ngbDropdownMenu aria-labelledby="filterByExam">-->
-<!--                      <button type="button" *ngFor="let item of filterExamList" ngbDropdownItem>{{item.title}}</button>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
+              <!--              <div class="col-auto">-->
+              <!--                <div class="input-group">-->
+              <!--                  <div ngbDropdown class="d-inline-block">-->
+              <!--                    <button type="button" class="btn btn-outline-dark" style="border-color: #ced4da" id="filterByExam"-->
+              <!--                            ngbDropdownToggle>-->
+              <!--                      {{selectedExam.title}}-->
+              <!--                    </button>-->
+              <!--                    <div ngbDropdownMenu aria-labelledby="filterByExam">-->
+              <!--                      <button type="button" *ngFor="let item of filterExamList" ngbDropdownItem>{{item.title}}</button>-->
+              <!--                    </div>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
             </div>
           </div>
         </div>
@@ -86,6 +86,7 @@
             <thead>
             <tr>
               <th scope="col" sortable="name">Exams</th>
+              <th scope="col" sortable="area">Category</th>
               <th scope="col" sortable="area">Date</th>
               <th scope="col" sortable="population">Score</th>
             </tr>
@@ -96,6 +97,11 @@
                 <div class="exam-name">
                   <ngb-highlight [result]="exam.examTitle" [term]="examSearchTerm"></ngb-highlight>
                 </div>
+                <div class="exam-type">
+                  <ngb-highlight [result]="exam.sectionName" [term]="examSearchTerm"></ngb-highlight>
+                </div>
+              </td>
+              <td>
                 <div class="exam-type">
                   <ngb-highlight [result]="exam.examType" [term]="examSearchTerm"></ngb-highlight>
                 </div>

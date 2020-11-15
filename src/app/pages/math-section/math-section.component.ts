@@ -48,7 +48,7 @@ export class MathSectionComponent implements OnInit {
   ) {
 
     const item = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION);
-    const examData = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION_DATA);
+    const examData = localStorage.getItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION_DATA);
 
     if (item) {
       this.itemDetail = JSON.parse(item);

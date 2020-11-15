@@ -83,7 +83,7 @@ export class WritingSectionComponent implements OnInit {
   ) {
 
     const item = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION);
-    const examData = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION_DATA);
+    const examData = localStorage.getItem(EnumService.cookieNames.CURRENT_EXAM_SESSION_DATA);
 
     if (item) {
       this.itemDetail = JSON.parse(item);
@@ -239,7 +239,7 @@ export class WritingSectionComponent implements OnInit {
       examId: this.itemDetail.id
     }).subscribe((data) => {
       if (data.isSuccess) {
-        this.cookieService.set(EnumService.cookieNames.CURRENT_EXAM_SESSION_DATA, JSON.stringify(data));
+        localStorage.setItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION_DATA, JSON.stringify(data));
         this.router.navigate(['test-direction'], {
           queryParams: {
             practiceType: EnumService.examSectionTypes.MATH

@@ -44,6 +44,7 @@ export class EnumService {
     USER_DATA: 'user_data',
     ALL_EXAMS: 'all_exams',
     USER_HISTORY: 'user_history',
+    CURRENT_EXAM_SESSION_DATA: 'current_exam_session_data'
   };
 
   static apiEndPoints = {
