@@ -75,6 +75,9 @@ export class MathSectionComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === 'Math')) {
+      this.location.back();
+    }
   }
 
   drop(event: CdkDragDrop<string[]>): void {

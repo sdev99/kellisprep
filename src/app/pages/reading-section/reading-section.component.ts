@@ -113,6 +113,9 @@ export class ReadingSectionComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === 'Reading')) {
+      this.location.back();
+    }
   }
 
   drop(event: CdkDragDrop<string[]>): void {
