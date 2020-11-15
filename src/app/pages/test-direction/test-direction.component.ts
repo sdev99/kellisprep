@@ -53,6 +53,9 @@ export class TestDirectionComponent implements OnInit {
       }
       if (examSessionData) {
         this.examSessionData = JSON.parse(examSessionData);
+        if (this.examSessionData && this.examSessionData.description) {
+          this.sectionDescription = this.examSessionData.description;
+        }
       }
 
     });

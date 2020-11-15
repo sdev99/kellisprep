@@ -26,7 +26,8 @@
           <ng-container *ngFor="let item of examSectionSets[currentIndex].questions; let idx=index">
 
             <div class="question-count">
-              Question {{(idx + 1) }} of {{examSectionSets[currentIndex].questions.length}}
+              <!--              Question {{(idx + 1) }} of {{examSectionSets[currentIndex].questions.length}}-->
+              Question {{(previousQuestionsCount() + idx + 1) }} of {{totalQuestionCount()}}
             </div>
 
 
@@ -179,7 +180,7 @@
 
       <button *ngIf="currentIndex>0" mat-button color="primary" (click)="onPrevious()">
         Back to
-        question {{(currentIndex + 1) + "-" + (currentIndex * examSectionSets[currentIndex].questions.length)}}
+        question {{this.previousBtnText()}}
       </button>
 
 
@@ -192,7 +193,7 @@
         <ng-template #nextPageBtn>
           <button mat-raised-button color="primary" (click)="onNext()">
             Continue to
-            question {{((currentIndex + 1)) + "-" + ((currentIndex + 1) * examSectionSets[currentIndex].questions.length)}}
+            question {{this.nextBtnText()}}
           </button>
         </ng-template>
       </ng-container>

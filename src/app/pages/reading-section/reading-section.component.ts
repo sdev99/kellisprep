@@ -286,6 +286,61 @@ export class ReadingSectionComponent implements OnInit {
     }
   }
 
+  totalQuestionCount(): number {
+    let totalQuestionCount = 0;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.examSectionSets.length; i++) {
+      const set = this.examSectionSets[i];
+      totalQuestionCount = totalQuestionCount + set.questions.length;
+    }
+    return totalQuestionCount;
+  }
+
+  previousQuestionsCount(): number {
+    if (this.currentIndex > 0) {
+      let totalQuestionCount = 0;
+      for (let i = 0; i <= (this.currentIndex - 1); i++) {
+        const set = this.examSectionSets[i];
+        totalQuestionCount = totalQuestionCount + set.questions.length;
+      }
+      return totalQuestionCount;
+    }
+    return 0;
+  }
+
+  previousBtnText(): string {
+    if (this.currentIndex > 0) {
+      let totalQuestionCount = 0;
+      for (let i = 0; i < (this.currentIndex - 1); i++) {
+        const set = this.examSectionSets[i];
+        totalQuestionCount = totalQuestionCount + set.questions.length;
+      }
+      const prevSet = this.examSectionSets[this.currentIndex - 1];
+      const prevSetQuestionCount = prevSet.questions.length;
+      return (totalQuestionCount + 1) + ' - ' + (totalQuestionCount + prevSetQuestionCount);
+    }
+    return '';
+  }
+
+  nextBtnText(): string {
+    if (this.currentIndex < this.examSectionSets.length - 1) {
+      let totalQuestionCount = 0;
+      for (let i = 0; i <= this.currentIndex; i++) {
+        const set = this.examSectionSets[i];
+        totalQuestionCount = totalQuestionCount + set.questions.length;
+      }
+      const nextSet = this.examSectionSets[this.currentIndex + 1];
+      const nextSetQuestionCount = nextSet.questions.length;
+      const startQuestionCount = totalQuestionCount + 1;
+      const endQuestionCount = totalQuestionCount + nextSetQuestionCount;
+      if (startQuestionCount === endQuestionCount) {
+        return startQuestionCount.toString();
+      }
+      return startQuestionCount + ' - ' + endQuestionCount;
+    }
+    return '';
+  }
+
   onFinishSectionClick(): void {
     this.router.navigate(['practice-tests']);
   }
