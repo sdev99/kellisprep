@@ -10,6 +10,8 @@ import {AccountService} from '../../services/account.service';
 import {ApiService} from '../../services/api.service';
 import {AlertService} from '../../services/alert.service';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {TestDirectionComponent} from '../test-direction/test-direction.component';
+import {ShareddataService} from '../../services/shareddata.service';
 
 @Component({
   selector: 'app-writing-section',
@@ -80,6 +82,7 @@ export class WritingSectionComponent implements OnInit {
     private alertService: AlertService,
     public dialog: MatDialog,
     private cookieService: CookieService,
+    public shareddataService: ShareddataService,
   ) {
 
     const item = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION);
@@ -243,11 +246,14 @@ export class WritingSectionComponent implements OnInit {
     }).subscribe((data) => {
       if (data.isSuccess) {
         localStorage.setItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION_DATA, JSON.stringify(data));
-        this.router.navigate(['test-direction'], {
-          queryParams: {
-            practiceType: EnumService.examSectionTypes.MATH
-          }
-        });
+
+        const examType = this.itemDetail.type;
+        const examId = this.itemDetail.id;
+        const sectionType = EnumService.examSectionTypes.MATH;
+        const testDirectionRouteConfig = examType + '/:id/:section/direction';
+        const testDirectionRoute = examType + '/' + examId + '/' + sectionType + '/direction';
+        this.shareddataService.addDynamicRoute(testDirectionRouteConfig, TestDirectionComponent, true);
+        this.router.navigate([testDirectionRoute]);
       } else {
         this.alertService.error(data.message.join('\n'));
       }

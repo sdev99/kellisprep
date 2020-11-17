@@ -15,14 +15,13 @@
           <div class="passage" [innerHTML]="examSectionSets[currentIndex].passage"></div>
         </ng-container>
         <ng-template #demoPassage>
-          <h1>Agriculture iron and Bantu people</h1>
-          <p [innerHTML]="descriptionText"></p>
+          <p class="ion-padding ion-text-center">No description available</p>
         </ng-template>
       </div>
 
       <div class="col-md-6 right-content">
 
-        <ng-container *ngIf="examSectionSets && examSectionSets.length>0">
+        <ng-container *ngIf="examSectionSets && examSectionSets.length>0; else noQuestionsAvailable;">
           <ng-container *ngFor="let item of examSectionSets[currentIndex].questions; let idx=index">
 
             <div class="question-count">
@@ -164,6 +163,11 @@
             <!--          </ng-container>-->
           </ng-container>
         </ng-container>
+
+        <ng-template #noQuestionsAvailable>
+          <p class="ion-padding ion-text-center">No questions available</p>
+        </ng-template>
+
 
       </div>
 

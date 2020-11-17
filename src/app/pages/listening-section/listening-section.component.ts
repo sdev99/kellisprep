@@ -53,6 +53,7 @@ export class ListeningSectionComponent implements OnInit {
 
   questions: any = [];
 
+  currentSetIndex = 0;
   currentIndex = 0;
   questionsPerpage = 10;
   totalPages = 1;
@@ -62,7 +63,11 @@ export class ListeningSectionComponent implements OnInit {
   data: any = {};
 
   itemDetail;
+  examSessionData;
+  examSectionSets;
   pathsTree = [];
+
+  currentQuestion;
 
   constructor(
     private location: Location,
@@ -71,44 +76,39 @@ export class ListeningSectionComponent implements OnInit {
     public dialog: MatDialog,
     private cookieService: CookieService,
   ) {
+
     const item = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION);
+    const examData = localStorage.getItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION_DATA);
+
     if (item) {
       this.itemDetail = JSON.parse(item);
-      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Listening Section'];
+      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Math Section'];
     }
 
-    this.route.queryParams.subscribe((params) => {
-      if (params && params.data) {
-        this.data = JSON.parse(params.data);
-      }
-    });
+    if (examData) {
+      // {"examSectionId":17,"sessionId":"b34ab0e5-ec3e-4c13-9ae5-556a9f07439c","examTypeId":1,"examTypeText":"SAT","title":"SAT-EXAM-01","description":"<p>SAT-EXAM-01</p>","duration":null,"sectionData":{"id":1,"name":"Reading","guideline":null,"sets":[{"id":2,"orderNo":1,"passage":" ","videoUri":null,"videoRepeatable":false,"questions":[{"id":1,"typeId":1,"text":"<p>q1x</p>","imageUri":"/medialibrary/image/worldmap.jpg","orderNo":0,"weight":1.00,"choices":[{"id":1,"text":"c1x","imageUri":null},{"id":2,"text":"c2x","imageUri":null},{"id":3,"text":"c3x","imageUri":null},{"id":4,"text":"c4x","imageUri":null}],"groups":[],"items":[]},{"id":10,"typeId":1,"text":" ","imageUri":null,"orderNo":1,"weight":1.00,"choices":[],"groups":[],"items":[]},{"id":12,"typeId":1,"text":" ","imageUri":null,"orderNo":2,"weight":1.00,"choices":[],"groups":[],"items":[]},{"id":17,"typeId":1,"text":"<p>aaaa</p>","imageUri":null,"orderNo":3,"weight":1.00,"choices":[{"id":20,"text":"cc1","imageUri":null},{"id":21,"text":"cc2","imageUri":null},{"id":22,"text":"cc3","imageUri":null},{"id":23,"text":"cc4","imageUri":null}],"groups":[],"items":[]},{"id":18,"typeId":1,"text":" ","imageUri":null,"orderNo":4,"weight":1.00,"choices":[],"groups":[],"items":[]},{"id":19,"typeId":1,"text":" ","imageUri":null,"orderNo":5,"weight":1.00,"choices":[],"groups":[],"items":[]},{"id":22,"typeId":1,"text":"<p>bbbb</p>","imageUri":null,"orderNo":6,"weight":1.00,"choices":[{"id":24,"text":"bc1","imageUri":null},{"id":25,"text":"bc2","imageUri":null},{"id":26,"text":"bc3","imageUri":null}],"groups":[],"items":[]},{"id":23,"typeId":1,"text":" ","imageUri":null,"orderNo":7,"weight":1.00,"choices":[],"groups":[],"items":[]}]}]},"isSuccess":true,"exception":null,"messages":["OK"]}
+      this.examSessionData = JSON.parse(examData);
+      this.examSectionSets = this.examSessionData.sectionData?.sets;
+      this.examSectionSets.map((set) => {
+        set.questions.map((question) => {
+          if (question.typeId === EnumService.examQuestionTypes.DRAG_DROP) {
+            question.groups.map((group) => {
+              group.answered = [];
+            });
+          }
+        });
+      });
 
-    for (let i = 0; i < 30; i++) {
-      if (i % 14 === 0) {
-        this.questions.push({
-          title: (i + 1) + ' Big History weaves expert thinking about the Universe into a coherent story and looks at the entire span of history at different scales. It’s a modern, scientific version of an origin story.',
-          questionType: 'multilinetext',
-          answer: ''
-        });
-      }  else {
-        this.questions.push({
-          title: (i + 1) + ' Which of the following statements is the best definition of Big History?',
-          questionType: (i % 4 === 0) ? 'multichoice' : 'singlechoice',
-          answers: [
-            {index: 'A', title: 'How was the Universe created?'},
-            {index: 'B', title: 'Why are stars so big and humans so small?'},
-            {index: 'C', title: 'Why are humans so insignificant?'},
-            {index: 'D', title: 'What does it mean to be human?'},
-          ],
-        });
-      }
+      this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
     }
 
-    this.totalPages = Math.ceil(this.questions.length / this.questionsPerpage);
   }
 
 
   ngOnInit(): void {
+    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === 'Math')) {
+      this.location.back();
+    }
   }
 
   openDialog(): void {

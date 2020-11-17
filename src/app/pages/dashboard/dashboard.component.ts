@@ -7,6 +7,9 @@ import {ApiService} from '../../services/api.service';
 import {AccountService} from '../../services/account.service';
 import {CookieService} from 'ngx-cookie-service';
 import {EnumService} from '../../services/enum.service';
+import {PracticeTestsComponent} from '../practice-tests/practice-tests.component';
+import {AuthGuard} from '../../helpers/auth.guard';
+import {ShareddataService} from '../../services/shareddata.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -252,6 +255,7 @@ export class DashboardComponent implements OnInit {
     public apiService: ApiService,
     public cookieService: CookieService,
     public accountService: AccountService,
+    public shareddataService: ShareddataService,
   ) {
     const selectedMenuIndex = this.cookieService.get(EnumService.cookieNames.DASHBOARD_SELECTED_MENU_INDEX) || 0;
     const selectedSubMenuIndex = this.cookieService.get(EnumService.cookieNames.DASHBOARD_SELECTED_SUBMENU_INDEX) || 0;
@@ -341,18 +345,24 @@ export class DashboardComponent implements OnInit {
   }
 
   startExam(item): void {
+    const examType = item.type;
+    const examId = item.id;
+    const practiceTestRouteConfig = examType + '/:id';
+    const practiceTestRoute = examType + '/' + examId;
+    this.shareddataService.addDynamicRoute(practiceTestRouteConfig, PracticeTestsComponent, true);
+
     if (this.selectedMenu.type === 'exam') {
       this.loading = true;
       this.apiService.initExamSession({
         userId: this.accountService.userValue.id,
-        examId: item.id
+        examId
       }).subscribe((data) => {
         this.loading = false;
         this.cookieService.set(EnumService.cookieNames.CURRENT_EXAM_SESSION, JSON.stringify(item));
         if (data.isSuccess) {
-          this.router.navigate(['practice-tests']);
+          this.router.navigate([practiceTestRoute]);
         } else {
-          this.router.navigate(['practice-tests']);
+          this.router.navigate([practiceTestRoute]);
         }
       }, (error) => {
         this.loading = false;

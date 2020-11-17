@@ -3,6 +3,8 @@ import {Location} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EnumService} from '../../services/enum.service';
 import {CookieService} from 'ngx-cookie-service';
+import {ShareddataService} from '../../services/shareddata.service';
+import {SectionDirectionComponent} from '../section-direction/section-direction.component';
 
 @Component({
   selector: 'app-test-direction',
@@ -13,7 +15,7 @@ export class TestDirectionComponent implements OnInit {
 
   EnumService = EnumService;
 
-  practiceType;
+  sectionType;
   itemDetail;
   examSessionData;
   pathsTree;
@@ -27,16 +29,17 @@ export class TestDirectionComponent implements OnInit {
     private route: ActivatedRoute,
     private cookieService: CookieService,
     private router: Router,
+    private shareddataService: ShareddataService,
   ) {
-    this.route.queryParams.subscribe((params) => {
+    this.route.params.subscribe((params) => {
 
-      if (params && params.practiceType) {
-        this.practiceType = params.practiceType;
-        if (this.practiceType === EnumService.examSectionTypes.MATH) {
-          this.sectionTitle = 'WELCOME TO ' + this.practiceType + ' (No CALCULATOR)';
+      if (params && params.section) {
+        this.sectionType = params.section;
+        if (this.sectionType === EnumService.examSectionTypes.MATH) {
+          this.sectionTitle = 'WELCOME TO ' + this.sectionType + ' (No CALCULATOR)';
           this.sectionDescription = 'This section has 20 questions and is 25 minutes total.';
         } else {
-          this.sectionTitle = 'WELCOME TO ' + this.practiceType + ' Section';
+          this.sectionTitle = 'WELCOME TO ' + this.sectionType + ' Section';
           this.sectionDescription = 'This test is divided up into 4 sections. Once you have finished all of the sections, you will get your math and\n' +
             '        reading scores. You must complete (or skip) each section to unlock the next. You cannot "save" a section for\n' +
             '        later, and once a section\'s timer has run out, you cannot go back to work on that section again. You can take\n' +
@@ -49,7 +52,7 @@ export class TestDirectionComponent implements OnInit {
       const examSessionData = localStorage.getItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION_DATA);
       if (item) {
         this.itemDetail = JSON.parse(item);
-        this.pathsTree = [this.itemDetail.type, this.itemDetail.name, this.practiceType + ' Section'];
+        this.pathsTree = [this.itemDetail.type, this.itemDetail.name, this.sectionType + ' Section'];
       }
       if (examSessionData) {
         this.examSessionData = JSON.parse(examSessionData);
@@ -69,11 +72,13 @@ export class TestDirectionComponent implements OnInit {
   }
 
   onNext(): void {
-    this.router.navigate(['section-direction'], {
-      queryParams: {
-        practiceType: this.practiceType
-      }
-    });
+    const examType = this.itemDetail.type;
+    const examId = this.itemDetail.id;
+    const sectionDirectionRouteConfig = examType + '/:id/:section/guideline';
+    const sectionDirectionRoute = examType + '/' + examId + '/' + this.sectionType + '/guideline';
+    this.shareddataService.addDynamicRoute(sectionDirectionRouteConfig, SectionDirectionComponent, true);
+
+    this.router.navigate([sectionDirectionRoute]);
   }
 
   onFinishSectionClick(): void {
