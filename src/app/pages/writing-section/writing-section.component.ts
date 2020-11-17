@@ -332,8 +332,5 @@ export class WritingSectionComponent implements OnInit {
     return '';
   }
 
-  onFinishSectionClick(): void {
-    this.router.navigate(['practice-tests']);
-  }
 
 }
