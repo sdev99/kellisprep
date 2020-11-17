@@ -170,7 +170,7 @@ export class ReadingSectionComponent implements OnInit {
             });
 
             const DragAndDropAnswerObject = {
-              questionId: group.id,
+              groupId: group.id,
               itemIds: answerIds
             };
 

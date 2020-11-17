@@ -117,6 +117,26 @@ export class MathSectionComponent implements OnInit {
         } else if (question.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_SINGLE_LINE || question.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_SINGLE_LINE || question.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE || question.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE) {
           answerObject.answerInput = question.answerInput;
           isAnswered = true;
+        } else if (question.typeId === EnumService.examQuestionTypes.DRAG_DROP) {
+          const groups = question.groups;
+          const groupItemMatches = [];
+          groups.map((group) => {
+            const answered = group.answered;
+            const answerIds = [];
+            answered.map((answer) => {
+              answerIds.push(answer.id);
+              isAnswered = true;
+            });
+
+            const DragAndDropAnswerObject = {
+              groupId: group.id,
+              itemIds: answerIds
+            };
+
+            groupItemMatches.push(DragAndDropAnswerObject);
+
+          });
+          answerObject.groupItemMatches = groupItemMatches;
         }
 
         if (isAnswered) {
