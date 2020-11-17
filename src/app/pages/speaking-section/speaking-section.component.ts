@@ -110,6 +110,9 @@ export class SpeakingSectionComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === 'Speaking')) {
+      this.location.back();
+    }
   }
 
   openDialog(): void {

@@ -106,7 +106,7 @@ export class ListeningSectionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === 'Math')) {
+    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === 'Listening')) {
       this.location.back();
     }
   }
