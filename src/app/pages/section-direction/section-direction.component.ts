@@ -16,6 +16,8 @@ export class SectionDirectionComponent implements OnInit {
   examSessionData;
   sectionDescription;
 
+  nextBtnTitle = 'Continue to first question';
+
   constructor(
     private location: Location,
     private route: ActivatedRoute,
@@ -44,6 +46,11 @@ export class SectionDirectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.itemDetail.type === 'TOEFL') {
+      if (this.sectionType === 'Writing' || this.sectionType === 'Listening') {
+        this.nextBtnTitle = 'Let\'s go, start the quiz';
+      }
+    }
   }
 
   onBack(): void {

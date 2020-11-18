@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.component';
 import {EnumService} from '../../services/enum.service';
 import {CookieService} from 'ngx-cookie-service';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-listening-section',
@@ -12,6 +13,7 @@ import {CookieService} from 'ngx-cookie-service';
   styleUrls: ['./listening-section.component.scss']
 })
 export class ListeningSectionComponent implements OnInit {
+  environment = environment;
 
   descriptionText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel tristique urna. Aliquam bibendum fringilla\n' +
     '          nulla at ultrices. Etiam bibendum mi sed enim ultricies, et varius quam pellentesque. Proin lobortis dolor\n' +
@@ -98,8 +100,6 @@ export class ListeningSectionComponent implements OnInit {
           }
         });
       });
-
-      this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
     }
 
   }

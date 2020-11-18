@@ -23,7 +23,7 @@ import {ListeningSectionComponent} from './pages/listening-section/listening-sec
 import {SpeakingSectionComponent} from './pages/speaking-section/speaking-section.component';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/home', pathMatch: 'full'}, // redirect to `first-component`
+  { path: '', component: HomeComponent },
   {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},

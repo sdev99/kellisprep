@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.component';
 import {EnumService} from '../../services/enum.service';
 import {CookieService} from 'ngx-cookie-service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-speaking-section',
@@ -12,6 +13,7 @@ import {CookieService} from 'ngx-cookie-service';
   styleUrls: ['./speaking-section.component.scss']
 })
 export class SpeakingSectionComponent implements OnInit {
+  environment = environment;
 
   descriptionText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel tristique urna. Aliquam bibendum fringilla\n' +
     '          nulla at ultrices. Etiam bibendum mi sed enim ultricies, et varius quam pellentesque. Proin lobortis dolor\n' +

@@ -64,6 +64,11 @@ export class PracticeTestsComponent implements OnInit {
             decription: 'Short detail about reading section in which you have to tell about what is reading section'
           },
           {
+            title: 'Writing Section',
+            type: 'Writing',
+            decription: 'Short detail about witting section in which you have to tell about what is witting section'
+          },
+          {
             title: 'Listening Section',
             type: 'Listening',
             decription: 'Short detail about Listening Section in which you have to tell about what is Listening Section'
@@ -72,11 +77,6 @@ export class PracticeTestsComponent implements OnInit {
             title: 'Speaking Section',
             type: 'Speaking',
             decription: 'Short detail about speaking action which you have to tell about what is speaking action'
-          },
-          {
-            title: 'Writing Section',
-            type: 'Writing',
-            decription: 'Short detail about witting section in which you have to tell about what is witting section'
           },
         ];
       }

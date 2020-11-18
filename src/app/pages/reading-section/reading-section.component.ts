@@ -12,6 +12,7 @@ import {AlertService} from '../../services/alert.service';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {TestDirectionComponent} from '../test-direction/test-direction.component';
 import {ShareddataService} from '../../services/shareddata.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-reading-section',
@@ -19,6 +20,7 @@ import {ShareddataService} from '../../services/shareddata.service';
   styleUrls: ['./reading-section.component.scss']
 })
 export class ReadingSectionComponent implements OnInit {
+  environment = environment;
 
   EnumService = EnumService;
 
