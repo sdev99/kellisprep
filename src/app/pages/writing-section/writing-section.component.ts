@@ -24,47 +24,6 @@ export class WritingSectionComponent implements OnInit {
 
   EnumService = EnumService;
 
-  loading = false;
-
-  descriptionText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel tristique urna. Aliquam bibendum fringilla\n' +
-    '          nulla at ultrices. Etiam bibendum mi sed enim ultricies, et varius quam pellentesque. Proin lobortis dolor\n' +
-    '          mauris,\n' +
-    '          id posuere nunc semper pharetra. Phasellus et lobortis lorem. Phasellus sed pharetra odio. Interdum et\n' +
-    '          malesuada\n' +
-    '          fames ac ante ipsum primis in faucibus. Aenean fermentum, urna sit amet interdum pharetra, mi arcu hendrerit\n' +
-    '          risus, at rutrum tortor neque sit amet ipsum.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Duis commodo dolor dolor, vel ornare elit ornare sed. Ut non\n' +
-    '          pulvinar libero. Sed porta eu tortor interdum suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing\n' +
-    '          elit.\n' +
-    '          Nullam dui turpis, facilisis et quam eu, ultrices auctor neque. Donec pretium sapien non eleifend consectetur.\n' +
-    '          Nullam ligula ante, suscipit vel ex sit amet, semper feugiat arcu. Fusce vehicula leo placerat venenatis\n' +
-    '          fermentum.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Nullam eu eros tincidunt, aliquet felis ac, efficitur dolor. Sed malesuada nisi id neque fermentum, vel\n' +
-    '          consequat leo ornare. Duis a turpis pulvinar, auctor turpis vel, facilisis velit. Cras fermentum quis felis in\n' +
-    '          posuere. Proin in dictum nisi, vel luctus erat. Integer in libero est. Mauris aliquet libero in mauris\n' +
-    '          porttitor,\n' +
-    '          a tempor lacus lacinia.Duis commodo dolor dolor, vel ornare elit ornare sed. Ut non pulvinar libero. Sed\n' +
-    '          porta\n' +
-    '          eu tortor interdum suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Nullam dui turpis, facilisis\n' +
-    '          et quam eu, ultrices auctor neque. Donec pretium sapien non eleifend consectetur. Nullam ligula ante, suscipit\n' +
-    '          vel\n' +
-    '          ex sit amet, semper feugiat arcu. Fusce vehicula leo placerat venenatis fermentum. Nullam eu eros tincidunt,\n' +
-    '          aliquet felis ac, efficitur dolor. Sed malesuada nisi id neque fermentum, vel consequat leo ornare. Duis a\n' +
-    '          turpis\n' +
-    '          pulvinar, auctor turpis vel, facilisis velit. Cras fermentum quis felis in posuere.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Proin in dictum nisi, vel\n' +
-    '          luctus erat. Integer in libero est. Mauris aliquet libero in mauris porttitor, a tempor lacus lacinia.';
-
-
   currentIndex = 0;
 
   maxMessageLength = 250;
@@ -134,77 +93,6 @@ export class WritingSectionComponent implements OnInit {
     }
   }
 
-  endExamSession = () => {
-    const examSectionSets = this.examSectionSets;
-    const asnwers = [];
-    examSectionSets.map((item) => {
-      const questions = item.questions;
-      questions.map((question) => {
-        const answerObject: any = {
-          questionId: question.id,
-        };
-
-        let isAsnwered = false;
-
-        if (question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT || question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) {
-          const choices = question.choices;
-          const selectedChoices = [];
-          choices.map((choice) => {
-            if (choice.selected) {
-              selectedChoices.push(choice.id);
-              isAsnwered = true;
-            }
-          });
-
-          answerObject.selectedChoices = selectedChoices;
-        } else if (question.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE || question.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE) {
-          answerObject.answerInput = question.answerInput;
-          isAsnwered = true;
-        } else if (question.typeId === EnumService.examQuestionTypes.DRAG_DROP) {
-          const groups = question.groups;
-          const groupItemMatches = [];
-          groups.map((group) => {
-            const answered = group.answered;
-            const answerIds = [];
-            answered.map((answer) => {
-              answerIds.push(answer.id);
-              isAsnwered = true;
-            });
-
-            const DragAndDropAnswerObject = {
-              groupId: group.id,
-              itemIds: answerIds
-            };
-
-            groupItemMatches.push(DragAndDropAnswerObject);
-
-          });
-          answerObject.groupItemMatches = groupItemMatches;
-        }
-
-        if (isAsnwered) {
-          asnwers.push(answerObject);
-        }
-      });
-    });
-
-    this.loading = true;
-    this.apiService.endExamSession({
-      answers: asnwers,
-      examSectionId: this.examSessionData.examSectionId
-    }).subscribe((res) => {
-      this.loading = false;
-      if (res.isSuccess) {
-        this.openMathSectionDialog();
-
-      } else {
-        this.alertService.error(res.messages.join('\n'));
-      }
-    }, (error) => {
-      this.loading = false;
-    });
-  };
-
 
   singleChoiceItemSelect(item, subItem): void {
     item.choices.map((choice) => {
@@ -230,58 +118,12 @@ export class WritingSectionComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
       if (result) {
-        this.endExamSession();
+        this.shareddataService.endExamSession(this.examSectionSets);
       } else {
         this.currentIndex = 0;
       }
     });
   }
-
-  openMathSectionDialog(): void {
-
-    const dialogRef = this.dialog.open(ConfirmModalComponent, {
-      id: 'confirmdialog',
-      disableClose: true,
-      role: 'dialog',
-      data: {
-        title: 'You finished Writing, nice work!',
-        message: 'When you take the real SAT, there\'s a 10-minute break before the next section. Take a quick breather, and when you\'re ready, start the next section: Math section.',
-        leftBtnTitle: 'Start Later',
-        rightBtnTitle: 'Start the Math Section'
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.resumeExam();
-      } else {
-        this.router.navigate(['practice-tests']);
-      }
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-
-  resumeExam = () => {
-    this.apiService.resumeExamSession({
-      userId: this.accountService.userValue.id,
-      examId: this.itemDetail.id
-    }).subscribe((data) => {
-      if (data.isSuccess) {
-        localStorage.setItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION_DATA, JSON.stringify(data));
-
-        const examType = this.itemDetail.type;
-        const examId = this.itemDetail.id;
-        const sectionType = EnumService.examSectionTypes.MATH;
-        const testDirectionRouteConfig = examType + '/:id/:section/direction';
-        const testDirectionRoute = examType + '/' + examId + '/' + sectionType + '/direction';
-        this.shareddataService.addDynamicRoute(testDirectionRouteConfig, TestDirectionComponent, true);
-        this.router.navigate([testDirectionRoute]);
-      } else {
-        this.alertService.error(data.message.join('\n'));
-      }
-    });
-  };
-
 
   onBack(): void {
     this.location.back();
@@ -344,15 +186,16 @@ export class WritingSectionComponent implements OnInit {
       }
       const nextSet = this.examSectionSets[this.currentIndex + 1];
       const nextSetQuestionCount = nextSet.questions.length;
-      const startQuestionCount = totalQuestionCount + 1;
-      const endQuestionCount = totalQuestionCount + nextSetQuestionCount;
-      if (startQuestionCount === endQuestionCount) {
-        return startQuestionCount.toString();
+      if (nextSetQuestionCount > 0) {
+        const startQuestionCount = totalQuestionCount + 1;
+        const endQuestionCount = totalQuestionCount + nextSetQuestionCount;
+        if (startQuestionCount === endQuestionCount) {
+          return startQuestionCount.toString();
+        }
+        return startQuestionCount + ' - ' + endQuestionCount;
       }
-      return startQuestionCount + ' - ' + endQuestionCount;
     }
     return '';
   }
-
 
 }

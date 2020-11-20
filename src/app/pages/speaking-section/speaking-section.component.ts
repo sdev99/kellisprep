@@ -5,7 +5,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.component';
 import {EnumService} from '../../services/enum.service';
 import {CookieService} from 'ngx-cookie-service';
-import { environment } from 'src/environments/environment';
+import {environment} from 'src/environments/environment';
+import {ShareddataService} from '../../services/shareddata.service';
 
 @Component({
   selector: 'app-speaking-section',
@@ -76,6 +77,7 @@ export class SpeakingSectionComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public dialog: MatDialog,
+    public shareddataService: ShareddataService,
     private cookieService: CookieService,
   ) {
 
@@ -134,28 +136,11 @@ export class SpeakingSectionComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
-      setTimeout(() => {
-        this.openDialog1();
-      }, 500);
-    });
-  }
-
-  openDialog1(): void {
-
-    const dialogRef = this.dialog.open(ConfirmModalComponent, {
-      id: 'confirmdialog',
-      disableClose: true,
-      role: 'dialog',
-      data: {
-        title: 'You finished Reading, nice work!',
-        message: 'When you take the real SAT, there\'s a 10-minute break before the next section. Take a quick breather, and when you\'re ready, start the next section: Writing section.',
-        leftBtnTitle: 'Start Later',
-        rightBtnTitle: 'Start the Writing Section'
+      if (result) {
+        this.shareddataService.endExamSession(this.examSectionSets);
+      } else {
+        this.currentIndex = 0;
       }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
     });
   }
 

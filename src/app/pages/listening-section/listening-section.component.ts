@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
@@ -6,6 +6,11 @@ import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.co
 import {EnumService} from '../../services/enum.service';
 import {CookieService} from 'ngx-cookie-service';
 import {environment} from '../../../environments/environment';
+import {AccountService} from '../../services/account.service';
+import {ApiService} from '../../services/api.service';
+import {AlertService} from '../../services/alert.service';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {ShareddataService} from '../../services/shareddata.service';
 
 @Component({
   selector: 'app-listening-section',
@@ -14,67 +19,30 @@ import {environment} from '../../../environments/environment';
 })
 export class ListeningSectionComponent implements OnInit {
   environment = environment;
+  EnumService = EnumService;
 
-  descriptionText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel tristique urna. Aliquam bibendum fringilla\n' +
-    '          nulla at ultrices. Etiam bibendum mi sed enim ultricies, et varius quam pellentesque. Proin lobortis dolor\n' +
-    '          mauris,\n' +
-    '          id posuere nunc semper pharetra. Phasellus et lobortis lorem. Phasellus sed pharetra odio. Interdum et\n' +
-    '          malesuada\n' +
-    '          fames ac ante ipsum primis in faucibus. Aenean fermentum, urna sit amet interdum pharetra, mi arcu hendrerit\n' +
-    '          risus, at rutrum tortor neque sit amet ipsum.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Duis commodo dolor dolor, vel ornare elit ornare sed. Ut non\n' +
-    '          pulvinar libero. Sed porta eu tortor interdum suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing\n' +
-    '          elit.\n' +
-    '          Nullam dui turpis, facilisis et quam eu, ultrices auctor neque. Donec pretium sapien non eleifend consectetur.\n' +
-    '          Nullam ligula ante, suscipit vel ex sit amet, semper feugiat arcu. Fusce vehicula leo placerat venenatis\n' +
-    '          fermentum.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Nullam eu eros tincidunt, aliquet felis ac, efficitur dolor. Sed malesuada nisi id neque fermentum, vel\n' +
-    '          consequat leo ornare. Duis a turpis pulvinar, auctor turpis vel, facilisis velit. Cras fermentum quis felis in\n' +
-    '          posuere. Proin in dictum nisi, vel luctus erat. Integer in libero est. Mauris aliquet libero in mauris\n' +
-    '          porttitor,\n' +
-    '          a tempor lacus lacinia.Duis commodo dolor dolor, vel ornare elit ornare sed. Ut non pulvinar libero. Sed\n' +
-    '          porta\n' +
-    '          eu tortor interdum suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Nullam dui turpis, facilisis\n' +
-    '          et quam eu, ultrices auctor neque. Donec pretium sapien non eleifend consectetur. Nullam ligula ante, suscipit\n' +
-    '          vel\n' +
-    '          ex sit amet, semper feugiat arcu. Fusce vehicula leo placerat venenatis fermentum. Nullam eu eros tincidunt,\n' +
-    '          aliquet felis ac, efficitur dolor. Sed malesuada nisi id neque fermentum, vel consequat leo ornare. Duis a\n' +
-    '          turpis\n' +
-    '          pulvinar, auctor turpis vel, facilisis velit. Cras fermentum quis felis in posuere.\n' +
-    '          <br/>\n' +
-    '          <br/>\n' +
-    '          Proin in dictum nisi, vel\n' +
-    '          luctus erat. Integer in libero est. Mauris aliquet libero in mauris porttitor, a tempor lacus lacinia.';
-
-  questions: any = [];
+  isVideoClipPlayed = false;
 
   currentSetIndex = 0;
   currentIndex = 0;
-  questionsPerpage = 10;
-  totalPages = 1;
+  currentQuestion;
 
   maxMessageLength = 250;
   submitted = false;
-  data: any = {};
 
   itemDetail;
   examSessionData;
   examSectionSets;
   pathsTree = [];
 
-  currentQuestion;
-
   constructor(
     private location: Location,
     private router: Router,
     private route: ActivatedRoute,
+    private accountService: AccountService,
+    private apiService: ApiService,
+    private alertService: AlertService,
+    private shareddataService: ShareddataService,
     public dialog: MatDialog,
     private cookieService: CookieService,
   ) {
@@ -84,7 +52,7 @@ export class ListeningSectionComponent implements OnInit {
 
     if (item) {
       this.itemDetail = JSON.parse(item);
-      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Math Section'];
+      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Listening Section'];
     }
 
     if (examData) {
@@ -100,16 +68,50 @@ export class ListeningSectionComponent implements OnInit {
           }
         });
       });
+
+      if (this.examSectionSets && this.examSectionSets.length > this.currentSetIndex) {
+        if (this.examSectionSets[this.currentSetIndex].questions.length > this.currentIndex) {
+          this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
+        }
+      }
     }
-
   }
-
 
   ngOnInit(): void {
     if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === 'Listening')) {
       this.location.back();
     }
   }
+
+  drop(event: CdkDragDrop<string[]>): void {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
+
+
+  singleChoiceItemSelect(item, subItem): void {
+    item.choices.map((choice) => {
+      choice.selected = false;
+    });
+    subItem.selected = true;
+  }
+
+
+  finishSection = () => {
+    if (this.currentSetIndex < this.examSectionSets.length - 1) {
+      this.currentSetIndex++;
+      this.currentIndex = 0;
+      this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
+    } else {
+      this.openDialog();
+    }
+  };
 
   openDialog(): void {
 
@@ -127,29 +129,14 @@ export class ListeningSectionComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
-      setTimeout(() => {
-        this.openDialog1();
-      }, 500);
-    });
-  }
-
-  openDialog1(): void {
-
-    const dialogRef = this.dialog.open(ConfirmModalComponent, {
-      id: 'confirmdialog',
-      disableClose: true,
-      role: 'dialog',
-      data: {
-        title: 'You finished Reading, nice work!',
-        message: 'When you take the real SAT, there\'s a 10-minute break before the next section. Take a quick breather, and when you\'re ready, start the next section: Writing section.',
-        leftBtnTitle: 'Start Later',
-        rightBtnTitle: 'Start the Writing Section'
+      if (result) {
+        this.shareddataService.endExamSession(this.examSectionSets);
+      } else {
+        this.currentSetIndex = 0;
+        this.currentIndex = 0;
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
   }
 
   onBack(): void {
@@ -159,18 +146,15 @@ export class ListeningSectionComponent implements OnInit {
   onPrevious(): void {
     if (this.currentIndex > 0) {
       this.currentIndex--;
+      this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
     }
   }
 
   onNext(): void {
-    if (this.currentIndex < (this.totalPages - 1)) {
+    if (this.currentIndex < (this.examSectionSets[this.currentSetIndex].questions.length - 1)) {
       this.currentIndex++;
+      this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
     }
-  }
-
-  getQuestionsForCurrentPage(): any {
-    const startIndex = (this.currentIndex * this.questionsPerpage);
-    return this.questions.slice(startIndex, startIndex + this.questionsPerpage);
   }
 
   onFinishSectionClick(): void {

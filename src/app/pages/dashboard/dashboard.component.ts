@@ -17,7 +17,6 @@ import {ShareddataService} from '../../services/shareddata.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  loading = false;
 
   menuItems = [
     {
@@ -280,7 +279,6 @@ export class DashboardComponent implements OnInit {
 
   getExams(): void {
     this.apiService.examSearch({}).subscribe((res) => {
-      this.loading = false;
       const exams = res.exams;
       if (exams) {
         localStorage.setItem(EnumService.localStorageKeys.ALL_EXAMS, JSON.stringify(exams));
@@ -352,12 +350,12 @@ export class DashboardComponent implements OnInit {
     this.shareddataService.addDynamicRoute(practiceTestRouteConfig, PracticeTestsComponent, true);
 
     if (this.selectedMenu.type === 'exam') {
-      this.loading = true;
+      this.shareddataService.startLoading();
       this.apiService.initExamSession({
         userId: this.accountService.userValue.id,
         examId
       }).subscribe((data) => {
-        this.loading = false;
+        this.shareddataService.stopLoading();
         this.cookieService.set(EnumService.cookieNames.CURRENT_EXAM_SESSION, JSON.stringify(item));
         if (data.isSuccess) {
           this.router.navigate([practiceTestRoute]);
@@ -365,7 +363,7 @@ export class DashboardComponent implements OnInit {
           this.router.navigate([practiceTestRoute]);
         }
       }, (error) => {
-        this.loading = false;
+        this.shareddataService.stopLoading();
       });
       // {
       //   "examId": 2,

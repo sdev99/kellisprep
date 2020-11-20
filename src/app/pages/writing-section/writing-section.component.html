@@ -131,9 +131,8 @@
                     </ion-item>
                     <ion-item *ngFor="let answer of group.answered" cdkDrag>
                       <ion-label>{{answer.text}}</ion-label>
-                    </ion-item>
+                     </ion-item>
                   </div>
-
                 </ion-list>
 
                 <br/>
@@ -200,12 +199,10 @@
           </button>
         </ng-template>
       </ng-container>
-
     </div>
   </div>
 </div>
 
 <app-footer></app-footer>
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop:true }"></ngx-loading>
 
 

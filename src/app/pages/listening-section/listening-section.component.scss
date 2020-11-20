@@ -15,9 +15,85 @@
   overflow: hidden;
 
 
+  .group-list {
+    background-color: #F9F9F9;
+    margin-top: 16px;
+
+    ion-list-header {
+      font: normal normal 600 14px/18px Montserrat;
+      letter-spacing: 0.42px;
+      color: #140020;
+      opacity: 1;
+    }
+
+    .placeholder {
+      font: normal normal normal 14px/18px Montserrat;
+      letter-spacing: 0.42px;
+      color: #B4B4B4;
+      opacity: 1;
+    }
+
+    .group-drop-list {
+      width: 100%;
+      padding: 20px 10px;
+    }
+
+    ion-list-header {
+      font-weight: 500;
+    }
+
+    ion-item {
+      --background: transparent;
+    }
+  }
+
+  .choice-item-list {
+    ion-item {
+      ion-label {
+        font: normal normal normal 14px/18px Montserrat;
+        letter-spacing: 0px;
+        color: #140020;
+        opacity: 1;
+      }
+    }
+  }
+
   .practice-content {
     margin: 0;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .video-clip-view {
+      .passage-info {
+        background: #F6F2F9;
+        border-radius: 4px;
+        margin: 16px 0;
+        padding: 16px;
+
+        h3 {
+          font: normal normal 600 12px/17px Montserrat;
+          letter-spacing: 0px;
+          color: #140020;
+          opacity: 1;
+        }
+
+        p {
+          font: normal normal normal 12px/17px Montserrat;
+          letter-spacing: -0.12px;
+          color: #140020;
+          opacity: 1;
+        }
+      }
+
+      .video-view {
+        width: 100%;
+        min-height: 320px;
+        background-color: #000;
+        margin-bottom: 16px;
+      }
+    }
 
     .question {
       font: normal normal 600 14px/18px Montserrat;
@@ -26,35 +102,17 @@
       opacity: 1;
     }
 
-
-    .left-content {
-      overflow-y: auto;
-      max-height: 50vh;
-      border-right: 1px solid #D4D3D4;
-      display: flex;
-      flex-direction: column;
-
-      h1 {
-        margin: 30px;
-        font: normal normal 600 20px/24px Montserrat;
-        letter-spacing: 0px;
-        color: #140020;
-        opacity: 1;
-      }
-
-      p {
-        margin: 0 30px 30px;
-        font: normal normal normal 12px/17px Montserrat;
-        letter-spacing: -0.12px;
-        color: #140020;
-        opacity: 1;
-      }
+    .question-img {
+      width: 300px;
+      height: auto;
+      object-fit: contain;
+      margin-right: 16px;
     }
 
-    .right-content {
+    .question-content {
       padding: 30px;
       overflow-y: auto;
-      max-height: 50vh;
+      max-height: 70vh;
 
       .question-count {
         font: normal normal 600 12px/15px Montserrat;

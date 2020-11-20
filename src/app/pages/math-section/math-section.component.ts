@@ -10,6 +10,7 @@ import {ApiService} from '../../services/api.service';
 import {AlertService} from '../../services/alert.service';
 import {environment} from '../../../environments/environment';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {ShareddataService} from '../../services/shareddata.service';
 
 @Component({
   selector: 'app-math-section',
@@ -20,9 +21,6 @@ export class MathSectionComponent implements OnInit {
   environment = environment;
 
   EnumService = EnumService;
-
-  loading = false;
-
 
   currentSetIndex = 0;
   currentIndex = 0;
@@ -45,6 +43,7 @@ export class MathSectionComponent implements OnInit {
     private alertService: AlertService,
     public dialog: MatDialog,
     private cookieService: CookieService,
+    private shareddataService: ShareddataService,
   ) {
 
     const item = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION);
@@ -91,76 +90,6 @@ export class MathSectionComponent implements OnInit {
     }
   }
 
-  endExamSession = () => {
-    const examSectionSets = this.examSectionSets;
-    const asnwers = [];
-    examSectionSets.map((item) => {
-      const questions = item.questions;
-      questions.map((question) => {
-        const answerObject: any = {
-          questionId: question.id,
-        };
-
-        let isAnswered = false;
-
-        if (question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT || question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) {
-          const choices = question.choices;
-          const selectedChoices = [];
-          choices.map((choice) => {
-            if (choice.selected) {
-              selectedChoices.push(choice.id);
-              isAnswered = true;
-            }
-          });
-
-          answerObject.selectedChoices = selectedChoices;
-        } else if (question.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_SINGLE_LINE || question.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_SINGLE_LINE || question.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE || question.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE) {
-          answerObject.answerInput = question.answerInput;
-          isAnswered = true;
-        } else if (question.typeId === EnumService.examQuestionTypes.DRAG_DROP) {
-          const groups = question.groups;
-          const groupItemMatches = [];
-          groups.map((group) => {
-            const answered = group.answered;
-            const answerIds = [];
-            answered.map((answer) => {
-              answerIds.push(answer.id);
-              isAnswered = true;
-            });
-
-            const DragAndDropAnswerObject = {
-              groupId: group.id,
-              itemIds: answerIds
-            };
-
-            groupItemMatches.push(DragAndDropAnswerObject);
-
-          });
-          answerObject.groupItemMatches = groupItemMatches;
-        }
-
-        if (isAnswered) {
-          asnwers.push(answerObject);
-        }
-      });
-    });
-
-    this.loading = true;
-    this.apiService.endExamSession({
-      answers: asnwers,
-      examSectionId: this.examSessionData.examSectionId
-    }).subscribe((res) => {
-      this.loading = false;
-      if (res.isSuccess) {
-        this.router.navigate(['dashboard']);
-      } else {
-        this.alertService.error(res.messages.join('\n'));
-      }
-    }, (error) => {
-      this.loading = false;
-    });
-  };
-
 
   singleChoiceItemSelect(item, subItem): void {
     item.choices.map((choice) => {
@@ -197,7 +126,7 @@ export class MathSectionComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
       if (result) {
-        this.endExamSession();
+        this.shareddataService.endExamSession(this.examSectionSets);
       } else {
         this.currentSetIndex = 0;
         this.currentIndex = 0;

@@ -1,96 +1,174 @@
-<app-header [pathsTree]="['SAT', 'Practice Test1', data.title]" subHeaderText3="60 minutes left"
-            rightBtnTitle="Finish this Section" (rightBtnClick)="openDialog()"></app-header>
+<app-header [pathsTree]="pathsTree"
+            [subHeaderText3]="(examSessionData&&examSessionData.duration?examSessionData.duration:0)+' minutes left'"
+            rightBtnTitle="Finish this Section" (rightBtnClick)="finishSection()"></app-header>
 
 <div class="container-fluid dashboard-content-container has-subheader">
+  <app-alert></app-alert>
+
   <div class="content">
 
     <div class="row practice-content">
-      <div class="listening-video-view" *ngIf="">
-        <div class="passage">
 
+      <div *ngIf="!isVideoClipPlayed; else setsContent;" class="video-clip-view">
+        <div class="passage-info">
+          <h3>Review the following passage and continue</h3>
+          <p>Listen to a conversation between student and his student at the career development office.You will not be
+            able to replay this video once you play.</p>
         </div>
 
+        <iframe class="video-view"
+                [src]="'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' | safe:'resourceUrl'"
+                frameborder="0"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
       </div>
+      <ng-template #setsContent>
+        <div class="col-md-6 question-content" *ngIf="currentQuestion">
 
-      <ng-template>
-        <div class="col-md-6 left-content">
-          <h1>Agriculture iron and Bantu people</h1>
-          <p [innerHTML]="descriptionText"></p>
-        </div>
 
-        <div class="col-md-6 right-content">
+          <div class="question-count" *ngIf="examSectionSets && examSectionSets.length>0">
+            Question {{(currentIndex + 1) }} of {{examSectionSets[currentSetIndex].questions.length}}
+          </div>
 
-          <ng-container *ngFor="let item of getQuestionsForCurrentPage(); let idx=index">
+          <ng-container *ngIf="currentQuestion">
+            <h1 class="question" [innerHTML]="currentQuestion.text"></h1>
+            <img class="question-img" *ngIf="currentQuestion.imageUri"
+                 [src]="environment.mediaUrl+currentQuestion.imageUri"/>
+          </ng-container>
 
-            <div class="question-count">
-              Question {{(currentIndex * questionsPerpage + idx + 1) }} of {{questions.length}}
+
+          <!-- For Singleline text answer-->
+          <ng-container
+            *ngIf="currentQuestion.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_SINGLE_LINE || currentQuestion.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_SINGLE_LINE">
+
+            <div class="form-group text-input">
+              <label>Answer</label>
+              <div class="input-group">
+                <ion-input class="form-control"
+                           placeholder="Write your answer here..."
+                           [(ngModel)]="currentQuestion.answerInput"
+                           [ngClass]="{ 'is-invalid': submitted  }"></ion-input>
+              </div>
             </div>
+          </ng-container>
+          <!-- For Singleline text answer-->
 
+          <!-- For multine text answer-->
+          <ng-container
+            *ngIf="currentQuestion.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE || currentQuestion.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE">
 
-            <!-- For multine text answer-->
-            <ng-container *ngIf="item.questionType === 'multilinetext'">
-              <h1 class="question">{{item.title}}</h1>
-
-              <div class="form-group textarea-input">
-                <label>Answer</label>
-                <div class="input-group">
+            <div class="form-group textarea-input">
+              <label>Answer</label>
+              <div class="input-group">
                 <textarea id="message" class="form-control"
                           placeholder="Write your answer here..."
-                          [(ngModel)]="item.answer"
+                          [(ngModel)]="currentQuestion.answerInput"
                           [maxlength]="maxMessageLength"
                           [ngClass]="{ 'is-invalid': submitted  }"></textarea>
 
-                  <div class="message-length">
-                    {{(maxMessageLength - item.answer.length)}}/{{maxMessageLength}} characters
-                    remaining
-                  </div>
+                <div class="message-length">
+                  {{(maxMessageLength - currentQuestion.answer?.length)}}/{{maxMessageLength}} characters
+                  remaining
                 </div>
               </div>
-            </ng-container>
-
-            <!-- For Single/Multiple choice answer-->
-            <ng-container
-              *ngIf="item.questionType === 'singlechoice' || item.questionType === 'multichoice'">
-
-              <h2 class="question">{{item.title}}</h2>
-
-              <div class="answer-type">Choose {{item.questionType != 'singlechoice' ? 'multiple' : '1'}}
-                answer
-              </div>
-
-              <ng-container *ngIf="item.questionType === 'singlechoice'">
-                <app-answer-choice-item
-                  *ngFor="let subItem of item.answers"
-                  [selected]="subItem.selected"
-                  [index]="subItem.index"
-                  [title]="subItem.title"
-                  (click)="subItem.selected=!subItem.selected"
-                ></app-answer-choice-item>
-              </ng-container>
-
-              <ng-container *ngIf="item.questionType === 'multichoice'">
-                <app-answer-multiple-choice-item
-                  *ngFor="let subItem of item.answers"
-                  [selected]="subItem.selected"
-                  [title]="subItem.title"
-                  (click)="subItem.selected=!subItem.selected"
-                ></app-answer-multiple-choice-item>
-              </ng-container>
-
-            </ng-container>
-
-
-            <!--          <ng-container *ngIf="item.questionType === 'video'">-->
-            <!--            <iframe class="video-view" [src]="item.link | safe:'resourceUrl'" frameborder="0"-->
-            <!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
-            <!--                    allowfullscreen></iframe>-->
-            <!--          </ng-container>-->
-
+            </div>
           </ng-container>
+
+          <!-- For Single/Multiple choice answer-->
+          <ng-container
+            *ngIf="currentQuestion.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT || currentQuestion.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT">
+
+
+            <div class="answer-type">
+              Choose {{(currentQuestion.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) ? 'multiple' : '1'}}
+              answer
+            </div>
+
+            <ng-container
+              *ngIf="currentQuestion.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT">
+              <app-answer-choice-item
+                *ngFor="let subItem of currentQuestion.choices; let index=index"
+                [selected]="subItem.selected"
+                [index]="index"
+                [title]="subItem.text"
+                [imageUri]="subItem.imageUri"
+                (click)="singleChoiceItemSelect(currentQuestion, subItem)"
+              ></app-answer-choice-item>
+            </ng-container>
+
+            <ng-container
+              *ngIf="currentQuestion.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT">
+              <app-answer-multiple-choice-item
+                *ngFor="let subItem of currentQuestion.choices; index as id"
+                [selected]="subItem.selected"
+                [title]="subItem.text"
+                [imageUri]="subItem.imageUri"
+                (click)="subItem.selected=!subItem.selected"
+              ></app-answer-multiple-choice-item>
+            </ng-container>
+          </ng-container>
+
+          <!-- End --- For Single/Multiple choice answer-->
+
+          <!-- For drag and drop choice question-->
+          <ng-container *ngIf="currentQuestion.typeId === EnumService.examQuestionTypes.DRAG_DROP">
+            <div cdkDropListGroup>
+
+              <ion-list
+                class="group-list"
+                *ngFor="let group of currentQuestion.groups; let idx=index"
+              >
+                <ion-list-header>
+                  {{group.text}}
+                </ion-list-header>
+
+                <div
+                  cdkDropList
+                  [cdkDropListData]="group.answered"
+                  class="group-drop-list"
+                  (cdkDropListDropped)="drop($event)"
+                >
+                  <ion-item *ngIf="!group.answered || group.answered.length===0" cdkDrag>
+                    <ion-label class="placeholder">Drop your choices here</ion-label>
+                  </ion-item>
+                  <ion-item *ngFor="let answer of group.answered" cdkDrag>
+                    <ion-label>{{answer.text}}</ion-label>
+                  </ion-item>
+                </div>
+
+              </ion-list>
+
+              <br/>
+
+              <label>Answer Choices</label>
+              <div class="answer-type" style="padding: 0">Drop your choices from here</div>
+              <br/>
+
+              <ion-list
+                lines="full"
+                cdkDropList
+                [cdkDropListData]="currentQuestion.items"
+                class="choice-item-list"
+                (cdkDropListDropped)="drop($event)">
+                <ion-item *ngFor="let choiceItem of currentQuestion.items" cdkDrag>
+                  <ion-icon slot="start" src="./assets/images/Drag.svg"></ion-icon>
+                  <ion-label>{{choiceItem.text}}</ion-label>
+                </ion-item>
+              </ion-list>
+            </div>
+          </ng-container>
+          <!-- End --- For drag and drop choice question-->
+
+
+          <!--          <ng-container *ngIf="item.questionType === 'video'">-->
+          <!--            <iframe class="video-view" [src]="item.link | safe:'resourceUrl'" frameborder="0"-->
+          <!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+          <!--                    allowfullscreen></iframe>-->
+          <!--          </ng-container>-->
+
 
         </div>
       </ng-template>
-
     </div>
 
     <div class="row practice-footer">
@@ -100,24 +178,32 @@
       <div style="display: flex;flex:1;"></div>
 
       <button *ngIf="currentIndex>0" mat-button color="primary" (click)="onPrevious()">
-        Back to
-        question {{(currentIndex * questionsPerpage + 1) + "-" + (currentIndex * questionsPerpage + questionsPerpage)}}
+        Back to question {{(currentIndex)}}
       </button>
 
-      <button *ngIf="currentIndex === (totalPages - 1); else nextPageBtn" mat-raised-button color="primary"
-              (click)="openDialog()">
-        Finish this Section
-      </button>
 
-      <ng-template #nextPageBtn>
-        <button mat-raised-button color="primary" (click)="onNext()">
-          Continue to
-          question {{((currentIndex + 1) * questionsPerpage + 1) + "-" + ((currentIndex + 1) * questionsPerpage + questionsPerpage)}}
+      <ng-container *ngIf="isVideoClipPlayed && examSectionSets && examSectionSets.length>0;">
+        <button *ngIf="currentIndex === (examSectionSets[currentSetIndex].questions.length-1); else nextPageBtn"
+                mat-raised-button color="primary"
+                (click)="finishSection()">
+          Finish this Section
         </button>
-      </ng-template>
+
+        <ng-template #nextPageBtn>
+          <button mat-raised-button color="primary" (click)="onNext()">
+            Continue to question {{(currentIndex + 2)}}
+          </button>
+        </ng-template>
+      </ng-container>
+
+      <button *ngIf="!isVideoClipPlayed" mat-raised-button color="primary" (click)="onNext()">
+        Continue to question {{(currentIndex + 2)}}
+      </button>
 
     </div>
   </div>
 </div>
 
 <app-footer></app-footer>
+
+

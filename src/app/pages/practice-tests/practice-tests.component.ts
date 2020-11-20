@@ -14,7 +14,6 @@ import {TestDirectionComponent} from '../test-direction/test-direction.component
   styleUrls: ['./practice-tests.component.scss']
 })
 export class PracticeTestsComponent implements OnInit {
-  loading = false;
 
 
   practiceList;
@@ -38,47 +37,10 @@ export class PracticeTestsComponent implements OnInit {
       this.itemDetail = JSON.parse(item);
       this.pathsTree = [this.itemDetail.type, this.itemDetail.name];
       if (this.itemDetail.type === 'SAT') {
-        this.practiceList = [
-          {
-            title: 'Reading Section',
-            type: 'Reading',
-            decription: 'Short detail about reading section in which you have to tell about what is reading section'
-          },
-          {
-            title: 'Writing Section',
-            type: 'Writing',
-            decription: 'Short detail about witting section in which you have to tell about what is witting section'
-          },
-          {
-            title: 'Math Section',
-            type: 'Math',
-            decription: 'Short detail about Math Section in which you have to tell about what is Math Section'
-          },
-        ];
+        this.practiceList = shareddataService.satSections;
       }
       if (this.itemDetail.type === 'TOEFL') {
-        this.practiceList = [
-          {
-            title: 'Reading Section',
-            type: 'Reading',
-            decription: 'Short detail about reading section in which you have to tell about what is reading section'
-          },
-          {
-            title: 'Writing Section',
-            type: 'Writing',
-            decription: 'Short detail about witting section in which you have to tell about what is witting section'
-          },
-          {
-            title: 'Listening Section',
-            type: 'Listening',
-            decription: 'Short detail about Listening Section in which you have to tell about what is Listening Section'
-          },
-          {
-            title: 'Speaking Section',
-            type: 'Speaking',
-            decription: 'Short detail about speaking action which you have to tell about what is speaking action'
-          },
-        ];
+        this.practiceList = shareddataService.toeflSections;
       }
     }
 
@@ -94,12 +56,12 @@ export class PracticeTestsComponent implements OnInit {
   }
 
   resumeExam = () => {
-    this.loading = true;
+    this.shareddataService.startLoading();
     this.apiService.resumeExamSession({
       userId: this.accountService.userValue.id,
       examId: this.itemDetail.id
     }).subscribe((data) => {
-      this.loading = false;
+      this.shareddataService.stopLoading();
       if (data.isSuccess) {
         this.examResumeSessionData = data;
         localStorage.setItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION_DATA, JSON.stringify(data));
@@ -108,7 +70,7 @@ export class PracticeTestsComponent implements OnInit {
         this.alertService.error(data.message.join('\n'));
       }
     }, (error) => {
-      this.loading = false;
+      this.shareddataService.stopLoading();
     });
   };
 
