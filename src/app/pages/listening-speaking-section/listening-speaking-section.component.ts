@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
@@ -12,8 +12,9 @@ import {AlertService} from '../../services/alert.service';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {ShareddataService} from '../../services/shareddata.service';
 import {UtilService} from '../../services/util.service';
-import MicRecorder from 'mic-recorder-to-mp3';
 import * as RecordRTC from 'recordrtc';
+import {HttpClient} from '@angular/common/http';
+import CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-listening-speaking-section',
@@ -42,7 +43,12 @@ export class ListeningSpeakingSectionComponent implements OnInit {
 
   isVideoPlaying = false;
 
+
+  unixtime;
+
+
   constructor(
+    private ngZone: NgZone,
     private location: Location,
     private router: Router,
     private route: ActivatedRoute,
@@ -53,6 +59,7 @@ export class ListeningSpeakingSectionComponent implements OnInit {
     private utilService: UtilService,
     public dialog: MatDialog,
     private cookieService: CookieService,
+    private http: HttpClient,
   ) {
 
     const item = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION);
@@ -81,11 +88,6 @@ export class ListeningSpeakingSectionComponent implements OnInit {
       if (this.examSectionSets && this.examSectionSets.length > this.currentSetIndex) {
         if (this.examSectionSets[this.currentSetIndex].questions.length > this.currentIndex) {
           this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
-        }
-        // For test only, remove it after test
-        if (!this.currentQuestion.audioUri) {
-          this.examSectionSets[this.currentSetIndex].startSetQuestion = true;
-          // this.currentQuestion.audioUri = 'https://res.cloudinary.com/kallisprep/video/upload/v1605906299/audios/uefa_cl_kxhgpj.mp3';
         }
       }
     }
@@ -141,56 +143,148 @@ export class ListeningSpeakingSectionComponent implements OnInit {
   // Record audio
   startRecording(currentQuestion): void {
     currentQuestion.recordingStart = true;
+    currentQuestion.recordingDuration = 0;
+
     if (!currentQuestion.recorder) {
-      // New instance
-      const recorder = new MicRecorder({
-        bitRate: 128
+      navigator.mediaDevices.getUserMedia({
+        audio: true
+      }).then(async (stream) => {
+        currentQuestion.stream = stream;
+        const recorder = RecordRTC(stream, {
+          type: 'audio',
+          mimeType: 'audio/webm'
+        });
+        currentQuestion.recorder = recorder;
+        currentQuestion.recorder.startRecording();
+        this.startRecordingTimer(currentQuestion);
       });
-
-      currentQuestion.recorder = recorder;
+    } else {
+      currentQuestion.recorder.startRecording();
+      this.startRecordingTimer(currentQuestion);
     }
+  }
 
-    // Start recording. Browser will request permission to use your microphone.
-    currentQuestion.recorder.start().then(() => {
-      // something else
-    }).catch((e) => {
-      console.error(e);
-    });
+  startRecordingTimer(currentQuestion): void {
+    currentQuestion.recordingTimer = setInterval(() => {
+      this.ngZone.run(() => {
+        if (currentQuestion.recordingDuration >= 60) {
+          this.stopAudioRecording(currentQuestion);
+        }
+        currentQuestion.recordingDuration = currentQuestion.recordingDuration + 1;
+      });
+    }, 1000);
+  }
+
+  stopRecordingTimer(currentQuestion): void {
+    if (currentQuestion.recordingTimer) {
+      clearInterval(currentQuestion.recordingTimer);
+      currentQuestion.recordingTimer = null;
+    }
   }
 
   pauseAudioRecording(currentQuestion): void {
-    currentQuestion.recordingPause = true;
-    // currentQuestion.recorder.pause();
+    this.ngZone.run(() => {
+      currentQuestion.recordingPause = true;
+      currentQuestion.recorder.pauseRecording();
+      this.stopRecordingTimer(currentQuestion);
+    });
   }
 
   resumeAudioRecording(currentQuestion): void {
-    currentQuestion.recordingPause = false;
+    this.ngZone.run(() => {
+      currentQuestion.recordingPause = false;
+      currentQuestion.recorder.resumeRecording();
+      this.startRecordingTimer(currentQuestion);
+    });
   }
 
   stopAudioRecording(currentQuestion): void {
     currentQuestion.recordingStart = false;
-    currentQuestion.recorder.stop().getMp3().then(([buffer, blob]) => {
-      console.log(buffer, blob);
-      const file = new File(buffer, 'music.mp3', {
-        type: blob.type,
-        lastModified: Date.now()
-      });
+    this.stopRecordingTimer(currentQuestion);
 
-      const player = new Audio(URL.createObjectURL(file));
-      currentQuestion.audioPlayRef = player;
-    }).catch((e) => {
-      console.error(e);
+    currentQuestion.recorder.stopRecording((blobURL) => {
+      const blob = currentQuestion.recorder.getBlob();
+      this.stopMedia(currentQuestion);
+      const mp3Name = this.audioFileName();
+      // const file = {blob, title: mp3Name};
+      const file = new File([blob], mp3Name);
+      currentQuestion.audioFile = file;
+      const player = new Audio(blobURL);
+      player.load();
+      this.ngZone.run(() => {
+        currentQuestion.audioPlayRef = player;
+      });
     });
   }
 
-  uploadAudio(currentQuestion): void {
+  private stopMedia(currentQuestion): void {
+    if (currentQuestion.recorder) {
+      currentQuestion.recorder = null;
+      if (currentQuestion.stream) {
+        currentQuestion.stream.getAudioTracks().forEach(track => track.stop());
+        currentQuestion.stream = null;
+      }
+    }
+  }
 
+  private audioFileName(): string {
+    if (this.examSessionData && this.currentQuestion) {
+      return this.examSessionData.sessionId + '+' + this.currentQuestion.id + '.mp3';
+    }
+    return Date.now() + '.mp3';
+  }
+
+  private generateSignature(): string {
+    const publicId = this.audioFileName(); // I like to make it unique.
+    // tslint:disable-next-line:no-bitwise
+    this.unixtime = Date.now() / 1000 | 0;
+    return CryptoJS.SHA1(`folder=${'audioresponses'}&public_id=${publicId}&timestamp=${this.unixtime}${environment.cloudnarySecretKey}`).toString();
+  }
+
+
+  uploadAudio(currentQuestion): void {
+    const publicId = this.audioFileName();
+    debugger;
+// Split the filename to get the name and type
+    const file = currentQuestion.audioFile;
+    if (!file.name) {
+      file.name = this.audioFileName();
+    }
+    // let fileParts = file.name.split('.');
+    // let fileName = fileParts[0];
+    // let fileType = fileParts[1];
+
+    const cloudName = environment.cloudnaryCloudName;
+    const uploadUrl = 'https://cors-anywhere.herokuapp.com/' + 'https://api.cloudinary.com/v1_1/' + cloudName + '/upload';
+
+    const signature = this.generateSignature();
+
+    const data = new FormData();
+    // data.append('upload_preset', environment.cloudnaryUploadPreset);
+    data.append('file', file);
+    data.append('folder', environment.cloudnaryAudioFolder);
+    data.append('public_id', publicId);
+    data.append('api_key', environment.cloudnaryApiKey);
+    data.append('signature', signature);
+    data.append('timestamp', this.unixtime.toString());
+
+    this.shareddataService.startLoading();
+    this.http.post(uploadUrl, data).subscribe((response: any) => {
+      this.shareddataService.stopLoading();
+      const url = response.url;
+      const resPublicId = response.public_id;
+      // const asset_id = response.data.asset_id;
+      currentQuestion.answerInput = url;
+    }, (error) => {
+      this.shareddataService.stopLoading();
+      console.log('Error ', error);
+    });
   }
 
   removeAudio(currentQuestion): void {
-    currentQuestion.recordingPause = false;
-    currentQuestion.recordingStart = false;
-    currentQuestion.audioPlayRef = null;
+    // currentQuestion.recordingPause = false;
+    // currentQuestion.recordingStart = false;
+    // currentQuestion.audioPlayRef = null;
   }
 
   // End --- Record audio
@@ -290,6 +384,16 @@ export class ListeningSpeakingSectionComponent implements OnInit {
 
   onBack(): void {
     this.location.back();
+  }
+
+  shouldEnableNextButton(): boolean {
+    if (this.examSessionData.sectionData.name === EnumService.examSectionTypes.SPEAKING) {
+      if (this.currentQuestion && this.currentQuestion.answerInput) {
+        return true;
+      }
+      return false;
+    }
+    return true;
   }
 
   onPrevious(): void {

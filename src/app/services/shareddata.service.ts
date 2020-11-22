@@ -123,38 +123,52 @@ export class ShareddataService {
 
           let isAnswered = false;
 
-          if (question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT || question.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) {
-            const choices = question.choices;
-            const selectedChoices = [];
-            choices.map((choice) => {
-              if (choice.selected) {
-                selectedChoices.push(choice.id);
-                isAnswered = true;
-              }
-            });
-
-            answerObject.selectedChoices = selectedChoices;
-          } else if (question.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_SINGLE_LINE || question.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_SINGLE_LINE || question.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE || question.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE) {
-            answerObject.answerInput = question.answerInput;
-            isAnswered = true;
-          } else if (question.typeId === EnumService.examQuestionTypes.DRAG_DROP) {
-            const groups = question.groups;
-            const groupItemMatches = [];
-            groups.map((group) => {
-              const answered = group.answered;
-              const answerIds = [];
-              answered.map((answer) => {
-                answerIds.push(answer.id);
-                isAnswered = true;
+          switch (question.typeId) {
+            case EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT:
+            case EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT:
+              const choices = question.choices;
+              const selectedChoices = [];
+              choices.map((choice) => {
+                if (choice.selected) {
+                  selectedChoices.push(choice.id);
+                  isAnswered = true;
+                }
               });
-              const DragAndDropAnswerObject = {
-                groupId: group.id,
-                itemIds: answerIds
-              };
-              groupItemMatches.push(DragAndDropAnswerObject);
-            });
-            answerObject.groupItemMatches = groupItemMatches;
+              answerObject.selectedChoices = selectedChoices;
+              break;
+
+            case EnumService.examQuestionTypes.VERIFIABLE_TEXT_SINGLE_LINE:
+            case EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_SINGLE_LINE:
+            case EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE:
+            case EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE:
+            case EnumService.examQuestionTypes.AUDIO_RESPONSE:
+              answerObject.answerInput = question.answerInput;
+              isAnswered = true;
+              break;
+
+            case EnumService.examQuestionTypes.DRAG_DROP:
+              const groups = question.groups;
+              const groupItemMatches = [];
+              groups.map((group) => {
+                const answered = group.answered;
+                const answerIds = [];
+                answered.map((answer) => {
+                  answerIds.push(answer.id);
+                  isAnswered = true;
+                });
+                const DragAndDropAnswerObject = {
+                  groupId: group.id,
+                  itemIds: answerIds
+                };
+                groupItemMatches.push(DragAndDropAnswerObject);
+              });
+              answerObject.groupItemMatches = groupItemMatches;
+              break;
+
+            default:
+              break;
           }
+
 
           if (isAnswered) {
             asnwers.push(answerObject);

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ForgotpasswordComponent} from '../../modals/forgotpassword/forgotpassword.component';
@@ -20,6 +20,7 @@ import {environment} from 'src/environments/environment';
   styleUrls: ['./writing-section.component.scss']
 })
 export class WritingSectionComponent implements OnInit {
+  @ViewChild('videoPlayer') videoplayer: ElementRef;
   environment = environment;
 
   EnumService = EnumService;
@@ -28,6 +29,7 @@ export class WritingSectionComponent implements OnInit {
 
   maxMessageLength = 250;
   submitted = false;
+  isVideoPlaying = false;
 
   itemDetail;
   examSessionData;
@@ -99,6 +101,43 @@ export class WritingSectionComponent implements OnInit {
       choice.selected = false;
     });
     subItem.selected = true;
+  }
+
+  // Video Play
+  shouldVideoClipPlay = () => {
+    if (this.examSectionSets && this.examSectionSets.length > this.currentIndex) {
+      const currentSet = this.examSectionSets[this.currentIndex];
+      if (currentSet.videoUri && !currentSet.startSetQuestion) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  playVideo(event: any): void {
+    this.isVideoPlaying = true;
+    this.videoplayer.nativeElement.play();
+  }
+
+  videoEnd(event: any): void {
+    if (this.examSectionSets && this.examSectionSets.length > this.currentIndex) {
+      const currentSet = this.examSectionSets[this.currentIndex];
+      if (!currentSet.videoRepeatable) {
+        currentSet.startSetQuestion = true;
+        this.isVideoPlaying = false;
+      }
+    }
+  }
+
+  // End-- Video Play
+
+  startSetQuestion(): void {
+    if (this.examSectionSets && this.examSectionSets.length > this.currentIndex) {
+      const currentSet = this.examSectionSets[this.currentIndex];
+      currentSet.startSetQuestion = true;
+      this.isVideoPlaying = false;
+      this.videoplayer.nativeElement.pause();
+    }
   }
 
   openDialog(): void {

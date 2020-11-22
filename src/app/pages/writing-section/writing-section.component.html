@@ -9,169 +9,199 @@
 
     <div class="row practice-content">
 
-      <div class="col-md-6 left-content">
-        <ng-container
-          *ngIf="examSectionSets && examSectionSets.length>currentIndex&&examSectionSets[currentIndex].passage&&examSectionSets[currentIndex].passage.length>1; else demoPassage;">
-          <div class="passage" [innerHTML]="examSectionSets[currentIndex].passage"></div>
-        </ng-container>
-        <ng-template #demoPassage>
-          <p class="ion-padding ion-text-center">No description available</p>
-        </ng-template>
-      </div>
+      <ng-container *ngIf="examSectionSets && examSectionSets.length>currentIndex">
+        <div *ngIf="shouldVideoClipPlay(); else setsContent;" class="video-clip-view">
+          <div class="passage-info">
+            <h3>Review the following passage and continue</h3>
+            <p>
+              Listen to a conversation between student and his student at the career development office.
+              <br/>
+              <br/>
+              You will not be able to replay this video once you play.
+            </p>
+          </div>
 
-      <div class="col-md-6 right-content">
+          <div class="video-view-container">
+            <video
+              controls
+              class="video-view"
+              #videoPlayer
+              (ended)="videoEnd($event)">
+              <source [src]="examSectionSets[currentIndex].videoUri" type="video/mp4"/>
+              Browser not supported
+            </video>
 
-        <ng-container *ngIf="examSectionSets && examSectionSets.length>0; else noQuestionsAvailable">
-          <ng-container *ngFor="let item of examSectionSets[currentIndex].questions; let idx=index">
+            <ion-button *ngIf="!isVideoPlaying" slot="icon-only" class="video-play-btn" (click)="playVideo($event)">
+              <ion-icon name="play"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
 
-            <div class="question-count">
-              <!--              Question {{(idx + 1) }} of {{examSectionSets[currentIndex].questions.length}}-->
-              Question {{(previousQuestionsCount() + idx + 1) }} of {{totalQuestionCount()}}
-            </div>
-
-
-            <h2 class="question" [innerHTML]="item.text"></h2>
-            <img class="question-img" *ngIf="item && item.imageUri"
-                 [src]="environment.mediaUrl+item.imageUri"/>
-
-            <!-- For Singleline text answer-->
+        <ng-template #setsContent>
+          <div class="col-md-6 left-content">
             <ng-container
-              *ngIf="item.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_SINGLE_LINE || item.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_SINGLE_LINE">
-
-              <div class="form-group text-input">
-                <label>Answer</label>
-                <div class="input-group">
-                  <ion-input class="form-control"
-                             placeholder="Write your answer here..."
-                             [(ngModel)]="item.answerInput"
-                             [ngClass]="{ 'is-invalid': submitted  }"></ion-input>
-
-                </div>
-              </div>
+              *ngIf="examSectionSets && examSectionSets.length>currentIndex&&examSectionSets[currentIndex].passage&&examSectionSets[currentIndex].passage.length>1; else demoPassage;">
+              <div class="passage" [innerHTML]="examSectionSets[currentIndex].passage"></div>
             </ng-container>
-            <!-- For Singleline text answer-->
+            <ng-template #demoPassage>
+              <p class="ion-padding ion-text-center">No description available</p>
+            </ng-template>
+          </div>
 
-            <!-- For multine text answer-->
-            <ng-container
-              *ngIf="item.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE || item.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE">
+          <div class="col-md-6 right-content">
 
-              <div class="form-group textarea-input">
-                <label>Answer</label>
-                <div class="input-group">
+            <ng-container *ngIf="examSectionSets && examSectionSets.length>0; else noQuestionsAvailable">
+              <ng-container *ngFor="let item of examSectionSets[currentIndex].questions; let idx=index">
+
+                <div class="question-count">
+                  <!--              Question {{(idx + 1) }} of {{examSectionSets[currentIndex].questions.length}}-->
+                  Question {{(previousQuestionsCount() + idx + 1) }} of {{totalQuestionCount()}}
+                </div>
+
+
+                <h2 class="question" [innerHTML]="item.text"></h2>
+                <img class="question-img" *ngIf="item && item.imageUri"
+                     [src]="environment.mediaUrl+item.imageUri"/>
+
+                <!-- For Singleline text answer-->
+                <ng-container
+                  *ngIf="item.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_SINGLE_LINE || item.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_SINGLE_LINE">
+
+                  <div class="form-group text-input">
+                    <label>Answer</label>
+                    <div class="input-group">
+                      <ion-input class="form-control"
+                                 placeholder="Write your answer here..."
+                                 [(ngModel)]="item.answerInput"
+                                 [ngClass]="{ 'is-invalid': submitted  }"></ion-input>
+
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- For Singleline text answer-->
+
+                <!-- For multine text answer-->
+                <ng-container
+                  *ngIf="item.typeId === EnumService.examQuestionTypes.VERIFIABLE_TEXT_MULTI_LINE || item.typeId === EnumService.examQuestionTypes.UNVERIFIABLE_TEXT_MULTI_LINE">
+
+                  <div class="form-group textarea-input">
+                    <label>Answer</label>
+                    <div class="input-group">
                 <textarea id="message" class="form-control"
                           placeholder="Write your answer here..."
                           [(ngModel)]="item.answerInput"
                           [maxlength]="maxMessageLength"
                           [ngClass]="{ 'is-invalid': submitted  }"></textarea>
 
-                  <div class="message-length">
-                    {{(maxMessageLength - item.answer?.length)}}/{{maxMessageLength}} characters
-                    remaining
+                      <div class="message-length">
+                        {{(maxMessageLength - item.answer?.length)}}/{{maxMessageLength}} characters
+                        remaining
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </ng-container>
-            <!-- End --- For multine text answer-->
+                </ng-container>
+                <!-- End --- For multine text answer-->
 
-            <!-- For Single/Multiple choice answer-->
-            <ng-container
-              *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT || item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT">
+                <!-- For Single/Multiple choice answer-->
+                <ng-container
+                  *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT || item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT">
 
 
-              <div class="answer-type">
-                Choose {{(item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) ? 'multiple' : '1'}}
-                answer
-              </div>
+                  <div class="answer-type">
+                    Choose {{(item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT) ? 'multiple' : '1'}}
+                    answer
+                  </div>
 
-              <ng-container *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT">
-                <app-answer-choice-item
-                  *ngFor="let subItem of item.choices; let index=index"
-                  [selected]="subItem.selected"
-                  [index]="index"
-                  [title]="subItem.text"
-                  [imageUri]="subItem.imageUri"
-                  (click)="singleChoiceItemSelect(item, subItem)"
-                ></app-answer-choice-item>
+                  <ng-container *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_SINGLE_SELECT">
+                    <app-answer-choice-item
+                      *ngFor="let subItem of item.choices; let index=index"
+                      [selected]="subItem.selected"
+                      [index]="index"
+                      [title]="subItem.text"
+                      [imageUri]="subItem.imageUri"
+                      (click)="singleChoiceItemSelect(item, subItem)"
+                    ></app-answer-choice-item>
+                  </ng-container>
+
+                  <ng-container *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT">
+                    <app-answer-multiple-choice-item
+                      *ngFor="let subItem of item.choices; index as id"
+                      [selected]="subItem.selected"
+                      [title]="subItem.text"
+                      [imageUri]="subItem.imageUri"
+                      (click)="subItem.selected=!subItem.selected"
+                    ></app-answer-multiple-choice-item>
+                  </ng-container>
+
+                </ng-container>
+                <!-- End --- For Single/Multiple choice answer-->
+
+
+                <!-- For drag and drop choice question-->
+                <ng-container *ngIf="item.typeId === EnumService.examQuestionTypes.DRAG_DROP">
+                  <div cdkDropListGroup>
+
+                    <ion-list
+                      class="group-list"
+                      *ngFor="let group of item.groups; let idx=index"
+                    >
+                      <ion-list-header>
+                        {{group.text}}
+                      </ion-list-header>
+
+                      <div
+                        cdkDropList
+                        [cdkDropListData]="group.answered"
+                        class="group-drop-list"
+                        (cdkDropListDropped)="drop($event)"
+                      >
+                        <ion-item *ngIf="!group.answered || group.answered.length===0" cdkDrag>
+                          <ion-label class="placeholder">Drop your choices here</ion-label>
+                        </ion-item>
+                        <ion-item *ngFor="let answer of group.answered" cdkDrag>
+                          <ion-label>{{answer.text}}</ion-label>
+                        </ion-item>
+                      </div>
+                    </ion-list>
+
+                    <br/>
+
+                    <label>Answer Choices</label>
+                    <div class="answer-type" style="padding: 0">Drop your choices from here</div>
+                    <br/>
+
+                    <ion-list
+                      lines="full"
+                      cdkDropList
+                      [cdkDropListData]="item.items"
+                      class="choice-item-list"
+                      (cdkDropListDropped)="drop($event)">
+                      <ion-item *ngFor="let choiceItem of item.items" cdkDrag>
+                        <ion-icon slot="start" src="./assets/images/Drag.svg"></ion-icon>
+                        <ion-label>{{choiceItem.text}}</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ng-container>
+                <!-- End --- For drag and drop choice question-->
+
               </ng-container>
 
-              <ng-container *ngIf="item.typeId === EnumService.examQuestionTypes.MULTIPLE_CHOICE_MULTIPLE_SELECT">
-                <app-answer-multiple-choice-item
-                  *ngFor="let subItem of item.choices; index as id"
-                  [selected]="subItem.selected"
-                  [title]="subItem.text"
-                  [imageUri]="subItem.imageUri"
-                  (click)="subItem.selected=!subItem.selected"
-                ></app-answer-multiple-choice-item>
-              </ng-container>
+              <!--          <ng-container *ngIf="item.questionType === 'video'">-->
+              <!--            <iframe class="video-view" [src]="item.link | safe:'resourceUrl'" frameborder="0"-->
+              <!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+              <!--                    allowfullscreen></iframe>-->
+              <!--          </ng-container>-->
 
             </ng-container>
-            <!-- End --- For Single/Multiple choice answer-->
 
+            <ng-template #noQuestionsAvailable>
+              <p class="ion-padding ion-text-center">No questions available</p>
+            </ng-template>
 
-            <!-- For drag and drop choice question-->
-            <ng-container *ngIf="item.typeId === EnumService.examQuestionTypes.DRAG_DROP">
-              <div cdkDropListGroup>
-
-                <ion-list
-                  class="group-list"
-                  *ngFor="let group of item.groups; let idx=index"
-                >
-                  <ion-list-header>
-                    {{group.text}}
-                  </ion-list-header>
-
-                  <div
-                    cdkDropList
-                    [cdkDropListData]="group.answered"
-                    class="group-drop-list"
-                    (cdkDropListDropped)="drop($event)"
-                  >
-                    <ion-item *ngIf="!group.answered || group.answered.length===0" cdkDrag>
-                      <ion-label class="placeholder">Drop your choices here</ion-label>
-                    </ion-item>
-                    <ion-item *ngFor="let answer of group.answered" cdkDrag>
-                      <ion-label>{{answer.text}}</ion-label>
-                     </ion-item>
-                  </div>
-                </ion-list>
-
-                <br/>
-
-                <label>Answer Choices</label>
-                <div class="answer-type" style="padding: 0">Drop your choices from here</div>
-                <br/>
-
-                <ion-list
-                  lines="full"
-                  cdkDropList
-                  [cdkDropListData]="item.items"
-                  class="choice-item-list"
-                  (cdkDropListDropped)="drop($event)">
-                  <ion-item *ngFor="let choiceItem of item.items" cdkDrag>
-                    <ion-icon slot="start" src="./assets/images/Drag.svg"></ion-icon>
-                    <ion-label>{{choiceItem.text}}</ion-label>
-                  </ion-item>
-                </ion-list>
-              </div>
-            </ng-container>
-            <!-- End --- For drag and drop choice question-->
-
-          </ng-container>
-
-          <!--          <ng-container *ngIf="item.questionType === 'video'">-->
-          <!--            <iframe class="video-view" [src]="item.link | safe:'resourceUrl'" frameborder="0"-->
-          <!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
-          <!--                    allowfullscreen></iframe>-->
-          <!--          </ng-container>-->
-
-        </ng-container>
-
-        <ng-template #noQuestionsAvailable>
-          <p class="ion-padding ion-text-center">No questions available</p>
+          </div>
         </ng-template>
-
-      </div>
-
+      </ng-container>
     </div>
 
     <div class="row practice-footer">

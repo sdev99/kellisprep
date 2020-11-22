@@ -10,6 +10,7 @@
     <div class="row practice-content">
 
       <ng-container *ngIf="examSectionSets && examSectionSets.length>currentSetIndex">
+
         <div *ngIf="shouldVideoClipPlay(); else setsContent;" class="video-clip-view">
           <div class="passage-info">
             <h3>Review the following passage and continue</h3>
@@ -35,8 +36,9 @@
               <ion-icon name="play"></ion-icon>
             </ion-button>
           </div>
-
         </div>
+
+
         <ng-template #setsContent>
 
           <div class="col-md-6 question-content" *ngIf="currentQuestion">
@@ -229,7 +231,8 @@
                 <div class="audio-recording" *ngIf="currentQuestion.recordingStart && !currentQuestion.audioPlayRef">
 
                   <ion-img src="./assets/images/wave.png" class="wave-img"></ion-img>
-                  <span class="record-duration">00:00</span>
+                  <span
+                    class="record-duration">{{currentQuestion.recordingDuration ? UtilService.secondsToMinuteSecond(currentQuestion.recordingDuration) : '00:00'}}</span>
 
                   <div style="flex:1"></div>
 
@@ -261,13 +264,17 @@
                     <span>{{ UtilService.secondsToMinuteSecond(currentQuestion.audioPlayRef.currentTime)}}</span>
                     <ion-progress-bar color="secondary"
                                       [value]="currentValueOfProgressBar()"></ion-progress-bar>
-                    <span>{{ UtilService.secondsToMinuteSecond(currentQuestion.audioPlayRef.duration)}}</span>
+                    <span>{{UtilService.secondsToMinuteSecond(currentQuestion.recordingDuration)}}</span>
                   </div>
 
-
-                  <div class="icon-container upload-recording">
+                  <div class="icon-container upload-recording" *ngIf="!currentQuestion.answerInput">
                     <div class="center-color"></div>
                     <ion-icon name="cloud-upload" (click)="uploadAudio(currentQuestion)"></ion-icon>
+                  </div>
+
+                  <div class="icon-container" *ngIf="currentQuestion.answerInput">
+                    <div class="center-color"></div>
+                    <ion-icon name="checkmark-circle"></ion-icon>
                   </div>
 
                   <div class="icon-container remove-recording">
@@ -277,7 +284,6 @@
 
                 </div>
                 <!-- End -- Recorded result view -->
-
 
               </div>
             </ng-container>
@@ -308,14 +314,14 @@
 
 
       <ng-container *ngIf="!shouldVideoClipPlay() && examSectionSets && examSectionSets.length>0;">
-        <button *ngIf="currentIndex === (examSectionSets[currentSetIndex].questions.length-1); else nextPageBtn"
+        <button [disabled]="!shouldEnableNextButton()" *ngIf="currentIndex === (examSectionSets[currentSetIndex].questions.length-1); else nextPageBtn"
                 mat-raised-button color="primary"
                 (click)="finishSection()">
           Finish this Section
         </button>
 
         <ng-template #nextPageBtn>
-          <button mat-raised-button color="primary" (click)="onNext()">
+          <button [disabled]="!shouldEnableNextButton()" mat-raised-button color="primary" (click)="onNext()">
             Continue to question {{(currentIndex + 2)}}
           </button>
         </ng-template>
