@@ -14,7 +14,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatListModule} from '@angular/material/list';
 import {HeaderComponent} from './components/header/header.component';
 import {FooterComponent} from './components/footer/footer.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbAccordion, NgbAccordionModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {ForgotpasswordComponent} from './modals/forgotpassword/forgotpassword.component';
@@ -66,10 +66,9 @@ import {
   GoogleLoginProvider,
   FacebookLoginProvider,
 } from 'angularx-social-login';
-import { ReadingSectionComponent } from './pages/reading-section/reading-section.component';
-import { MathSectionComponent } from './pages/math-section/math-section.component';
-import { ListeningSectionComponent } from './pages/listening-section/listening-section.component';
-import { SpeakingSectionComponent } from './pages/speaking-section/speaking-section.component';
+import {ReadingSectionComponent} from './pages/reading-section/reading-section.component';
+import {MathSectionComponent} from './pages/math-section/math-section.component';
+import {ListeningSpeakingSectionComponent} from './pages/listening-speaking-section/listening-speaking-section.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
@@ -108,39 +107,40 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     AnswerMultipleChoiceItemComponent,
     ReadingSectionComponent,
     MathSectionComponent,
-    ListeningSectionComponent,
-    SpeakingSectionComponent,
+    ListeningSpeakingSectionComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatButtonModule,
-        MatGridListModule,
-        MatListModule,
-        NgbModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatDialogModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        CommonModule,
-        MatSidenavModule,
-        MatSelectModule,
-        FormsModule,
-        MatTabsModule,
-        MatPaginatorModule,
-        PipesModule,
-        IonicModule.forRoot(),
-        MatRippleModule,
-        MatCheckboxModule,
-        MatTableModule,
-        SocialLoginModule,
-        NgxLoadingModule.forRoot({}),
-        DragDropModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatGridListModule,
+    MatListModule,
+    NgbModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    CommonModule,
+    MatSidenavModule,
+    MatSelectModule,
+    FormsModule,
+    MatTabsModule,
+    MatPaginatorModule,
+    PipesModule,
+    IonicModule.forRoot(),
+    MatRippleModule,
+    MatCheckboxModule,
+    MatTableModule,
+    SocialLoginModule,
+    NgxLoadingModule.forRoot({}),
+    DragDropModule,
+    NgbModule,
+    NgbAccordionModule
+  ],
   providers: [
     {provide: MatPaginatorIntl, useClass: MatPaginatorIntlCro},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

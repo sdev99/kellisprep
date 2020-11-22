@@ -51,7 +51,7 @@ export class MathSectionComponent implements OnInit {
 
     if (item) {
       this.itemDetail = JSON.parse(item);
-      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Math Section'];
+      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, EnumService.examSectionTypes.MATH + ' Section'];
     }
 
     if (examData) {
@@ -74,7 +74,7 @@ export class MathSectionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === 'Math')) {
+    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === EnumService.examSectionTypes.MATH)) {
       this.location.back();
     }
   }
@@ -151,10 +151,6 @@ export class MathSectionComponent implements OnInit {
       this.currentIndex++;
       this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
     }
-  }
-
-  onFinishSectionClick(): void {
-    this.router.navigate(['practice-tests']);
   }
 
 }

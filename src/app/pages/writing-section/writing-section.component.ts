@@ -51,7 +51,7 @@ export class WritingSectionComponent implements OnInit {
 
     if (item) {
       this.itemDetail = JSON.parse(item);
-      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Writing Section'];
+      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, EnumService.examSectionTypes.WRITING + ' Section'];
     }
 
     if (examData) {
@@ -77,7 +77,7 @@ export class WritingSectionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === 'Writing')) {
+    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === EnumService.examSectionTypes.WRITING)) {
       this.location.back();
     }
   }

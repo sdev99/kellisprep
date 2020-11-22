@@ -92,7 +92,7 @@ export class ReadingSectionComponent implements OnInit {
 
     if (item) {
       this.itemDetail = JSON.parse(item);
-      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Reading Section'];
+      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, EnumService.examSectionTypes.READING + ' Section'];
     }
 
     if (examSessionData) {
@@ -118,7 +118,7 @@ export class ReadingSectionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === 'Reading')) {
+    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === EnumService.examSectionTypes.READING)) {
       this.location.back();
     }
   }

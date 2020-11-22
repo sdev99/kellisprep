@@ -19,8 +19,7 @@ import {PrivacypolicyComponent} from './pages/privacypolicy/privacypolicy.compon
 import {TermsofserviceComponent} from './pages/termsofservice/termsofservice.component';
 import {ReadingSectionComponent} from './pages/reading-section/reading-section.component';
 import {MathSectionComponent} from './pages/math-section/math-section.component';
-import {ListeningSectionComponent} from './pages/listening-section/listening-section.component';
-import {SpeakingSectionComponent} from './pages/speaking-section/speaking-section.component';
+import {ListeningSpeakingSectionComponent} from './pages/listening-speaking-section/listening-speaking-section.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -42,8 +41,8 @@ const routes: Routes = [
   {path: 'reading-section', component: ReadingSectionComponent, canActivate: [AuthGuard]},
   {path: 'writing-section', component: WritingSectionComponent, canActivate: [AuthGuard]},
   {path: 'math-section', component: MathSectionComponent, canActivate: [AuthGuard]},
-  {path: 'listening-section', component: ListeningSectionComponent, canActivate: [AuthGuard]},
-  {path: 'speaking-section', component: SpeakingSectionComponent, canActivate: [AuthGuard]},
+  {path: 'listening-section', component: ListeningSpeakingSectionComponent, canActivate: [AuthGuard]},
+  {path: 'speaking-section', component: ListeningSpeakingSectionComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

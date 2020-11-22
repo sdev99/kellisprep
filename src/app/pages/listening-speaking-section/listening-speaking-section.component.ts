@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
@@ -11,17 +11,22 @@ import {ApiService} from '../../services/api.service';
 import {AlertService} from '../../services/alert.service';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {ShareddataService} from '../../services/shareddata.service';
+import {UtilService} from '../../services/util.service';
+import MicRecorder from 'mic-recorder-to-mp3';
+import * as RecordRTC from 'recordrtc';
 
 @Component({
-  selector: 'app-listening-section',
-  templateUrl: './listening-section.component.html',
-  styleUrls: ['./listening-section.component.scss']
+  selector: 'app-listening-speaking-section',
+  templateUrl: './listening-speaking-section.component.html',
+  styleUrls: ['./listening-speaking-section.component.scss']
 })
-export class ListeningSectionComponent implements OnInit {
+export class ListeningSpeakingSectionComponent implements OnInit {
+  @ViewChild('videoPlayer') videoplayer: ElementRef;
+  Math = Math;
+  UtilService = UtilService;
+
   environment = environment;
   EnumService = EnumService;
-
-  isVideoClipPlayed = false;
 
   currentSetIndex = 0;
   currentIndex = 0;
@@ -35,6 +40,8 @@ export class ListeningSectionComponent implements OnInit {
   examSectionSets;
   pathsTree = [];
 
+  isVideoPlaying = false;
+
   constructor(
     private location: Location,
     private router: Router,
@@ -43,6 +50,7 @@ export class ListeningSectionComponent implements OnInit {
     private apiService: ApiService,
     private alertService: AlertService,
     private shareddataService: ShareddataService,
+    private utilService: UtilService,
     public dialog: MatDialog,
     private cookieService: CookieService,
   ) {
@@ -69,17 +77,158 @@ export class ListeningSectionComponent implements OnInit {
         });
       });
 
+
       if (this.examSectionSets && this.examSectionSets.length > this.currentSetIndex) {
         if (this.examSectionSets[this.currentSetIndex].questions.length > this.currentIndex) {
           this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
+        }
+        // For test only, remove it after test
+        if (!this.currentQuestion.audioUri) {
+          this.examSectionSets[this.currentSetIndex].startSetQuestion = true;
+          // this.currentQuestion.audioUri = 'https://res.cloudinary.com/kallisprep/video/upload/v1605906299/audios/uefa_cl_kxhgpj.mp3';
         }
       }
     }
   }
 
   ngOnInit(): void {
-    if (!(this.examSessionData.sectionData && this.examSessionData.sectionData.name === 'Listening')) {
+    if (!(this.examSessionData.sectionData && (this.examSessionData.sectionData.name === EnumService.examSectionTypes.LISTENING || this.examSessionData.sectionData.name === EnumService.examSectionTypes.SPEAKING))) {
       this.location.back();
+    }
+  }
+
+  // PLay Audio
+  playAudio(currentQuestion): void {
+    let audioPlay: HTMLAudioElement = currentQuestion.audioPlayRef;
+    if (!currentQuestion.audioPlayRef) {
+      audioPlay = new Audio(currentQuestion.audioUri);
+    }
+    currentQuestion.playing = true;
+
+    audioPlay.play().then(() => {
+      currentQuestion.audioPlayRef = audioPlay;
+      currentQuestion.audioPlayTimer = setInterval(() => {
+        currentQuestion.currentTime = currentQuestion.audioPlayRef.currentTime;
+      }, 1000);
+    });
+
+    audioPlay.onended = () => {
+      this.stopAudio(currentQuestion);
+    };
+  }
+
+  stopAudio(currentQuestion): void {
+    currentQuestion.playing = false;
+    if (currentQuestion.audioPlayRef) {
+      currentQuestion.audioPlayRef.pause();
+      currentQuestion.audioPlayRef.currentTime = 0;
+      clearInterval(currentQuestion.audioPlayTimer);
+    }
+  }
+
+  currentValueOfProgressBar(): number {
+    if (this.currentQuestion.audioPlayRef) {
+      const time = this.currentQuestion.audioPlayRef.currentTime;
+      const duration = this.currentQuestion.audioPlayRef.duration;
+      return (Math.round(time) / Math.round(duration));
+    }
+    return 0;
+  }
+
+
+  // End -- PLay Audio
+
+  // Record audio
+  startRecording(currentQuestion): void {
+    currentQuestion.recordingStart = true;
+    if (!currentQuestion.recorder) {
+      // New instance
+      const recorder = new MicRecorder({
+        bitRate: 128
+      });
+
+      currentQuestion.recorder = recorder;
+    }
+
+    // Start recording. Browser will request permission to use your microphone.
+    currentQuestion.recorder.start().then(() => {
+      // something else
+    }).catch((e) => {
+      console.error(e);
+    });
+  }
+
+  pauseAudioRecording(currentQuestion): void {
+    currentQuestion.recordingPause = true;
+    // currentQuestion.recorder.pause();
+  }
+
+  resumeAudioRecording(currentQuestion): void {
+    currentQuestion.recordingPause = false;
+  }
+
+  stopAudioRecording(currentQuestion): void {
+    currentQuestion.recordingStart = false;
+    currentQuestion.recorder.stop().getMp3().then(([buffer, blob]) => {
+      console.log(buffer, blob);
+      const file = new File(buffer, 'music.mp3', {
+        type: blob.type,
+        lastModified: Date.now()
+      });
+
+      const player = new Audio(URL.createObjectURL(file));
+      currentQuestion.audioPlayRef = player;
+    }).catch((e) => {
+      console.error(e);
+    });
+  }
+
+  uploadAudio(currentQuestion): void {
+
+  }
+
+  removeAudio(currentQuestion): void {
+    currentQuestion.recordingPause = false;
+    currentQuestion.recordingStart = false;
+    currentQuestion.audioPlayRef = null;
+  }
+
+  // End --- Record audio
+
+  // Video Play
+  shouldVideoClipPlay = () => {
+    if (this.examSectionSets && this.examSectionSets.length > this.currentSetIndex) {
+      const currentSet = this.examSectionSets[this.currentSetIndex];
+      if (currentSet.videoUri && !currentSet.startSetQuestion) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  playVideo(event: any): void {
+    this.isVideoPlaying = true;
+    this.videoplayer.nativeElement.play();
+  }
+
+  videoEnd(event: any): void {
+    if (this.examSectionSets && this.examSectionSets.length > this.currentSetIndex) {
+      const currentSet = this.examSectionSets[this.currentSetIndex];
+      if (!currentSet.videoRepeatable) {
+        currentSet.startSetQuestion = true;
+        this.isVideoPlaying = false;
+      }
+    }
+  }
+
+  // End-- Video Play
+
+  startSetQuestion(): void {
+    if (this.examSectionSets && this.examSectionSets.length > this.currentSetIndex) {
+      const currentSet = this.examSectionSets[this.currentSetIndex];
+      currentSet.startSetQuestion = true;
+      this.isVideoPlaying = false;
+      this.videoplayer.nativeElement.pause();
     }
   }
 
@@ -155,10 +304,6 @@ export class ListeningSectionComponent implements OnInit {
       this.currentIndex++;
       this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
     }
-  }
-
-  onFinishSectionClick(): void {
-    this.router.navigate(['practice-tests']);
   }
 
 }

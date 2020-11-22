@@ -17,6 +17,7 @@ import {User} from '../_models';
   providedIn: 'root'
 })
 export class ShareddataService {
+
   private loadingSubject: BehaviorSubject<boolean>;
   public loading: Observable<boolean>;
 
@@ -27,17 +28,17 @@ export class ShareddataService {
   satSections = [
     {
       title: 'Reading Section',
-      type: 'Reading',
+      type: EnumService.examSectionTypes.READING,
       decription: 'Short detail about reading section in which you have to tell about what is reading section'
     },
     {
       title: 'Writing Section',
-      type: 'Writing',
+      type: EnumService.examSectionTypes.WRITING,
       decription: 'Short detail about witting section in which you have to tell about what is witting section'
     },
     {
       title: 'Math Section',
-      type: 'Math',
+      type: EnumService.examSectionTypes.MATH,
       decription: 'Short detail about Math Section in which you have to tell about what is Math Section'
     },
   ];
@@ -45,22 +46,22 @@ export class ShareddataService {
   toeflSections = [
     {
       title: 'Reading Section',
-      type: 'Reading',
+      type: EnumService.examSectionTypes.READING,
       decription: 'Short detail about reading section in which you have to tell about what is reading section'
     },
     {
       title: 'Writing Section',
-      type: 'Writing',
+      type: EnumService.examSectionTypes.WRITING,
       decription: 'Short detail about witting section in which you have to tell about what is witting section'
     },
     {
       title: 'Listening Section',
-      type: 'Listening',
+      type: EnumService.examSectionTypes.LISTENING,
       decription: 'Short detail about Listening Section in which you have to tell about what is Listening Section'
     },
     {
       title: 'Speaking Section',
-      type: 'Speaking',
+      type: EnumService.examSectionTypes.SPEAKING,
       decription: 'Short detail about speaking action which you have to tell about what is speaking action'
     },
   ];

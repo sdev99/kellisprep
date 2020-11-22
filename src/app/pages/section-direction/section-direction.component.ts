@@ -47,7 +47,7 @@ export class SectionDirectionComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.itemDetail.type === 'TOEFL') {
-      if (this.sectionType === 'Writing' || this.sectionType === 'Listening') {
+      if (this.sectionType === EnumService.examSectionTypes.WRITING || this.sectionType === EnumService.examSectionTypes.LISTENING) {
         this.nextBtnTitle = 'Let\'s go, start the quiz';
       }
     }
