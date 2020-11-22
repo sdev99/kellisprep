@@ -154,9 +154,11 @@ export class ListeningSpeakingSectionComponent implements OnInit {
           type: 'audio',
           mimeType: 'audio/webm'
         });
-        currentQuestion.recorder = recorder;
-        currentQuestion.recorder.startRecording();
-        this.startRecordingTimer(currentQuestion);
+        if (recorder) {
+          currentQuestion.recorder = recorder;
+          currentQuestion.recorder.startRecording();
+          this.startRecordingTimer(currentQuestion);
+        }
       });
     } else {
       currentQuestion.recorder.startRecording();
@@ -185,7 +187,9 @@ export class ListeningSpeakingSectionComponent implements OnInit {
   pauseAudioRecording(currentQuestion): void {
     this.ngZone.run(() => {
       currentQuestion.recordingPause = true;
-      currentQuestion.recorder.pauseRecording();
+      if (currentQuestion.recorder) {
+        currentQuestion.recorder.pauseRecording();
+      }
       this.stopRecordingTimer(currentQuestion);
     });
   }
@@ -193,7 +197,9 @@ export class ListeningSpeakingSectionComponent implements OnInit {
   resumeAudioRecording(currentQuestion): void {
     this.ngZone.run(() => {
       currentQuestion.recordingPause = false;
-      currentQuestion.recorder.resumeRecording();
+      if (currentQuestion.recorder) {
+        currentQuestion.recorder.resumeRecording();
+      }
       this.startRecordingTimer(currentQuestion);
     });
   }
@@ -201,20 +207,21 @@ export class ListeningSpeakingSectionComponent implements OnInit {
   stopAudioRecording(currentQuestion): void {
     currentQuestion.recordingStart = false;
     this.stopRecordingTimer(currentQuestion);
-
-    currentQuestion.recorder.stopRecording((blobURL) => {
-      const blob = currentQuestion.recorder.getBlob();
-      this.stopMedia(currentQuestion);
-      const mp3Name = this.audioFileName();
-      // const file = {blob, title: mp3Name};
-      const file = new File([blob], mp3Name);
-      currentQuestion.audioFile = file;
-      const player = new Audio(blobURL);
-      player.load();
-      this.ngZone.run(() => {
-        currentQuestion.audioPlayRef = player;
+    if (currentQuestion.recorder) {
+      currentQuestion.recorder.stopRecording((blobURL) => {
+        const blob = currentQuestion.recorder.getBlob();
+        this.stopMedia(currentQuestion);
+        const mp3Name = this.audioFileName();
+        // const file = {blob, title: mp3Name};
+        const file = new File([blob], mp3Name);
+        currentQuestion.audioFile = file;
+        const player = new Audio(blobURL);
+        player.load();
+        this.ngZone.run(() => {
+          currentQuestion.audioPlayRef = player;
+        });
       });
-    });
+    }
   }
 
   private stopMedia(currentQuestion): void {
