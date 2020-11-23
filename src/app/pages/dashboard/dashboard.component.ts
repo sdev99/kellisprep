@@ -155,6 +155,7 @@ export class DashboardComponent implements OnInit {
 
     filterTimesList = [
         {title: 'All', value: 'all'},
+        {title: 'Today', value: 'today'},
         {title: 'This Month', value: 'this_month'},
         {title: 'Yesterday', value: 'yesterday'},
         {title: 'Last week', value: 'last_week'},
@@ -288,6 +289,9 @@ export class DashboardComponent implements OnInit {
 
         switch (this.selectedTime.value) {
             case 'all':
+                break;
+            case 'today':
+                specificDate = moment();
                 break;
             case 'yesterday':
                 specificDate = moment().subtract(1, 'days');
