@@ -19,7 +19,7 @@
         <ng-container *ngIf="currentQuestion">
           <h1 class="question" [innerHTML]="currentQuestion.text"></h1>
           <img class="question-img" *ngIf="currentQuestion.imageUri"
-                   [src]="environment.mediaUrl+currentQuestion.imageUri" />
+                   [src]="currentQuestion.imageUri" />
         </ng-container>
 
 

@@ -61,7 +61,7 @@
 
                 <h2 class="question" [innerHTML]="item.text"></h2>
                 <img class="question-img" *ngIf="item && item.imageUri"
-                     [src]="environment.mediaUrl+item.imageUri"/>
+                     [src]="item.imageUri"/>
 
                 <!-- For Singleline text answer-->
                 <ng-container
