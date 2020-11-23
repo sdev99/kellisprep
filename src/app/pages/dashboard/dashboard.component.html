@@ -92,7 +92,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let exam of myHistories[selectedMenu.apiDataKey] | listFilter:examSearchTerm:'examTitle'">
+            <tr *ngFor="let exam of getExamHistoryData() | listFilter:examSearchTerm:'examTitle'">
               <td>
                 <div class="exam-name">
                   <ngb-highlight [result]="exam.examTitle" [term]="examSearchTerm"></ngb-highlight>

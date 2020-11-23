@@ -6,8 +6,8 @@ import {Injectable} from '@angular/core';
 export class EnumService {
 
   static userRoles = {
-    SuperAdmin: 1,
-    Admin: 2,
+    // SuperAdmin: 1,
+    // Admin: 2,
     Teacher: 3,
     Student: 4,
   };
@@ -15,9 +15,10 @@ export class EnumService {
   static cookieNames = {
     DASHBOARD_SELECTED_MENU_INDEX: 'dashboard_selected_menu_index',
     DASHBOARD_SELECTED_SUBMENU_INDEX: 'dashboard_selected_submenu_index',
-    CURRENT_EXAM_SESSION: 'current_exam_session',
-    CURRENT_EXAM_SESSION_DATA: 'current_exam_session_data',
-    SELECTED_EXAM_DETAILS: 'selected_exam_details',
+  };
+
+  static observalbles = {
+    DROP_DOWN_ITEM_SELECT: 'drop_down_item_select',
   };
 
   static examSectionTypes = {
@@ -44,7 +45,9 @@ export class EnumService {
     USER_DATA: 'user_data',
     ALL_EXAMS: 'all_exams',
     USER_HISTORY: 'user_history',
-    CURRENT_EXAM_SESSION_DATA: 'current_exam_session_data'
+    CURRENT_EXAM_SESSION_DATA: 'current_exam_session_data',
+    CURRENT_EXAM_SESSION: 'current_exam_session',
+    SELECTED_EXAM_DETAILS: 'selected_exam_details',
   };
 
   static apiEndPoints = {

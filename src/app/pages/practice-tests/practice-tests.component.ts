@@ -32,7 +32,7 @@ export class PracticeTestsComponent implements OnInit {
     private shareddataService: ShareddataService,
   ) {
 
-    const item = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION);
+    const item = localStorage.getItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION);
     if (item) {
       this.itemDetail = JSON.parse(item);
       this.pathsTree = [this.itemDetail.type, this.itemDetail.name];

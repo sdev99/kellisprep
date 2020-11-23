@@ -107,7 +107,7 @@ export class ShareddataService {
 
 
   endExamSession = (examSectionSets) => {
-    const currentExamSessionStr = this.cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION);
+    const currentExamSessionStr = localStorage.getItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION);
     const examSessionDataStr = localStorage.getItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION_DATA);
     if (currentExamSessionStr && examSessionDataStr) {
       const currentExamSession = JSON.parse(currentExamSessionStr);

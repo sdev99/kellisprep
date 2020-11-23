@@ -137,7 +137,7 @@ export class PersonalizeExamcourseComponent implements AfterViewInit, OnInit {
 
     setTimeout(() => {
       if (this.data.type === 'exam') {
-        this.cookieService.set(EnumService.cookieNames.SELECTED_EXAM_DETAILS, JSON.stringify(this.selectedExam));
+        localStorage.setItem(EnumService.localStorageKeys.SELECTED_EXAM_DETAILS, JSON.stringify(this.selectedExam));
         this.router.navigate(['select-exam-course'], {
           queryParams: {
             selectionType: 'exam',

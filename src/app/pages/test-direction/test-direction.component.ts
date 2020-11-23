@@ -48,7 +48,7 @@ export class TestDirectionComponent implements OnInit {
         }
       }
 
-      const item = cookieService.get(EnumService.cookieNames.CURRENT_EXAM_SESSION);
+      const item = localStorage.getItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION);
       const examSessionData = localStorage.getItem(EnumService.localStorageKeys.CURRENT_EXAM_SESSION_DATA);
       if (item) {
         this.itemDetail = JSON.parse(item);

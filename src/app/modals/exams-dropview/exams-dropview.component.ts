@@ -4,6 +4,7 @@ import {ApiService} from '../../services/api.service';
 import {ShareddataService} from '../../services/shareddata.service';
 import {CookieService} from 'ngx-cookie-service';
 import {EnumService} from '../../services/enum.service';
+import {ObservablesService} from '../../services/observables.service';
 
 @Component({
   selector: 'app-exams-dropview',
@@ -25,6 +26,7 @@ export class ExamsDropviewComponent implements OnInit {
     private cookieService: CookieService,
     private apiService: ApiService,
     private shareddataService: ShareddataService,
+    private observablesService: ObservablesService,
   ) {
   }
 
@@ -98,7 +100,8 @@ export class ExamsDropviewComponent implements OnInit {
 
   onExamSelect(exam): void {
     this.dismiss.emit();
-    this.cookieService.set(EnumService.cookieNames.SELECTED_EXAM_DETAILS, JSON.stringify(exam));
+    this.observablesService.publishSomeData(EnumService.observalbles.DROP_DOWN_ITEM_SELECT, exam);
+    localStorage.setItem(EnumService.localStorageKeys.SELECTED_EXAM_DETAILS, JSON.stringify(exam));
     this.router.navigate(['select-exam-course'], {
       queryParams: {
         selectionType: 'exam'
