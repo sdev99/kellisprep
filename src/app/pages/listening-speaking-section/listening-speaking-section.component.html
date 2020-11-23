@@ -236,7 +236,7 @@
 
                   <div style="flex:1"></div>
 
-                  <div class="icon-container">
+                  <div class="icon-container" style="display: none">
                     <div class="center-color"></div>
                     <ion-icon class="recording-pause" name="pause-circle" *ngIf="!currentQuestion.recordingPause"
                               (click)="pauseAudioRecording(currentQuestion)"></ion-icon>
@@ -314,7 +314,8 @@
 
 
       <ng-container *ngIf="!shouldVideoClipPlay() && examSectionSets && examSectionSets.length>0;">
-        <button [disabled]="!shouldEnableNextButton()" *ngIf="currentIndex === (examSectionSets[currentSetIndex].questions.length-1); else nextPageBtn"
+        <button [disabled]="!shouldEnableNextButton()"
+                *ngIf="currentIndex === (examSectionSets[currentSetIndex].questions.length-1); else nextPageBtn"
                 mat-raised-button color="primary"
                 (click)="finishSection()">
           Finish this Section

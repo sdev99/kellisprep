@@ -15,6 +15,7 @@ import {UtilService} from '../../services/util.service';
 import * as RecordRTC from 'recordrtc';
 import {HttpClient} from '@angular/common/http';
 import CryptoJS from 'crypto-js';
+import MicRecorder from 'mic-recorder-to-mp3';
 
 @Component({
   selector: 'app-listening-speaking-section',
@@ -146,22 +147,39 @@ export class ListeningSpeakingSectionComponent implements OnInit {
     currentQuestion.recordingDuration = 0;
 
     if (!currentQuestion.recorder) {
-      navigator.mediaDevices.getUserMedia({
-        audio: true
-      }).then(async (stream) => {
-        currentQuestion.stream = stream;
-        const recorder = RecordRTC(stream, {
-          type: 'audio',
-          mimeType: 'audio/webm'
-        });
+      // New instance
+      const recorder = new MicRecorder({
+        bitRate: 128
+      });
+
+      // Start recording. Browser will request permission to use your microphone.
+      recorder.start().then(() => {
+        // something else
         if (recorder) {
           currentQuestion.recorder = recorder;
-          currentQuestion.recorder.startRecording();
           this.startRecordingTimer(currentQuestion);
         }
+      }).catch((e) => {
+        console.error(e);
       });
+
+      // navigator.mediaDevices.getUserMedia({
+      //   audio: true
+      // }).then(async (stream) => {
+      //   currentQuestion.stream = stream;
+      //   const recorder = RecordRTC(stream, {
+      //     type: 'audio',
+      //     mimeType: 'audio/webm'
+      //   });
+      //   if (recorder) {
+      //     currentQuestion.recorder = recorder;
+      //     currentQuestion.recorder.startRecording();
+      //     this.startRecordingTimer(currentQuestion);
+      //   }
+      // });
     } else {
-      currentQuestion.recorder.startRecording();
+      currentQuestion.recorder.start();
+      // currentQuestion.recorder.startRecording();
       this.startRecordingTimer(currentQuestion);
     }
   }
@@ -208,19 +226,44 @@ export class ListeningSpeakingSectionComponent implements OnInit {
     currentQuestion.recordingStart = false;
     this.stopRecordingTimer(currentQuestion);
     if (currentQuestion.recorder) {
-      currentQuestion.recorder.stopRecording((blobURL) => {
-        const blob = currentQuestion.recorder.getBlob();
-        this.stopMedia(currentQuestion);
+
+
+      currentQuestion.recorder
+        .stop()
+        .getMp3().then(([buffer, blob]) => {
+        // do what ever you want with buffer and blob
+        // Example: Create a mp3 file and play
         const mp3Name = this.audioFileName();
-        // const file = {blob, title: mp3Name};
-        const file = new File([blob], mp3Name);
-        currentQuestion.audioFile = file;
-        const player = new Audio(blobURL);
+        const file = new File(buffer, mp3Name, {
+          type: blob.type,
+          lastModified: Date.now()
+        });
+
+        const player = new Audio(URL.createObjectURL(file));
         player.load();
+        currentQuestion.audioFile = file;
         this.ngZone.run(() => {
           currentQuestion.audioPlayRef = player;
         });
+        this.stopMedia(currentQuestion);
+      }).catch((e) => {
+        alert('We could not retrieve your message');
+        console.log(e);
       });
+
+      // currentQuestion.recorder.stopRecording((blobURL) => {
+      //   const blob = currentQuestion.recorder.getBlob();
+      //   this.stopMedia(currentQuestion);
+      //   const mp3Name = this.audioFileName();
+      //   // const file = {blob, title: mp3Name};
+      //   const file = new File([blob], mp3Name);
+      //   currentQuestion.audioFile = file;
+      //   const player = new Audio(blobURL);
+      //   player.load();
+      //   this.ngZone.run(() => {
+      //     currentQuestion.audioPlayRef = player;
+      //   });
+      // });
     }
   }
 
@@ -236,9 +279,9 @@ export class ListeningSpeakingSectionComponent implements OnInit {
 
   private audioFileName(): string {
     if (this.examSessionData && this.currentQuestion) {
-      return this.examSessionData.sessionId + '+' + this.currentQuestion.id + '.mp3';
+      return this.examSessionData.sessionId + '+' + this.currentQuestion.id;
     }
-    return Date.now() + '.mp3';
+    return Date.now() + '';
   }
 
   private generateSignature(): string {
@@ -262,7 +305,8 @@ export class ListeningSpeakingSectionComponent implements OnInit {
     // let fileType = fileParts[1];
 
     const cloudName = environment.cloudnaryCloudName;
-    const uploadUrl = 'https://cors-anywhere.herokuapp.com/' + 'https://api.cloudinary.com/v1_1/' + cloudName + '/upload';
+    // const uploadUrl = 'https://cors-anywhere.herokuapp.com/' + 'https://api.cloudinary.com/v1_1/' + cloudName + '/upload';
+    const uploadUrl = 'https://api.cloudinary.com/v1_1/' + cloudName + '/upload';
 
     const signature = this.generateSignature();
 
