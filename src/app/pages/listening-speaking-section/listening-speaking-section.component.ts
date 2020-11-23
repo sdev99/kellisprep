@@ -68,7 +68,6 @@ export class ListeningSpeakingSectionComponent implements OnInit {
 
     if (item) {
       this.itemDetail = JSON.parse(item);
-      this.pathsTree = [this.itemDetail.type, this.itemDetail.name, 'Listening Section'];
     }
 
     if (examData) {
@@ -90,6 +89,10 @@ export class ListeningSpeakingSectionComponent implements OnInit {
         if (this.examSectionSets[this.currentSetIndex].questions.length > this.currentIndex) {
           this.currentQuestion = this.examSectionSets[this.currentSetIndex].questions[this.currentIndex];
         }
+      }
+
+      if (this.itemDetail && this.examSessionData && this.examSessionData.sectionData) {
+        this.pathsTree = [this.itemDetail.type, this.itemDetail.name, this.examSessionData.sectionData.name + ' Section'];
       }
     }
   }
