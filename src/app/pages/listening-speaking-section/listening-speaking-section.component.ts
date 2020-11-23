@@ -152,16 +152,18 @@ export class ListeningSpeakingSectionComponent implements OnInit {
         bitRate: 128
       });
 
-      // Start recording. Browser will request permission to use your microphone.
-      recorder.start().then(() => {
-        // something else
-        if (recorder) {
-          currentQuestion.recorder = recorder;
-          this.startRecordingTimer(currentQuestion);
-        }
-      }).catch((e) => {
-        console.error(e);
-      });
+      if (recorder) {
+        currentQuestion.recorder = recorder;
+        this.startRecordingTimer(currentQuestion);
+
+        // Start recording. Browser will request permission to use your microphone.
+        recorder.start().then(() => {
+          // something else
+        }).catch((e) => {
+          console.error(e);
+        });
+      }
+
 
       // navigator.mediaDevices.getUserMedia({
       //   audio: true
