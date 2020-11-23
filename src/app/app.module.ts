@@ -44,7 +44,7 @@ import {LearnViewComponent} from './pages/learn-view/learn-view.component';
 import {BackSubheaderComponent} from './components/back-subheader/back-subheader.component';
 import {PracticeViewComponent} from './pages/practice-view/practice-view.component';
 import {PaginationComponent} from './components/pagination/pagination.component';
-import {MatRippleModule} from '@angular/material/core';
+import {MatNativeDateModule, MatRippleModule} from '@angular/material/core';
 import {PracticeTestsComponent} from './pages/practice-tests/practice-tests.component';
 import {TestDirectionComponent} from './pages/test-direction/test-direction.component';
 import {SectionDirectionComponent} from './pages/section-direction/section-direction.component';
@@ -70,6 +70,7 @@ import {ReadingSectionComponent} from './pages/reading-section/reading-section.c
 import {MathSectionComponent} from './pages/math-section/math-section.component';
 import {ListeningSpeakingSectionComponent} from './pages/listening-speaking-section/listening-speaking-section.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -139,7 +140,9 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     NgxLoadingModule.forRoot({}),
     DragDropModule,
     NgbModule,
-    NgbAccordionModule
+    NgbAccordionModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     {provide: MatPaginatorIntl, useClass: MatPaginatorIntlCro},

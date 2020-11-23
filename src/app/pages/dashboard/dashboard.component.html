@@ -36,6 +36,7 @@
 
       <ng-container *ngIf="selectedMenu.type === 'exam_history'; else myExamCourses">
 
+
         <!--        filter tool bar-->
         <div class="row filter-tool-bar">
           <div class="col-xs-12 col-sm-auto field-container">
@@ -45,21 +46,36 @@
             <div class="row">
               <div class="col-auto">
                 <div class="input-group">
+
+
                   <div ngbDropdown class="d-inline-block">
                     <button type="button" class="btn btn-outline-dark" style="border-color: #ced4da" id="filterByDate"
                             ngbDropdownToggle>
                       {{selectedTime.title}}
                     </button>
-                    <!--                    <div ngbDropdownMenu aria-labelledby="filterByDate">-->
-                    <!--                      <button type="button" *ngFor="let item of filterTimesList" ngbDropdownItem>{{item.title}}</button>-->
-                    <!--                      <div class="dropdown-divider"></div>-->
-                    <!--                      <button type="button" ngbDropdownItem-->
-                    <!--                              style="display: flex;flex-direction: row;align-items: center;">-->
-                    <!--                        Jump to specific date-->
-                    <!--                        <mat-icon>chevron_right</mat-icon>-->
-                    <!--                      </button>-->
-                    <!--                    </div>-->
+
+                    <div ngbDropdownMenu aria-labelledby="filterByDate">
+                      <button type="button" *ngFor="let item of filterTimesList" ngbDropdownItem
+                              (click)="selectedTime=item">{{item.title}}</button>
+                      <div class="dropdown-divider"></div>
+                      <button type="button" ngbDropdownItem
+                              style="display: flex;flex-direction: row;align-items: center;"
+                              (click)="picker.open()"
+                      >
+                        Jump to specific date
+                        <mat-icon>chevron_right</mat-icon>
+                      </button>
+
+                    </div>
                   </div>
+                  <input matInput
+                         [matDatepicker]="picker"
+                         (dateInput)="datePickerEvent('input', $event)"
+                         (dateChange)="datePickerEvent('change', $event)"
+                         style="opacity: 0;position: absolute;z-index: -1"
+                  >
+                  <mat-datepicker #picker></mat-datepicker>
+
                 </div>
               </div>
 

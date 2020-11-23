@@ -10,6 +10,9 @@ import {EnumService} from '../../services/enum.service';
 import {PracticeTestsComponent} from '../practice-tests/practice-tests.component';
 import {AuthGuard} from '../../helpers/auth.guard';
 import {ShareddataService} from '../../services/shareddata.service';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import * as moment from 'moment';
+import {from} from 'rxjs';
 
 @Component({
     selector: 'app-dashboard',
@@ -151,10 +154,12 @@ export class DashboardComponent implements OnInit {
     ];
 
     filterTimesList = [
-        {title: 'Yesterday'},
-        {title: 'Last week'},
-        {title: 'Last month'},
-        {title: 'The very beginning'},
+        {title: 'All', value: 'all'},
+        {title: 'This Month', value: 'this_month'},
+        {title: 'Yesterday', value: 'yesterday'},
+        {title: 'Last week', value: 'last_week'},
+        {title: 'Last month', value: 'last_month'},
+        // {title: 'The very beginning'},
     ];
 
     filterExamList = [
@@ -162,73 +167,6 @@ export class DashboardComponent implements OnInit {
         {title: 'PPSC Exams'},
         {title: 'NTS Exams'},
         {title: 'GAT Exams'},
-    ];
-
-
-    examsHistories = [
-        {title: 'Exam 1', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 2', type: 'NTS Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 3', type: 'GAT Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 4', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 80},
-        {title: 'Exam 5', type: 'PPSC Exams', date: '2020/9/11 12:10', score: 40},
-        {title: 'Exam 5', type: 'NTS Exams', date: '2020/11/19 12:10', score: 30},
-        {title: 'Exam 7', type: 'GAT Exams', date: '2020/12/12 19:10', score: 30},
-        {title: 'Exam 1', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 2', type: 'NTS Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 3', type: 'GAT Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 4', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 80},
-        {title: 'Exam 5', type: 'PPSC Exams', date: '2020/9/11 12:10', score: 40},
-        {title: 'Exam 5', type: 'NTS Exams', date: '2020/11/19 12:10', score: 30},
-        {title: 'Exam 7', type: 'GAT Exams', date: '2020/12/12 19:10', score: 30},
-        {title: 'Exam 1', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 2', type: 'NTS Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 3', type: 'GAT Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 4', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 80},
-        {title: 'Exam 5', type: 'PPSC Exams', date: '2020/9/11 12:10', score: 40},
-        {title: 'Exam 5', type: 'NTS Exams', date: '2020/11/19 12:10', score: 30},
-        {title: 'Exam 7', type: 'GAT Exams', date: '2020/12/12 19:10', score: 30},
-        {title: 'Exam 1', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 2', type: 'NTS Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 3', type: 'GAT Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 4', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 80},
-        {title: 'Exam 5', type: 'PPSC Exams', date: '2020/9/11 12:10', score: 40},
-        {title: 'Exam 5', type: 'NTS Exams', date: '2020/11/19 12:10', score: 30},
-        {title: 'Exam 7', type: 'GAT Exams', date: '2020/12/12 19:10', score: 30},
-        {title: 'Exam 1', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 2', type: 'NTS Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 3', type: 'GAT Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 4', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 80},
-        {title: 'Exam 5', type: 'PPSC Exams', date: '2020/9/11 12:10', score: 40},
-        {title: 'Exam 5', type: 'NTS Exams', date: '2020/11/19 12:10', score: 30},
-        {title: 'Exam 7', type: 'GAT Exams', date: '2020/12/12 19:10', score: 30},
-        {title: 'Exam 1', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 2', type: 'NTS Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 3', type: 'GAT Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 4', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 80},
-        {title: 'Exam 5', type: 'PPSC Exams', date: '2020/9/11 12:10', score: 40},
-        {title: 'Exam 5', type: 'NTS Exams', date: '2020/11/19 12:10', score: 30},
-        {title: 'Exam 7', type: 'GAT Exams', date: '2020/12/12 19:10', score: 30},
-        {title: 'Exam 1', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 2', type: 'NTS Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 3', type: 'GAT Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 4', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 80},
-        {title: 'Exam 5', type: 'PPSC Exams', date: '2020/9/11 12:10', score: 40},
-        {title: 'Exam 5', type: 'NTS Exams', date: '2020/11/19 12:10', score: 30},
-        {title: 'Exam 7', type: 'GAT Exams', date: '2020/12/12 19:10', score: 30},
-        {title: 'Exam 1', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 2', type: 'NTS Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 3', type: 'GAT Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 4', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 80},
-        {title: 'Exam 5', type: 'PPSC Exams', date: '2020/9/11 12:10', score: 40},
-        {title: 'Exam 5', type: 'NTS Exams', date: '2020/11/19 12:10', score: 30},
-        {title: 'Exam 7', type: 'GAT Exams', date: '2020/12/12 19:10', score: 30},
-        {title: 'Exam 1', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 2', type: 'NTS Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 3', type: 'GAT Exams', date: '2020/10/12 12:10', score: 30},
-        {title: 'Exam 4', type: 'FPSC Exams', date: '2020/10/12 12:10', score: 80},
-        {title: 'Exam 5', type: 'PPSC Exams', date: '2020/9/11 12:10', score: 40},
-        {title: 'Exam 5', type: 'NTS Exams', date: '2020/11/19 12:10', score: 30},
-        {title: 'Exam 7', type: 'GAT Exams', date: '2020/12/12 19:10', score: 30},
     ];
 
 
@@ -262,13 +200,6 @@ export class DashboardComponent implements OnInit {
         this.selectedMenu = this.menuItems[selectedMenuIndex].submenus[selectedSubMenuIndex];
         this.selectedExam = this.filterExamList[0];
         this.selectedTime = this.filterTimesList[0];
-
-        this.examHistoryPagination = {
-            pageIndex: 0,
-            pageSize: this.itemsPerPage[0],
-            length: this.examsHistories.length,
-            previousPageIndex: -1
-        };
     }
 
     ngOnInit(): void {
@@ -309,6 +240,12 @@ export class DashboardComponent implements OnInit {
             });
 
             this.myHistories = myHistories;
+            this.examHistoryPagination = {
+                pageIndex: 0,
+                pageSize: this.itemsPerPage[0],
+                length: this.myHistories[this.selectedMenu.apiDataKey].length,
+                previousPageIndex: -1
+            };
         }
     };
 
@@ -344,10 +281,56 @@ export class DashboardComponent implements OnInit {
 
     getExamHistoryData(): any {
         const list = this.myHistories[this.selectedMenu.apiDataKey];
+        let timeFilteredList;
+        let fromDate;
+        let toDate;
+        let specificDate;
+
+        switch (this.selectedTime.value) {
+            case 'all':
+                break;
+            case 'yesterday':
+                specificDate = moment().subtract(1, 'days');
+                break;
+            case 'last_week':
+                fromDate = moment().subtract(1, 'weeks').startOf('isoWeek');
+                toDate = moment().subtract(1, 'weeks').endOf('isoWeek');
+                break;
+            case 'this_month':
+                fromDate = moment().startOf('month');
+                toDate = moment();
+                break;
+            case 'last_month':
+                fromDate = moment().subtract(1, 'months').startOf('month');
+                toDate = moment().subtract(1, 'months').endOf('month');
+                break;
+
+            default:
+                specificDate = moment(this.selectedTime.value);
+                break;
+        }
+        if (fromDate || toDate || specificDate) {
+            timeFilteredList = [];
+            list.map((item) => {
+                const itemDate = moment(item.completedOn);
+                if (fromDate && toDate) {
+                    if (itemDate.isBetween(fromDate, toDate, 'day', '[]')) {
+                        timeFilteredList.push(item);
+                    }
+                } else if (specificDate) {
+                    if (itemDate.isSame(specificDate, 'day')) {
+                        timeFilteredList.push(item);
+                    }
+                }
+            });
+        } else {
+            timeFilteredList = list;
+        }
+
         // const length = this.examHistoryPagination.length;
         const pageSize = this.examHistoryPagination.pageSize;
         const pageIndex = this.examHistoryPagination.pageIndex;
-        const resultList = list.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
+        const resultList = timeFilteredList.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize);
         return resultList;
     }
 
@@ -424,10 +407,6 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    getExamHistoryListByPagination(): any {
-        const list = this.examsHistories.clone().splice(this.examHistoryPagination.pageIndex * this.examHistoryPagination.pageSize, this.examHistoryPagination.pageSize);
-        return list;
-    }
 
     openAddExamCourseDialog(): void {
 
@@ -445,4 +424,11 @@ export class DashboardComponent implements OnInit {
             console.log(`Dialog result: ${result}`);
         });
     }
+
+    datePickerEvent(type: string, event): void {
+        const eventC: MatDatepickerInputEvent<Date> = event;
+        console.log(`${type}: ${eventC.value}`);
+        this.selectedTime = {title: moment(eventC.value).format('DD/MM/YYYY'), value: eventC.value};
+    }
+
 }
