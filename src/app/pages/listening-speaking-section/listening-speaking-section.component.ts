@@ -307,8 +307,8 @@ export class ListeningSpeakingSectionComponent implements OnInit {
     // let fileType = fileParts[1];
 
     const cloudName = environment.cloudnaryCloudName;
-    // const uploadUrl = 'https://cors-anywhere.herokuapp.com/' + 'https://api.cloudinary.com/v1_1/' + cloudName + '/upload';
-    const uploadUrl = 'https://api.cloudinary.com/v1_1/' + cloudName + '/upload';
+    const uploadUrl = 'https://cors-anywhere.herokuapp.com/' + 'https://api.cloudinary.com/v1_1/' + cloudName + '/upload';
+    // const uploadUrl = 'https://api.cloudinary.com/v1_1/' + cloudName + '/upload';
 
     const signature = this.generateSignature();
 
