@@ -7,6 +7,8 @@ import {AccountService} from '../../services/account.service';
 import {AlertService} from '../../services/alert.service';
 import {ShareddataService} from '../../services/shareddata.service';
 import {TestDirectionComponent} from '../test-direction/test-direction.component';
+import {ConfirmModalComponent} from '../../modals/confirm-modal/confirm-modal.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-practice-tests',
@@ -29,6 +31,7 @@ export class PracticeTestsComponent implements OnInit {
     private apiService: ApiService,
     private alertService: AlertService,
     private accountService: AccountService,
+    public dialog: MatDialog,
     private shareddataService: ShareddataService,
   ) {
 
@@ -47,7 +50,6 @@ export class PracticeTestsComponent implements OnInit {
     this.route.params.subscribe((params) => {
       const id = params.id;
     });
-
   }
 
 
@@ -80,14 +82,47 @@ export class PracticeTestsComponent implements OnInit {
 
 
   startPractice(item): void {
+    let isSectionHaveQuestions = false;
     const examType = this.itemDetail.type;
     const examId = this.itemDetail.id;
     const sectionType = item.type;
-    const testDirectionRouteConfig = examType + '/:id/:section/direction';
-    const testDirectionRoute = examType + '/' + examId + '/' + sectionType + '/direction';
-    this.shareddataService.addDynamicRoute(testDirectionRouteConfig, TestDirectionComponent, true);
 
-    this.router.navigate([testDirectionRoute]);
+    if (this.examResumeSessionData && this.examResumeSessionData.sectionData && this.examResumeSessionData.sectionData.sets && this.examResumeSessionData.sectionData.sets.length > 0) {
+      this.examResumeSessionData.sectionData.sets.map((set) => {
+        if (set.questions && set.questions.length > 0) {
+          isSectionHaveQuestions = true;
+          return;
+        }
+      });
+    }
+
+    if (isSectionHaveQuestions) {
+      const testDirectionRouteConfig = examType + '/:id/:section/direction';
+      const testDirectionRoute = examType + '/' + examId + '/' + sectionType + '/direction';
+      this.shareddataService.addDynamicRoute(testDirectionRouteConfig, TestDirectionComponent, true);
+
+      this.router.navigate([testDirectionRoute]);
+    } else {
+      this.openEmptySectionDialog(sectionType);
+    }
+  }
+
+  openEmptySectionDialog(sectionType): void {
+
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      id: 'alertDialog',
+      disableClose: true,
+      role: 'dialog',
+      data: {
+        title: sectionType + ' Section !',
+        message: 'This exam section is currently empty.',
+        leftBtnTitle: 'Dismiss',
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
   }
 
 }

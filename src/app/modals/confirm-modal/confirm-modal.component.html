@@ -1,16 +1,19 @@
 <h2 mat-dialog-title>
   {{data.title}}
 </h2>
+
 <div class="devider"></div>
+
 <mat-dialog-content class="mat-typography">
   <p class="text-wrap message">
     {{data.message}}
   </p>
 </mat-dialog-content>
+
 <mat-dialog-actions align="end">
-  <button type="cancel" mat-button mat-dialog-close color="primary"
+  <button *ngIf="data.leftBtnTitle" type="cancel" mat-button mat-dialog-close color="primary"
           (click)="onClick(false)">{{data.leftBtnTitle}}</button>
-  <button type="submit" mat-raised-button color="primary" cdkFocusInitial
+  <button *ngIf="data.rightBtnTitle" type="submit" mat-raised-button color="primary" cdkFocusInitial
           (click)="onClick(true)">{{data.rightBtnTitle}}</button>
 </mat-dialog-actions>
 

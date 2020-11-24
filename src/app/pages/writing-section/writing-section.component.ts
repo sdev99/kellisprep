@@ -40,11 +40,7 @@ export class WritingSectionComponent implements OnInit {
     private location: Location,
     private router: Router,
     private route: ActivatedRoute,
-    private accountService: AccountService,
-    private apiService: ApiService,
-    private alertService: AlertService,
     public dialog: MatDialog,
-    private cookieService: CookieService,
     public shareddataService: ShareddataService,
   ) {
 
