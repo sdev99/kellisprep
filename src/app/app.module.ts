@@ -57,10 +57,10 @@ import {PersonalizeExamcourseComponent} from './modals/personalize-examcourse/pe
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
 import {AnswerMultipleChoiceItemComponent} from './components/answer-multiple-choice-item/answer-multiple-choice-item.component';
-import {ErrorInterceptor} from './helpers/error.interceptor';
 import {SocialLoginModule, SocialAuthServiceConfig} from 'angularx-social-login';
-import {NgxLoadingModule} from 'ngx-loading';
+import {ErrorInterceptor} from './helpers/error.interceptor';
 import {CookieService} from 'ngx-cookie-service';
+import {NgxLoadingModule} from 'ngx-loading';
 
 import {
   GoogleLoginProvider,
