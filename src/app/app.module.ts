@@ -60,7 +60,7 @@ import {AnswerMultipleChoiceItemComponent} from './components/answer-multiple-ch
 import {SocialLoginModule, SocialAuthServiceConfig} from 'angularx-social-login';
 import {ErrorInterceptor} from './helpers/error.interceptor';
 import {CookieService} from 'ngx-cookie-service';
-// import {NgxLoadingModule} from 'ngx-loading';
+import {NgxLoadingModule} from 'ngx-loading';
 
 import {
   GoogleLoginProvider,
@@ -138,7 +138,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MatCheckboxModule,
     MatTableModule,
     SocialLoginModule,
-    // NgxLoadingModule.forRoot({}),
+    NgxLoadingModule.forRoot({}),
     DragDropModule,
     NgbModule,
     NgbAccordionModule,
